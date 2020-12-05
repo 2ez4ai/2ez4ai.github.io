@@ -2,7 +2,7 @@
 19layout: post
 title: Machine Learning - 09 Exact Inference of Graphical Models
 published: True
-description: A very abstract post as it entails graphs and trees while providing no figures and examples.
+description: A very abstract post as it involves graphs and trees while providing no figures and examples.
 ---
 
 *The notes are based on the [session]( https://github.com/shuhuai007/Machine-Learning-Session), [CS228-notes](https://ermongroup.github.io/cs228-notes/) and [PRML](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf). For the fundamental of probability, one can refer to [Introduction to Probability](https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view). Many thanks to these great works.*
@@ -11,7 +11,7 @@ description: A very abstract post as it entails graphs and trees while providing
 {:toc}
 # 0. Introduction
 
-In the last [post](https://2ez4ai.github.io/2020/11/29/probabilistic_graphical_models-ml08/), we introduce graphical models which is capable of representing random variables and the conditional independences among them. We now consider the problem of inference in graphical models. Particularly, we wish to compute posterior distributions of one or more nodes contioned on some other known (observed) nodes, and the techniques we shall talk in this post are for *exact inference*.
+In the last [post](https://2ez4ai.github.io/2020/11/29/probabilistic_graphical_models-ml08/), we introduce graphical models which is capable of representing random variables and the conditional independences among them. We now consider the problem of inference in graphical models. Particularly, we wish to compute posterior distributions of one or more nodes conditioned on some other known (observed) nodes, and the techniques we shall talk in this post are for *exact inference*.
 
 # 1. Variable Elimination
 
@@ -25,7 +25,7 @@ $$P(x_n)=\sum_{x_1}\sum_{x_2}\dots\sum_{x_{n-1}}P(x_1,x_2,\dots,x_{n-1}).$$
 
 However, as there are $n-1$ variables each with $k$ states, the computation needs to sum the probability over $k^{n-1}$ values and would scale exponentially with the length of the chain. To simplify the computation, we can leverage *variable elimination*.
 
-The key of *variable elimination* is in *reagrranging the order* of the summations and the multiplications. Specifically, the marginal distribution follows that
+The key of *variable elimination* is in *rearranging the order* of the summations and the multiplications. Specifically, the marginal distribution follows that
 
 $$\begin{aligned}P(x_n)&=\sum_{x_1}\sum_{x_2}\dots\sum_{x_{n-1}}P(x_1)\prod_{i=2}^nP(x_i\vert x_{i-1})\\&=\sum_{x_{n-1}}P(x_n\vert x_{n-1})\cdot \sum_{x_{n-2}}P(x_{n-1}\vert x_{n-2})\cdot\dots\cdot \sum_{x_{1}}P(x_{2}\vert x_{1})P(x_1).\end{aligned}$$
 
@@ -33,7 +33,7 @@ Such a rearrangement works because multiplication is distributive over addition,
 
 $$ab+ac=a(b+c),$$
 
-where the number of arithmetic operations are reduced from three (the left-hand side) to two (the right-hand side). Before we move on, we generalize the new expression to a Markov network since every Bayesian network can be tranformed into a Markov network. For the chain Bayesian network we considered, we can remove all the arrows of the graph to obtain a Markov network. The obtained Markov network would have maximum cliques $$\{x_1,x_2\}$$, …, $$\{x_{n-2},x_{n-1}\}$$ and $$\{x_{n-1},x_{n}\}$$ and the corresponding potentials are
+where the number of arithmetic operations are reduced from three (the left-hand side) to two (the right-hand side). Before we move on, we generalize the new expression to a Markov network since every Bayesian network can be transformed into a Markov network. For the chain Bayesian network we considered, we can remove all the arrows of the graph to obtain a Markov network. The obtained Markov network would have maximum cliques $$\{x_1,x_2\}$$, …, $$\{x_{n-2},x_{n-1}\}$$ and $$\{x_{n-1},x_{n}\}$$ and the corresponding potentials are
 
 $$\begin{aligned}\psi_{1,2}(x_1,x_2)&=P(x_2\vert x_1)P(x_1),\\&\vdots\\\psi_{x_{n-2},x_{n-1}}(x_{n-2},x_{n-1})&=P(x_{n-2}\vert x_{n-1}),\\\psi_{n-1,n}(x_{n-1},x_n)&=P(x_{n-1}\vert x_n).\end{aligned}$$
 
@@ -41,7 +41,7 @@ The rearrangement for the Markov network then follows that
 
 $$P(x_n)=\sum_{x_{n-1}}\psi_{n-1,n}(x_{n-1}, x_{n})\cdot \sum_{x_{n-2}}\psi_{n-2,n-1}(x_{n-2}, x_{n-1})\cdot\dots\cdot \sum_{x_{1}}\psi_{1,2}(x_1,x_2).$$
 
-Now the computation composes of $n-1$ summations. More importantly, unlike the previous one sums over $k^{n-1}$ values, this exression allows each term only need to sum over $k\times k$ values. Specifically, the sum
+Now the computation composes of $n-1$ summations. More importantly, unlike the previous one sums over $k^{n-1}$ values, this expression allows each term only need to sum over $k\times k$ values. Specifically, the sum
 
 $$\sum_{x_i}\psi_{x_i,x_{i+1}}(x_{i},x_{i+1})$$
 
@@ -100,5 +100,5 @@ Such a method for maximizing *max-product* is known as *max-product* algorithm.
 
 # 3. Conclusion
 
-In this post, we briefly introduced two algorithms for *exact inference* in graphical models. Given a proper order of nodes, *variable elimination* algorithm is efficient. However, the finding of the proper order is an NP-hard problem. Besides, each query of marginals needs running the algorithm, during which the computation can be highly redundant. To improve computing efficiency, *belif propagation* stores the intermediate results as messages. After that, one can get any marginal by the messages. Moreover, we can also exploit those messages to determine the values of random varaibles with the largest probability, which is known as *max-product*.
+In this post, we briefly introduced two algorithms for *exact inference* in graphical models. Given a proper order of nodes, *variable elimination* algorithm is efficient. However, the finding of the proper order is an NP-hard problem. Besides, each query of marginals needs running the algorithm, during which the computation can be highly redundant. To improve computing efficiency, *belief propagation* stores the intermediate results as messages. After that, one can get any marginal by the messages. Moreover, we can also exploit those messages to determine the values of random variables with the largest probability, which is known as *max-product*.
 
