@@ -4,7 +4,7 @@
  <title>Jingye Wang</title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2020-12-05T14:39:53+08:00</updated>
+ <updated>2020-12-05T16:04:45+08:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Jingye Wang</name>
@@ -32,7 +32,7 @@
 &lt;/ul&gt;
 &lt;h1 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h1&gt;
 
-&lt;p&gt;In the last &lt;a href=&quot;https://19w6.github.io/2020/11/29/probabilistic_graphical_models-ml08/&quot;&gt;post&lt;/a&gt;, we introduce graphical models which is capable of representing random variables and the conditional independences among them. We now consider the problem of inference in graphical models. Particularly, we wish to compute posterior distributions of one or more nodes contioned on some other known (observed) nodes, and the techniques we shall talk in this post are for &lt;em&gt;exact inference&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;In the last &lt;a href=&quot;https://2ez4ai.github.io/2020/11/29/probabilistic_graphical_models-ml08/&quot;&gt;post&lt;/a&gt;, we introduce graphical models which is capable of representing random variables and the conditional independences among them. We now consider the problem of inference in graphical models. Particularly, we wish to compute posterior distributions of one or more nodes contioned on some other known (observed) nodes, and the techniques we shall talk in this post are for &lt;em&gt;exact inference&lt;/em&gt;.&lt;/p&gt;
 
 &lt;h1 id=&quot;1-variable-elimination&quot;&gt;1. Variable Elimination&lt;/h1&gt;
 
@@ -441,7 +441,7 @@ Figure 5. The Markov blanket of $x_i$ is denoted by colored nodes. (Figure 8.26 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{aligned}P(x_1,x_2,\dots,x_N)&amp;=\frac{1}{Z}\prod_{C}^{C_m}\psi_C(\text{x}_C)\\&amp;=\frac{1}{Z}\exp\left\{-\sum_{C}^{C_m}E(\text{x}_C)\right\},\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;which is known as &lt;em&gt;Boltzmann distribution&lt;/em&gt; (or, &lt;em&gt;Gibbs distribution&lt;/em&gt;). Moreover, we can see that the distribution is consistent with the definition of &lt;a href=&quot;https://19w6.github.io/2020/11/12/exponential_family-ml07/&quot;&gt;exponential families&lt;/a&gt;. The joint distribution of any Markov network in which every potential has the form of exponentials is in exponential families.&lt;/p&gt;
+&lt;p&gt;which is known as &lt;em&gt;Boltzmann distribution&lt;/em&gt; (or, &lt;em&gt;Gibbs distribution&lt;/em&gt;). Moreover, we can see that the distribution is consistent with the definition of &lt;a href=&quot;https://2ez4ai.github.io/2020/11/12/exponential_family-ml07/&quot;&gt;exponential families&lt;/a&gt;. The joint distribution of any Markov network in which every potential has the form of exponentials is in exponential families.&lt;/p&gt;
 
 &lt;h2 id=&quot;23-moralization&quot;&gt;2.3. Moralization&lt;/h2&gt;
 
@@ -682,7 +682,7 @@ Figure 6. (a) A directed graph. (b) The corresponding moral graph of the directe
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat\mu=\frac{1}{N}\sum_{i=1}^Nx_i,\quad \hat\sigma=\frac{1}{N}\sum_{i=1}^Nx_i^2-\hat\mu^2,&lt;/script&gt;
 
-&lt;p&gt;which is consistent with the result in the &lt;a href=&quot;https://19w6.github.io/2020/09/28/intro-ml01/&quot;&gt;post&lt;/a&gt;. $\tag*{$\blacksquare$}$&lt;/p&gt;
+&lt;p&gt;which is consistent with the result in the &lt;a href=&quot;https://2ez4ai.github.io/2020/09/28/intro-ml01/&quot;&gt;post&lt;/a&gt;. $\tag*{$\blacksquare$}$&lt;/p&gt;
 
 &lt;p&gt;Now we show that&lt;/p&gt;
 
@@ -755,7 +755,7 @@ T(x)=\begin{bmatrix}x&amp;x^2\end{bmatrix}^T %]]&gt;&lt;/script&gt;, we have&lt;
 
 &lt;h2 id=&quot;1-kernel-method&quot;&gt;1. Kernel method&lt;/h2&gt;
 
-&lt;p&gt;Define the data set as &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}, X=\{x_1,x_2,\dots,x_N\}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Y=\{y_1,y_2,\dots,y_N\}&lt;/script&gt; where $x_i\in\mathbb{R}^{d\times 1}$ and &lt;script type=&quot;math/tex&quot;&gt;y_i\in\{-1,1\}&lt;/script&gt;. We further assume that the data set is non-linearly separable. Kernel method supposes that there is a non-linear transformation $\phi(x):\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1},d&amp;lt;p,$  such that &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}_p=\{(\phi(x_1),y_1),(\phi(x_2),y_2),\dots,(\phi(x_N),y_N)\}&lt;/script&gt; are linearly separable. For such a linearly separable data set, recalling the problem we formulated in section 1.3 of &lt;a href=&quot;https://19w6.github.io/2020/10/28/support_vector_machine-ml05/&quot;&gt;SVM&lt;/a&gt;, we have the duality problem&lt;/p&gt;
+&lt;p&gt;Define the data set as &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}, X=\{x_1,x_2,\dots,x_N\}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Y=\{y_1,y_2,\dots,y_N\}&lt;/script&gt; where $x_i\in\mathbb{R}^{d\times 1}$ and &lt;script type=&quot;math/tex&quot;&gt;y_i\in\{-1,1\}&lt;/script&gt;. We further assume that the data set is non-linearly separable. Kernel method supposes that there is a non-linear transformation $\phi(x):\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1},d&amp;lt;p,$  such that &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}_p=\{(\phi(x_1),y_1),(\phi(x_2),y_2),\dots,(\phi(x_N),y_N)\}&lt;/script&gt; are linearly separable. For such a linearly separable data set, recalling the problem we formulated in section 1.3 of &lt;a href=&quot;https://2ez4ai.github.io/2020/10/28/support_vector_machine-ml05/&quot;&gt;SVM&lt;/a&gt;, we have the duality problem&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{aligned}\min_\lambda&amp;\quad \frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^N\left(\lambda_i\lambda_jy_iy_j\phi^T(x_i)\phi(x_j)\right)-\sum_{i=1}^N\lambda_i\\\text{s.t.}&amp;\quad \lambda_i\ge0,i=1,2,\dots,N\\&amp;\quad \sum_{i=1}^N\lambda_iy_i=0.\end{aligned} %]]&gt;&lt;/script&gt;
@@ -847,7 +847,7 @@ T(x)=\begin{bmatrix}x&amp;x^2\end{bmatrix}^T %]]&gt;&lt;/script&gt;, we have&lt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;w^Tx-b=0,&lt;/script&gt;
 
-&lt;p&gt;where $w\in\mathbb{R}^{d\times 1}$ and $b\in\mathbb{R}$ are parameters to be learned. Then like what we arrived in &lt;a href=&quot;https://19w6.github.io/2020/10/14/linear_classification-ml03/&quot;&gt;perceptron&lt;/a&gt;, a correct classifier should ensure that&lt;/p&gt;
+&lt;p&gt;where $w\in\mathbb{R}^{d\times 1}$ and $b\in\mathbb{R}$ are parameters to be learned. Then like what we arrived in &lt;a href=&quot;https://2ez4ai.github.io/2020/10/14/linear_classification-ml03/&quot;&gt;perceptron&lt;/a&gt;, a correct classifier should ensure that&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;y_i(w^Tx_i-b)&gt;0,\forall i=1,2,\dots,N.&lt;/script&gt;
 
@@ -1121,7 +1121,7 @@ X=(x_1,x_2,\dots,x_N)^T=\begin{pmatrix}x_{1}^T\\x_{2}^T\\\vdots\\x_{N}^T\end{pma
 
 &lt;p&gt;Principal component analysis (PCA) is defined as an &lt;a href=&quot;https://en.wikipedia.org/wiki/Orthogonal_transformation&quot;&gt;orthogonal&lt;/a&gt; &lt;a href=&quot;https://en.wikipedia.org/wiki/Linear_transformation&quot;&gt;linear transformation&lt;/a&gt; that transforms the data to a new coordinate system such that the greatest variance by some scalar projection of the data comes to lie on the first coordinate (called the first principal component), the second greatest variance on the second coordinate, and so on.&lt;/p&gt;
 
-&lt;p&gt;Recall that in &lt;a href=&quot;https://19w6.github.io/2020/10/14/linear_classification-ml03/&quot;&gt;the previous post&lt;/a&gt;, we introduce &lt;em&gt;linear discriminant analysis&lt;/em&gt; (LDA), which requires a projection that maximizes the distance between different classes. In PCA, instead of classes, we need to find a projection that maximizes the distance (variance) of all the data so that we can reduce the dimensionality (as a projection involves one dimensionality reduction) while losing the least information (as the greatest variance implies most information). Now we give the mathematically formulation.&lt;/p&gt;
+&lt;p&gt;Recall that in &lt;a href=&quot;https://2ez4ai.github.io/2020/10/14/linear_classification-ml03/&quot;&gt;the previous post&lt;/a&gt;, we introduce &lt;em&gt;linear discriminant analysis&lt;/em&gt; (LDA), which requires a projection that maximizes the distance between different classes. In PCA, instead of classes, we need to find a projection that maximizes the distance (variance) of all the data so that we can reduce the dimensionality (as a projection involves one dimensionality reduction) while losing the least information (as the greatest variance implies most information). Now we give the mathematically formulation.&lt;/p&gt;
 
 &lt;p&gt;The notation in section 1 will be used in this section as well. Since PCA is sensitive to the variance of the data, it is critical to normalize the variables over all dimensions, which yields&lt;/p&gt;
 
@@ -1259,7 +1259,7 @@ X=(x_1,x_2,\dots,x_N)^T=\begin{pmatrix}x_{1}^T\\x_{2}^T\\\vdots\\x_{N}^T\end{pma
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{pmatrix}x_i\\z_i\end{pmatrix}\sim\mathcal{N}\left(\begin{pmatrix}\mu\\\mathbf{0}_{k\times1} \end{pmatrix},\begin{pmatrix}WW^T+\sigma^2\mathbf{1}_{d\times d}&amp;W\\W^T&amp;\mathbf{1}_{k\times k}\end{pmatrix}\right). %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;By the formula derived in &lt;a href=&quot;https://19w6.github.io/2020/09/28/intro-ml01/&quot;&gt;session 01&lt;/a&gt;, it can be shown that&lt;/p&gt;
+&lt;p&gt;By the formula derived in &lt;a href=&quot;https://2ez4ai.github.io/2020/09/28/intro-ml01/&quot;&gt;session 01&lt;/a&gt;, it can be shown that&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;z_i\vert x_i\sim\mathcal{N}(W^T(WW^T+\sigma^2\mathbf{1}_{d\times d})^{-1}(x_i-\mu),\mathbf{1}_{k\times k}-W^T(WW^T+\sigma^2\mathbf{1}_{d\times d})^{-1}W).&lt;/script&gt;
 
@@ -1638,7 +1638,7 @@ X=(x_1,x_2, x_3)^T=\begin{pmatrix}1&amp;0.2&amp;0.5\\0&amp;1&amp;0\\0&amp;0&amp;
 
 &lt;h2 id=&quot;32-maximum-a-posteriori&quot;&gt;3.2 Maximum a posteriori&lt;/h2&gt;
 
-&lt;p&gt;As we mentioned in the &lt;a href=&quot;https://19w6.github.io/2020/09/28/intro-ml01/&quot;&gt;previous notes&lt;/a&gt;, in the view of Bayesians, $w$ can also be a random variable. Suppose $w\sim\mathcal{N}(0,\sigma_0^2)$. Still, we have $y\vert x;w\sim\mathcal{N}(w^Tx,\sigma^2)$ (there is a little abuse of notation: $w$ after ‘$|$’ is a sample rather than a random variable). By &lt;em&gt;maximum a posteriori&lt;/em&gt; (MAP) method, we have&lt;/p&gt;
+&lt;p&gt;As we mentioned in the &lt;a href=&quot;https://2ez4ai.github.io/2020/09/28/intro-ml01/&quot;&gt;previous notes&lt;/a&gt;, in the view of Bayesians, $w$ can also be a random variable. Suppose $w\sim\mathcal{N}(0,\sigma_0^2)$. Still, we have $y\vert x;w\sim\mathcal{N}(w^Tx,\sigma^2)$ (there is a little abuse of notation: $w$ after ‘$|$’ is a sample rather than a random variable). By &lt;em&gt;maximum a posteriori&lt;/em&gt; (MAP) method, we have&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{aligned}\hat w&amp;=\arg\max_w P(w|Y)\\&amp;=\arg\max_w\log\left(\frac{\prod_{i=1}^NP(y_i|w)\cdot P(w)}{\prod_{i=1}^NP(y_i)}\right)\\&amp;=\arg\max_w\log\left(\prod_{i=1}^NP(y_i|w)\right)+\log P(w)\\&amp;=\arg\max_w\sum_{i=1}^N\log\left(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(y_i-w^Tx_i)^2}{2\sigma^2}}\right)+\log\left(\frac{1}{\sqrt{2\pi}\sigma_0}e^{-\frac{||w||^2}{2\sigma_0^2}}\right)\\&amp;=\arg\min_w\sum_{i=1}^N\frac{(y_i-w^Tx_i)^2}{2\sigma^2}+\frac{||w||^2}{2\sigma_0^2}\\&amp;=\arg\min_w\underbrace{\sum_{i=1}^N(y_i-w^Tx_i)^2}_\text{square error}+\underbrace{\frac{\sigma^2}{\sigma_0^2}||w||^2}_\text{regularizer}\end{aligned}, %]]&gt;&lt;/script&gt;
@@ -1940,25 +1940,25 @@ z\sim\mathcal{N}\left(\begin{pmatrix}\mu\\A\mu+b\end{pmatrix},\begin{pmatrix}\Si
    <id>http://localhost:4000/2020/09/21/intro-rl</id>
    <content type="html">&lt;p&gt;The introductory &lt;a href=&quot;https://github.com/19w6/Reinforcement_Learning_Notes&quot;&gt;notes&lt;/a&gt; included &lt;strong&gt;Bandit Algorithms&lt;/strong&gt;, &lt;strong&gt;MDP&lt;/strong&gt;, &lt;strong&gt;Model-free Methods&lt;/strong&gt;, &lt;strong&gt;Value Function Approximation&lt;/strong&gt;, &lt;strong&gt;Policy Optimization&lt;/strong&gt;. For the state-of-the-art advances, one can refer to paper directly and some excellent blogs.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Reinforcement Learning Notes.pdf&quot;&gt;Reinforcement Learning Notes (an integration of the following sections)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Reinforcement Learning Notes.pdf&quot;&gt;Reinforcement Learning Notes (an integration of the following sections)&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Section 1 Introduction.pdf&quot;&gt;Section 1 Introduction&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Section 1 Introduction.pdf&quot;&gt;Section 1 Introduction&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Section 2 Probability.pdf&quot;&gt;Section 2 Probability&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Section 2 Probability.pdf&quot;&gt;Section 2 Probability&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Section 3 Bandit Algorithms.pdf&quot;&gt;Section 3 Bandit Algorithms&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Section 3 Bandit Algorithms.pdf&quot;&gt;Section 3 Bandit Algorithms&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Section 4 Markov Chains.pdf&quot;&gt;Section 4 Markov Chains&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Section 4 Markov Chains.pdf&quot;&gt;Section 4 Markov Chains&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Section 5 Markov Decision Process.pdf&quot;&gt;Section 5 Markov Decision Process&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Section 5 Markov Decision Process.pdf&quot;&gt;Section 5 Markov Decision Process&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Section 6 Model-Free Prediction.pdf&quot;&gt;Section 6 Model-Free Prediction&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Section 6 Model-Free Prediction.pdf&quot;&gt;Section 6 Model-Free Prediction&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Section 7 Model-Free Control.pdf&quot;&gt;Section 7 Model-Free Control&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Section 7 Model-Free Control.pdf&quot;&gt;Section 7 Model-Free Control&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Section 8 Value Function Approximation.pdf&quot;&gt;Section 8 Value Function Approximation&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Section 8 Value Function Approximation.pdf&quot;&gt;Section 8 Value Function Approximation&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://19w6.github.io/assets/rl/Section 9 Policy Gradient.pdf&quot;&gt;Section 9 Policy Gradient&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Section 9 Policy Gradient.pdf&quot;&gt;Section 9 Policy Gradient&lt;/a&gt;&lt;/p&gt;
 
 </content>
  </entry>

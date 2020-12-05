@@ -1,4 +1,4 @@
-<p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>, <a href="https://ermongroup.github.io/cs228-notes/">CS228-notes</a> and <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf">PRML</a>. For the fundamental of probability, one can refer to <a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Introduction to Probability</a>. Many thanks to these great works.</em></p>
+I"'<p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>, <a href="https://ermongroup.github.io/cs228-notes/">CS228-notes</a> and <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf">PRML</a>. For the fundamental of probability, one can refer to <a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Introduction to Probability</a>. Many thanks to these great works.</em></p>
 
 <ul id="markdown-toc">
   <li><a href="#0-introduction" id="markdown-toc-0-introduction">0. Introduction</a></li>
@@ -111,3 +111,4 @@
 
 <p>In this post, we briefly introduced two algorithms for <em>exact inference</em> in graphical models. Given a proper order of nodes, <em>variable elimination</em> algorithm is efficient. However, the finding of the proper order is an NP-hard problem. Besides, each query of marginals needs running the algorithm, during which the computation can be highly redundant. To improve computing efficiency, <em>belif propagation</em> stores the intermediate results as messages. After that, one can get any marginal by the messages. Moreover, we can also exploit those messages to determine the values of random varaibles with the largest probability, which is known as <em>max-product</em>.</p>
 
+:ET
