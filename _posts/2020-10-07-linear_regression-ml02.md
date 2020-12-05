@@ -6,6 +6,8 @@ description: A naive model of machine learning. Introduce three perspectives to 
 
 *The notes are based on the [session]( https://github.com/shuhuai007/Machine-Learning-Session). Many thanks to the great work.*
 
+* what?
+{:toc}
 # 1. Least Squares Method
 
 Suppose we have the IID data $$\mathcal{D}=\{(x_1,y_1), (x_2,y_2),\dots,(x_N,y_N)\},$$ where $x_i\in\mathbb{R}^{d\times 1}, y_i\in\mathbb{R}, i=1,2,\dots,N$. One can view $x_i$ as a feature vector and $y_i$ is the corresponding label. Denote

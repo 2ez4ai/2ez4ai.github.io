@@ -7,6 +7,8 @@ description: Include support vector machine and Lagrange duality.
 
 *The notes are based on the [session]( https://github.com/shuhuai007/Machine-Learning-Session). For the fundamental of linear algebra, one can always refer to [Introduction to Linear Algebra](http://math.mit.edu/~gs/linearalgebra/) and [The Matrix Cookbook](https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf) for more details. Many thanks to these great works.*
 
+* what?
+{:toc}
 # 0. Introduction
 
 Support vector machine (SVM) is a supervised learning method for classification and regression analysis. It is one of the most robust prediction method. Here we mainly consider its applications in classification. Specifically, for the data of $d$-dimensional, we want to know whether we can separate classes with a $(d-1)$-dimensional *hyperplane*. In particular, a good separation is achieved by the hyperplane that has the largest distance to the nearest training-data point of any class. According to whether the dataset is linearly separable or not, there are *hard-margin* SVM, *soft-margin* SVM and *kernel* SVM.
@@ -163,7 +165,7 @@ $$\hat b=\sum_{i=1}^N\hat\lambda_iy_ix_i^Tx_k-y_k.$$
 
 Accordingly, the hyperplane is the linear combination of the data on the margin with corresponding $\hat\lambda_k>0$. We call those data *support vectors* from where the name SVM comes.
 
-## 2. Soft-margin SVM
+# 2. Soft-margin SVM
 
 In practice, there are noise and outliers among the data, which makes the data nonlinearly separable. In that case, hard-margin fails to work. Now we introduce *soft-margin SVM* which extends SVM to the nonlinearly separable data. Recall that in hard-margin SVM, we have the constraint
 
@@ -201,6 +203,6 @@ $$\begin{aligned}\min_{w,b}&\quad \frac{1}{2}w^Tw+C\sum_{i=1}^N\xi_i\\\text{s.t.
 
 where $C$ is the *cost* parameter that determines to what extent we allow for outliers. To solve the problem one can refer to the hard-margin case as they are actually similar.
 
-# 4. Conclusion
+# 3. Conclusion
 
 In this post, we first introduced hard-margin SVM for linearly separable data. By introducing a loss function and slack variables, soft-margin SVM allows for noise and outliers so that it can handle non linear case. The two models can both be solved by *convex optimization* methods. For convex optimization, we briefly reviewed *Lagrange duality*, *Slater’s condition* and *KKT conditions*.

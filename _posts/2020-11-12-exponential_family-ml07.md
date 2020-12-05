@@ -7,6 +7,8 @@ description: Introduce concepts of exponential family.
 
 *The notes are based on the [session]( https://github.com/shuhuai007/Machine-Learning-Session) and the [material](https://people.eecs.berkeley.edu/~jordan/courses/260-spring10/other-readings/chapter8.pdf). For the fundamental of linear algebra, one can always refer to [Introduction to Linear Algebra](http://math.mit.edu/~gs/linearalgebra/) and [The Matrix Cookbook](https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf) for more details. Many thanks to these great works.*
 
+* what?
+{:toc}
 # 0. Introduction
 
 An exponential family is a family of distributions which share some properties in common. The real message of this note is the simplicity and elegance of the exponential family. Once the ideas are mastered, it is often easier to work within the general exponential family framework than with specific instances.

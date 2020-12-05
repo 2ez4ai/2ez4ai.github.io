@@ -6,6 +6,8 @@ description: Include perceptron, Fisher's linear discriminant, logistic regressi
 
 *The notes are based on the [session]( https://github.com/shuhuai007/Machine-Learning-Session). For the fundamental of linear algebra, one can always refer to [Introduction to Linear Algebra](http://math.mit.edu/~gs/linearalgebra/) and [The Matrix Cookbook](https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf) for more details. Many thanks to these great works.*
 
+* what?
+{:toc}
 # 0. Introduction
 
 *The following introduction is derived from the [paper](http://pages.stat.wisc.edu/~wahba/stat860public/pdf1/liu.zhang.wu.lum.11.pdf).*
