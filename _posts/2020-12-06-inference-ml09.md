@@ -1,5 +1,5 @@
 ---
-layout: post
+19layout: post
 title: Machine Learning - 09 Exact Inference of Graphical Models
 published: True
 description: A very abstract post as it entails graphs and trees while providing no figures and examples.

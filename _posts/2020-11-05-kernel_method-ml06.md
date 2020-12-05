@@ -13,7 +13,7 @@ Kernel methods are a class of algorithms for pattern analysis. The name of kerne
 
 ## 1. Kernel method
 
-Define the data set as $$\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}, X=\{x_1,x_2,\dots,x_N\}$$ and $$Y=\{y_1,y_2,\dots,y_N\}$$ where $x_i\in\mathbb{R}^{d\times 1}$ and $$y_i\in\{-1,1\}$$. We further assume that the data set is non-linearly separable. Kernel method supposes that there is a non-linear transformation $\phi(x):\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1},d<p,$  such that $$\mathcal{D}_p=\{(\phi(x_1),y_1),(\phi(x_2),y_2),\dots,(\phi(x_N),y_N)\}$$ are linearly separable. For such a linearly separable data set, recalling the problem we formulated in section 1.3 of [SVM](https://19w6.github.io/2020/10/28/support_vector_machine-ml05/), we have the duality problem
+Define the data set as $$\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}, X=\{x_1,x_2,\dots,x_N\}$$ and $$Y=\{y_1,y_2,\dots,y_N\}$$ where $x_i\in\mathbb{R}^{d\times 1}$ and $$y_i\in\{-1,1\}$$. We further assume that the data set is non-linearly separable. Kernel method supposes that there is a non-linear transformation $\phi(x):\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1},d<p,$  such that $$\mathcal{D}_p=\{(\phi(x_1),y_1),(\phi(x_2),y_2),\dots,(\phi(x_N),y_N)\}$$ are linearly separable. For such a linearly separable data set, recalling the problem we formulated in section 1.3 of [SVM](https://2ez4ai.github.io/2020/10/28/support_vector_machine-ml05/), we have the duality problem
 
 $$\begin{aligned}\min_\lambda&\quad \frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^N\left(\lambda_i\lambda_jy_iy_j\phi^T(x_i)\phi(x_j)\right)-\sum_{i=1}^N\lambda_i\\\text{s.t.}&\quad \lambda_i\ge0,i=1,2,\dots,N\\&\quad \sum_{i=1}^N\lambda_iy_i=0.\end{aligned}$$
 
