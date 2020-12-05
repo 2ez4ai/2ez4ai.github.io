@@ -95,7 +95,7 @@ $$\max_{\text{x}} P(\text{x})=\max_{\text{x}_1}\dots \max_{\text{x}_n}P(\text{x}
 
 By *sum-product*, we have
 
-$$\begin{aligned}\max_{\text{x}} P(\text{x})&=\max_{x_1}\dots \max_{x_n}\psi_i(x_i)\prod_{k\in N(x_i)}m_{k,i}\\&=\max_{x_n}\max_{x_n-1{}}\psi_{x_n,x_{n-1}}(x_n,x_{n-1})\max_{x_{n-2}}\psi_{x_{n-1},x_{n-2}}(x_{n-1},x_{n-2})\dots\max_{x_1}\psi_{x_2,x_1}(x_2,x_1)\psi_{x_1}(x_1).\end{aligned}$$
+$$\begin{aligned}\max_{\text{x}} P(\text{x})&=\max_{x_1}\dots \max_{x_n}\psi_i(x_i)\prod_{k\in N(x_i)}m_{k,i}\\&=\max_{x_n}\max_{x_n-1{}}\psi_{x_n,x_{n-1}}(x_n,x_{n-1})\max_{x_{n-2}}\psi_{x_{n-1},x_{n-2}}(x_{n-1},x_{n-2})\\&\quad\ \dots\max_{x_1}\psi_{x_2,x_1}(x_2,x_1)\psi_{x_1}(x_1).\end{aligned}$$
 
 Such a method for maximizing *max-product* is known as *max-product* algorithm.
 
