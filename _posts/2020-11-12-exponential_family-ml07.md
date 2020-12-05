@@ -131,7 +131,7 @@ Solving the equations we have
 
 $$\hat\mu=\frac{1}{N}\sum_{i=1}^Nx_i,\quad \hat\sigma=\frac{1}{N}\sum_{i=1}^Nx_i^2-\hat\mu^2,$$
 
-which is consistent with the result in the [post](https://19w6.github.io/2020/09/28/intro-ml01/). $\tag*{$\blacksquare$}$
+which is consistent with the result in the [post](https://2ez4ai.github.io/2020/09/28/intro-ml01/). $\tag*{$\blacksquare$}$
 
 Now we show that
 

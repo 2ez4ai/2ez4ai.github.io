@@ -11,7 +11,7 @@ description: A very abstract post as it entails graphs and trees while providing
 {:toc}
 # 0. Introduction
 
-In the last [post](https://19w6.github.io/2020/11/29/probabilistic_graphical_models-ml08/), we introduce graphical models which is capable of representing random variables and the conditional independences among them. We now consider the problem of inference in graphical models. Particularly, we wish to compute posterior distributions of one or more nodes contioned on some other known (observed) nodes, and the techniques we shall talk in this post are for *exact inference*.
+In the last [post](https://2ez4ai.github.io/2020/11/29/probabilistic_graphical_models-ml08/), we introduce graphical models which is capable of representing random variables and the conditional independences among them. We now consider the problem of inference in graphical models. Particularly, we wish to compute posterior distributions of one or more nodes contioned on some other known (observed) nodes, and the techniques we shall talk in this post are for *exact inference*.
 
 # 1. Variable Elimination
 

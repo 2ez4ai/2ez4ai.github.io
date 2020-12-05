@@ -25,7 +25,7 @@ Suppose we have data set $$\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}$$
 
 $$w^Tx-b=0,$$
 
-where $w\in\mathbb{R}^{d\times 1}$ and $b\in\mathbb{R}$ are parameters to be learned. Then like what we arrived in [perceptron](https://19w6.github.io/2020/10/14/linear_classification-ml03/), a correct classifier should ensure that
+where $w\in\mathbb{R}^{d\times 1}$ and $b\in\mathbb{R}$ are parameters to be learned. Then like what we arrived in [perceptron](https://2ez4ai.github.io/2020/10/14/linear_classification-ml03/), a correct classifier should ensure that
 
 $$y_i(w^Tx_i-b)>0,\forall i=1,2,\dots,N.$$
 

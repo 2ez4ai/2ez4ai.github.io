@@ -54,7 +54,7 @@ where $H$ is *centering matrix*, and it can be shown that $H^T=H,H^n=H$.
 
 Principal component analysis (PCA) is defined as an [orthogonal](https://en.wikipedia.org/wiki/Orthogonal_transformation) [linear transformation](https://en.wikipedia.org/wiki/Linear_transformation) that transforms the data to a new coordinate system such that the greatest variance by some scalar projection of the data comes to lie on the first coordinate (called the first principal component), the second greatest variance on the second coordinate, and so on.
 
-Recall that in [the previous post](https://19w6.github.io/2020/10/14/linear_classification-ml03/), we introduce *linear discriminant analysis* (LDA), which requires a projection that maximizes the distance between different classes. In PCA, instead of classes, we need to find a projection that maximizes the distance (variance) of all the data so that we can reduce the dimensionality (as a projection involves one dimensionality reduction) while losing the least information (as the greatest variance implies most information). Now we give the mathematically formulation.
+Recall that in [the previous post](https://2ez4ai.github.io/2020/10/14/linear_classification-ml03/), we introduce *linear discriminant analysis* (LDA), which requires a projection that maximizes the distance between different classes. In PCA, instead of classes, we need to find a projection that maximizes the distance (variance) of all the data so that we can reduce the dimensionality (as a projection involves one dimensionality reduction) while losing the least information (as the greatest variance implies most information). Now we give the mathematically formulation.
 
 The notation in section 1 will be used in this section as well. Since PCA is sensitive to the variance of the data, it is critical to normalize the variables over all dimensions, which yields
 
@@ -184,7 +184,7 @@ Hence the union distribution of $(x_i,z_i)^T$ is
 
 $$\begin{pmatrix}x_i\\z_i\end{pmatrix}\sim\mathcal{N}\left(\begin{pmatrix}\mu\\\mathbf{0}_{k\times1} \end{pmatrix},\begin{pmatrix}WW^T+\sigma^2\mathbf{1}_{d\times d}&W\\W^T&\mathbf{1}_{k\times k}\end{pmatrix}\right).$$
 
-By the formula derived in [session 01](https://19w6.github.io/2020/09/28/intro-ml01/), it can be shown that
+By the formula derived in [session 01](https://2ez4ai.github.io/2020/09/28/intro-ml01/), it can be shown that
 
 $$z_i\vert x_i\sim\mathcal{N}(W^T(WW^T+\sigma^2\mathbf{1}_{d\times d})^{-1}(x_i-\mu),\mathbf{1}_{k\times k}-W^T(WW^T+\sigma^2\mathbf{1}_{d\times d})^{-1}W).$$
 

@@ -88,7 +88,7 @@ which is consistent with our analysis in section 1. In fact, least squares metho
 
 ## 3.2 Maximum a posteriori
 
-As we mentioned in the [previous notes](https://19w6.github.io/2020/09/28/intro-ml01/), in the view of Bayesians, $w$ can also be a random variable. Suppose $w\sim\mathcal{N}(0,\sigma_0^2)$. Still, we have $y\vert x;w\sim\mathcal{N}(w^Tx,\sigma^2)$ (there is a little abuse of notation: $w$ after ‘$\|$’ is a sample rather than a random variable). By *maximum a posteriori* (MAP) method, we have
+As we mentioned in the [previous notes](https://2ez4ai.github.io/2020/09/28/intro-ml01/), in the view of Bayesians, $w$ can also be a random variable. Suppose $w\sim\mathcal{N}(0,\sigma_0^2)$. Still, we have $y\vert x;w\sim\mathcal{N}(w^Tx,\sigma^2)$ (there is a little abuse of notation: $w$ after ‘$\|$’ is a sample rather than a random variable). By *maximum a posteriori* (MAP) method, we have
 
 $$\begin{aligned}\hat w&=\arg\max_w P(w|Y)\\&=\arg\max_w\log\left(\frac{\prod_{i=1}^NP(y_i|w)\cdot P(w)}{\prod_{i=1}^NP(y_i)}\right)\\&=\arg\max_w\log\left(\prod_{i=1}^NP(y_i|w)\right)+\log P(w)\\&=\arg\max_w\sum_{i=1}^N\log\left(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(y_i-w^Tx_i)^2}{2\sigma^2}}\right)+\log\left(\frac{1}{\sqrt{2\pi}\sigma_0}e^{-\frac{||w||^2}{2\sigma_0^2}}\right)\\&=\arg\min_w\sum_{i=1}^N\frac{(y_i-w^Tx_i)^2}{2\sigma^2}+\frac{||w||^2}{2\sigma_0^2}\\&=\arg\min_w\underbrace{\sum_{i=1}^N(y_i-w^Tx_i)^2}_\text{square error}+\underbrace{\frac{\sigma^2}{\sigma_0^2}||w||^2}_\text{regularizer}\end{aligned},$$
 

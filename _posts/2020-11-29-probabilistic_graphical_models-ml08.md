@@ -264,7 +264,7 @@ where $E(\text{x}_C)$ is called *energy function*. The joint distribution then i
 
 $$\begin{aligned}P(x_1,x_2,\dots,x_N)&=\frac{1}{Z}\prod_{C}^{C_m}\psi_C(\text{x}_C)\\&=\frac{1}{Z}\exp\left\{-\sum_{C}^{C_m}E(\text{x}_C)\right\},\end{aligned}$$
 
-which is known as *Boltzmann distribution* (or, *Gibbs distribution*). Moreover, we can see that the distribution is consistent with the definition of [exponential families](https://19w6.github.io/2020/11/12/exponential_family-ml07/). The joint distribution of any Markov network in which every potential has the form of exponentials is in exponential families.
+which is known as *Boltzmann distribution* (or, *Gibbs distribution*). Moreover, we can see that the distribution is consistent with the definition of [exponential families](https://2ez4ai.github.io/2020/11/12/exponential_family-ml07/). The joint distribution of any Markov network in which every potential has the form of exponentials is in exponential families.
 
 ## 2.3. Moralization
 
