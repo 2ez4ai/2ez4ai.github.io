@@ -1,0 +1,42 @@
+# Setup
+title:               Jingye Wang
+tagline:             'A personal blog.'
+description:         '"You can’t connect the dots looking forward; you can only connect them looking backward."'
+url:                 https://2ez4ai.github.io
+baseurl:             ''
+paginate:            5
+permalink:           pretty
+future:              true
+
+# About/contact
+author:
+  name:              Jingye Wang
+  url:               https://github.com/19w6
+  email:             wangjy5@shanghaitech.edu.cn
+
+# Gems
+plugins:
+  - jekyll-paginate
+
+# Custom vars
+version:             0.0.2
+google_analytics_id: #UA-XXXX-Y
+
+# comments:
+
+#   allowedFields: ["name", "email", "url", "message"]
+#   branch: "master"
+#   commitMessage: "Add comments."
+#   filename: "entry{@timestamp}"
+#   format: "yaml"
+#   generatedFields:
+#     date:
+#       type: date
+#       options:
+#         format: "timestamp-seconds"
+#   moderation: true
+#   name: "example.com"
+#   path: "_data/comments/{options.slug}"
+#   requiredFields: ["name", "email", "message"]
+#   transforms:
+#     email: md5
