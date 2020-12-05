@@ -1,5 +1,6 @@
 ---
 layout: post
+categories: machine-learning
 title: Machine Learning - 03 Linear Classification
 description: Include perceptron, Fisher's linear discriminant, logistic regression, Gaussian discriminant analysis and naive Bayes classifier. 
 ---

@@ -4,7 +4,7 @@
  <title>Jingye Wang</title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2020-12-05T16:04:45+08:00</updated>
+ <updated>2020-12-05T19:44:56+08:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Jingye Wang</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Machine Learning - 09 Exact Inference of Graphical Models</title>
-   <link href="http://localhost:4000/2020/12/06/inference-ml09/"/>
+   <link href="http://localhost:4000/machine-learning/inference-ml09/"/>
    <updated>2020-12-06T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/12/06/inference-ml09</id>
+   <id>http://localhost:4000/machine-learning/inference-ml09</id>
    <content type="html">&lt;p&gt;&lt;em&gt;The notes are based on the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt;, &lt;a href=&quot;https://ermongroup.github.io/cs228-notes/&quot;&gt;CS228-notes&lt;/a&gt; and &lt;a href=&quot;https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf&quot;&gt;PRML&lt;/a&gt;. For the fundamental of probability, one can refer to &lt;a href=&quot;https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view&quot;&gt;Introduction to Probability&lt;/a&gt;. Many thanks to these great works.&lt;/em&gt;&lt;/p&gt;
 
 &lt;ul id=&quot;markdown-toc&quot;&gt;
@@ -32,7 +32,7 @@
 &lt;/ul&gt;
 &lt;h1 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h1&gt;
 
-&lt;p&gt;In the last &lt;a href=&quot;https://2ez4ai.github.io/2020/11/29/probabilistic_graphical_models-ml08/&quot;&gt;post&lt;/a&gt;, we introduce graphical models which is capable of representing random variables and the conditional independences among them. We now consider the problem of inference in graphical models. Particularly, we wish to compute posterior distributions of one or more nodes contioned on some other known (observed) nodes, and the techniques we shall talk in this post are for &lt;em&gt;exact inference&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;In the last &lt;a href=&quot;https://2ez4ai.github.io/2020/11/29/probabilistic_graphical_models-ml08/&quot;&gt;post&lt;/a&gt;, we introduce graphical models which is capable of representing random variables and the conditional independences among them. We now consider the problem of inference in graphical models. Particularly, we wish to compute posterior distributions of one or more nodes conditioned on some other known (observed) nodes, and the techniques we shall talk in this post are for &lt;em&gt;exact inference&lt;/em&gt;.&lt;/p&gt;
 
 &lt;h1 id=&quot;1-variable-elimination&quot;&gt;1. Variable Elimination&lt;/h1&gt;
 
@@ -46,7 +46,7 @@
 
 &lt;p&gt;However, as there are $n-1$ variables each with $k$ states, the computation needs to sum the probability over $k^{n-1}$ values and would scale exponentially with the length of the chain. To simplify the computation, we can leverage &lt;em&gt;variable elimination&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;The key of &lt;em&gt;variable elimination&lt;/em&gt; is in &lt;em&gt;reagrranging the order&lt;/em&gt; of the summations and the multiplications. Specifically, the marginal distribution follows that&lt;/p&gt;
+&lt;p&gt;The key of &lt;em&gt;variable elimination&lt;/em&gt; is in &lt;em&gt;rearranging the order&lt;/em&gt; of the summations and the multiplications. Specifically, the marginal distribution follows that&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{aligned}P(x_n)&amp;=\sum_{x_1}\sum_{x_2}\dots\sum_{x_{n-1}}P(x_1)\prod_{i=2}^nP(x_i\vert x_{i-1})\\&amp;=\sum_{x_{n-1}}P(x_n\vert x_{n-1})\cdot \sum_{x_{n-2}}P(x_{n-1}\vert x_{n-2})\cdot\dots\cdot \sum_{x_{1}}P(x_{2}\vert x_{1})P(x_1).\end{aligned} %]]&gt;&lt;/script&gt;
@@ -55,7 +55,7 @@
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;ab+ac=a(b+c),&lt;/script&gt;
 
-&lt;p&gt;where the number of arithmetic operations are reduced from three (the left-hand side) to two (the right-hand side). Before we move on, we generalize the new expression to a Markov network since every Bayesian network can be tranformed into a Markov network. For the chain Bayesian network we considered, we can remove all the arrows of the graph to obtain a Markov network. The obtained Markov network would have maximum cliques &lt;script type=&quot;math/tex&quot;&gt;\{x_1,x_2\}&lt;/script&gt;, …, &lt;script type=&quot;math/tex&quot;&gt;\{x_{n-2},x_{n-1}\}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\{x_{n-1},x_{n}\}&lt;/script&gt; and the corresponding potentials are&lt;/p&gt;
+&lt;p&gt;where the number of arithmetic operations are reduced from three (the left-hand side) to two (the right-hand side). Before we move on, we generalize the new expression to a Markov network since every Bayesian network can be transformed into a Markov network. For the chain Bayesian network we considered, we can remove all the arrows of the graph to obtain a Markov network. The obtained Markov network would have maximum cliques &lt;script type=&quot;math/tex&quot;&gt;\{x_1,x_2\}&lt;/script&gt;, …, &lt;script type=&quot;math/tex&quot;&gt;\{x_{n-2},x_{n-1}\}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\{x_{n-1},x_{n}\}&lt;/script&gt; and the corresponding potentials are&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{aligned}\psi_{1,2}(x_1,x_2)&amp;=P(x_2\vert x_1)P(x_1),\\&amp;\vdots\\\psi_{x_{n-2},x_{n-1}}(x_{n-2},x_{n-1})&amp;=P(x_{n-2}\vert x_{n-1}),\\\psi_{n-1,n}(x_{n-1},x_n)&amp;=P(x_{n-1}\vert x_n).\end{aligned} %]]&gt;&lt;/script&gt;
@@ -64,7 +64,7 @@
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;P(x_n)=\sum_{x_{n-1}}\psi_{n-1,n}(x_{n-1}, x_{n})\cdot \sum_{x_{n-2}}\psi_{n-2,n-1}(x_{n-2}, x_{n-1})\cdot\dots\cdot \sum_{x_{1}}\psi_{1,2}(x_1,x_2).&lt;/script&gt;
 
-&lt;p&gt;Now the computation composes of $n-1$ summations. More importantly, unlike the previous one sums over $k^{n-1}$ values, this exression allows each term only need to sum over $k\times k$ values. Specifically, the sum&lt;/p&gt;
+&lt;p&gt;Now the computation composes of $n-1$ summations. More importantly, unlike the previous one sums over $k^{n-1}$ values, this expression allows each term only need to sum over $k\times k$ values. Specifically, the sum&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{x_i}\psi_{x_i,x_{i+1}}(x_{i},x_{i+1})&lt;/script&gt;
 
@@ -128,16 +128,16 @@
 
 &lt;h1 id=&quot;3-conclusion&quot;&gt;3. Conclusion&lt;/h1&gt;
 
-&lt;p&gt;In this post, we briefly introduced two algorithms for &lt;em&gt;exact inference&lt;/em&gt; in graphical models. Given a proper order of nodes, &lt;em&gt;variable elimination&lt;/em&gt; algorithm is efficient. However, the finding of the proper order is an NP-hard problem. Besides, each query of marginals needs running the algorithm, during which the computation can be highly redundant. To improve computing efficiency, &lt;em&gt;belif propagation&lt;/em&gt; stores the intermediate results as messages. After that, one can get any marginal by the messages. Moreover, we can also exploit those messages to determine the values of random varaibles with the largest probability, which is known as &lt;em&gt;max-product&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;In this post, we briefly introduced two algorithms for &lt;em&gt;exact inference&lt;/em&gt; in graphical models. Given a proper order of nodes, &lt;em&gt;variable elimination&lt;/em&gt; algorithm is efficient. However, the finding of the proper order is an NP-hard problem. Besides, each query of marginals needs running the algorithm, during which the computation can be highly redundant. To improve computing efficiency, &lt;em&gt;belief propagation&lt;/em&gt; stores the intermediate results as messages. After that, one can get any marginal by the messages. Moreover, we can also exploit those messages to determine the values of random variables with the largest probability, which is known as &lt;em&gt;max-product&lt;/em&gt;.&lt;/p&gt;
 
 </content>
  </entry>
  
  <entry>
    <title>Machine Learning - 08 Probabilistic Graphical Models</title>
-   <link href="http://localhost:4000/2020/11/29/probabilistic_graphical_models-ml08/"/>
+   <link href="http://localhost:4000/machine-learning/probabilistic_graphical_models-ml08/"/>
    <updated>2020-11-29T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/11/29/probabilistic_graphical_models-ml08</id>
+   <id>http://localhost:4000/machine-learning/probabilistic_graphical_models-ml08</id>
    <content type="html">&lt;p&gt;&lt;em&gt;The notes are based on the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt; and &lt;a href=&quot;https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf&quot;&gt;PRML&lt;/a&gt;. For the fundamental of probability, one can refer to &lt;a href=&quot;https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view&quot;&gt;Introduction to Probability&lt;/a&gt;. Many thanks to these great works.&lt;/em&gt;&lt;/p&gt;
 
 &lt;ul id=&quot;markdown-toc&quot;&gt;
@@ -545,11 +545,20 @@ Figure 6. (a) A directed graph. (b) The corresponding moral graph of the directe
  
  <entry>
    <title>Machine Learning - 07 Exponential Family</title>
-   <link href="http://localhost:4000/2020/11/12/exponential_family-ml07/"/>
+   <link href="http://localhost:4000/machine-learning/exponential_family-ml07/"/>
    <updated>2020-11-12T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/11/12/exponential_family-ml07</id>
+   <id>http://localhost:4000/machine-learning/exponential_family-ml07</id>
    <content type="html">&lt;p&gt;&lt;em&gt;The notes are based on the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt; and the &lt;a href=&quot;https://people.eecs.berkeley.edu/~jordan/courses/260-spring10/other-readings/chapter8.pdf&quot;&gt;material&lt;/a&gt;. For the fundamental of linear algebra, one can always refer to &lt;a href=&quot;http://math.mit.edu/~gs/linearalgebra/&quot;&gt;Introduction to Linear Algebra&lt;/a&gt; and &lt;a href=&quot;https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf&quot;&gt;The Matrix Cookbook&lt;/a&gt; for more details. Many thanks to these great works.&lt;/em&gt;&lt;/p&gt;
 
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#0-introduction&quot; id=&quot;markdown-toc-0-introduction&quot;&gt;0. Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-exponential-family&quot; id=&quot;markdown-toc-1-exponential-family&quot;&gt;1. Exponential Family&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2-sufficient-statistic&quot; id=&quot;markdown-toc-2-sufficient-statistic&quot;&gt;2. Sufficient Statistic&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-log-partition-function&quot; id=&quot;markdown-toc-3-log-partition-function&quot;&gt;3. Log-partition Function&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4-maximum-entropy&quot; id=&quot;markdown-toc-4-maximum-entropy&quot;&gt;4. Maximum Entropy&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#5-gaussian-distribution&quot; id=&quot;markdown-toc-5-gaussian-distribution&quot;&gt;5. Gaussian Distribution&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#6-conclusion&quot; id=&quot;markdown-toc-6-conclusion&quot;&gt;6. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h1&gt;
 
 &lt;p&gt;An exponential family is a family of distributions which share some properties in common. The real message of this note is the simplicity and elegance of the exponential family. Once the ideas are mastered, it is often easier to work within the general exponential family framework than with specific instances.&lt;/p&gt;
@@ -744,16 +753,22 @@ T(x)=\begin{bmatrix}x&amp;x^2\end{bmatrix}^T %]]&gt;&lt;/script&gt;, we have&lt;
  
  <entry>
    <title>Machine Learning - 06 Kernel Method</title>
-   <link href="http://localhost:4000/2020/11/05/kernel_method-ml06/"/>
+   <link href="http://localhost:4000/machine-learning/kernel_method-ml06/"/>
    <updated>2020-11-05T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/11/05/kernel_method-ml06</id>
+   <id>http://localhost:4000/machine-learning/kernel_method-ml06</id>
    <content type="html">&lt;p&gt;&lt;em&gt;The notes are based on the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt;. For the fundamental of linear algebra, one can always refer to &lt;a href=&quot;http://math.mit.edu/~gs/linearalgebra/&quot;&gt;Introduction to Linear Algebra&lt;/a&gt; and &lt;a href=&quot;https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf&quot;&gt;The Matrix Cookbook&lt;/a&gt; for more details. Many thanks to these great works.&lt;/em&gt;&lt;/p&gt;
 
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#0-introduction&quot; id=&quot;markdown-toc-0-introduction&quot;&gt;0. Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-kernel-method&quot; id=&quot;markdown-toc-1-kernel-method&quot;&gt;1. Kernel method&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2-kernel-function&quot; id=&quot;markdown-toc-2-kernel-function&quot;&gt;2. Kernel function&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-conclusion&quot; id=&quot;markdown-toc-3-conclusion&quot;&gt;3. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h1&gt;
 
 &lt;p&gt;Kernel methods are a class of algorithms for pattern analysis. The name of kernel methods comes from the use of &lt;em&gt;kernel function&lt;/em&gt;, which enable operations in a high-dimensional and implicit space. Specifically, by &lt;a href=&quot;https://en.wikipedia.org/wiki/Cover%27s_theorem&quot;&gt;Cover’s theorem&lt;/a&gt;, given a set of training data that is not &lt;em&gt;linearly separable&lt;/em&gt;, one can with high probability transform it into a training set that is linearly separable by projecting it into a higher-dimensional space via some &lt;em&gt;non-linear transformation&lt;/em&gt;. With the help of kernel function, the operation, &lt;em&gt;i.e.,&lt;/em&gt; inner product, it involves after transforming can be often computationally cheaper than the explicit computation. Such an approach is called the &lt;em&gt;kernel trick&lt;/em&gt;. In this post, we will focus on the application of kernel method to SVM.&lt;/p&gt;
 
-&lt;h2 id=&quot;1-kernel-method&quot;&gt;1. Kernel method&lt;/h2&gt;
+&lt;h1 id=&quot;1-kernel-method&quot;&gt;1. Kernel method&lt;/h1&gt;
 
 &lt;p&gt;Define the data set as &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}, X=\{x_1,x_2,\dots,x_N\}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Y=\{y_1,y_2,\dots,y_N\}&lt;/script&gt; where $x_i\in\mathbb{R}^{d\times 1}$ and &lt;script type=&quot;math/tex&quot;&gt;y_i\in\{-1,1\}&lt;/script&gt;. We further assume that the data set is non-linearly separable. Kernel method supposes that there is a non-linear transformation $\phi(x):\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1},d&amp;lt;p,$  such that &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}_p=\{(\phi(x_1),y_1),(\phi(x_2),y_2),\dots,(\phi(x_N),y_N)\}&lt;/script&gt; are linearly separable. For such a linearly separable data set, recalling the problem we formulated in section 1.3 of &lt;a href=&quot;https://2ez4ai.github.io/2020/10/28/support_vector_machine-ml05/&quot;&gt;SVM&lt;/a&gt;, we have the duality problem&lt;/p&gt;
 
@@ -762,7 +777,7 @@ T(x)=\begin{bmatrix}x&amp;x^2\end{bmatrix}^T %]]&gt;&lt;/script&gt;, we have&lt;
 
 &lt;p&gt;However, after transforming, the inner product $\phi(x_i)^T\phi(x_j)=\langle\phi(x_i),\phi(x_j)\rangle$ could be hard to obtain (consider the case that $\phi(\cdot)$ has infinite dimensions), which requires the aid of &lt;em&gt;kernel function&lt;/em&gt;.&lt;/p&gt;
 
-&lt;h2 id=&quot;2-kernel-function&quot;&gt;2. Kernel function&lt;/h2&gt;
+&lt;h1 id=&quot;2-kernel-function&quot;&gt;2. Kernel function&lt;/h1&gt;
 
 &lt;p&gt;A kernel function is defined as $K:\mathbb{R}^{d\times 1}\times\mathbb{R}^{d\times 1}\to\mathbb{R}$. Specifically, for non-linear transformation $\phi(\cdot)\in\mathcal{H}\text{ (Hilbert space) }:\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1}$ and any $x_i,x_j\in\mathbb{R}^{d\times 1}$, we call $K(x_i,x_j)=\langle\phi(x_i),\phi(x_j)\rangle$ a kernel function. Such a kernel function is regarded &lt;em&gt;positive definite&lt;/em&gt;, which satisfies&lt;/p&gt;
 
@@ -826,11 +841,22 @@ T(x)=\begin{bmatrix}x&amp;x^2\end{bmatrix}^T %]]&gt;&lt;/script&gt;, we have&lt;
  
  <entry>
    <title>Machine Learning - 05 Support Vector Machine</title>
-   <link href="http://localhost:4000/2020/10/28/support_vector_machine-ml05/"/>
+   <link href="http://localhost:4000/machine-learning/support_vector_machine-ml05/"/>
    <updated>2020-10-28T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/10/28/support_vector_machine-ml05</id>
+   <id>http://localhost:4000/machine-learning/support_vector_machine-ml05</id>
    <content type="html">&lt;p&gt;&lt;em&gt;The notes are based on the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt;. For the fundamental of linear algebra, one can always refer to &lt;a href=&quot;http://math.mit.edu/~gs/linearalgebra/&quot;&gt;Introduction to Linear Algebra&lt;/a&gt; and &lt;a href=&quot;https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf&quot;&gt;The Matrix Cookbook&lt;/a&gt; for more details. Many thanks to these great works.&lt;/em&gt;&lt;/p&gt;
 
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#0-introduction&quot; id=&quot;markdown-toc-0-introduction&quot;&gt;0. Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-hard-margin-svm&quot; id=&quot;markdown-toc-1-hard-margin-svm&quot;&gt;1. Hard-margin SVM&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#11-problem-formulation&quot; id=&quot;markdown-toc-11-problem-formulation&quot;&gt;1.1. Problem formulation&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#12-lagrange-duality&quot; id=&quot;markdown-toc-12-lagrange-duality&quot;&gt;1.2. Lagrange duality&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#13-karushkuhntucker-conditions&quot; id=&quot;markdown-toc-13-karushkuhntucker-conditions&quot;&gt;1.3. Karush–Kuhn–Tucker conditions&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2-soft-margin-svm&quot; id=&quot;markdown-toc-2-soft-margin-svm&quot;&gt;2. Soft-margin SVM&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-conclusion&quot; id=&quot;markdown-toc-3-conclusion&quot;&gt;3. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h1&gt;
 
 &lt;p&gt;Support vector machine (SVM) is a supervised learning method for classification and regression analysis. It is one of the most robust prediction method. Here we mainly consider its applications in classification. Specifically, for the data of $d$-dimensional, we want to know whether we can separate classes with a $(d-1)$-dimensional &lt;em&gt;hyperplane&lt;/em&gt;. In particular, a good separation is achieved by the hyperplane that has the largest distance to the nearest training-data point of any class. According to whether the dataset is linearly separable or not, there are &lt;em&gt;hard-margin&lt;/em&gt; SVM, &lt;em&gt;soft-margin&lt;/em&gt; SVM and &lt;em&gt;kernel&lt;/em&gt; SVM.&lt;/p&gt;
@@ -1013,7 +1039,7 @@ T(x)=\begin{bmatrix}x&amp;x^2\end{bmatrix}^T %]]&gt;&lt;/script&gt;, we have&lt;
 
 &lt;p&gt;Accordingly, the hyperplane is the linear combination of the data on the margin with corresponding $\hat\lambda_k&amp;gt;0$. We call those data &lt;em&gt;support vectors&lt;/em&gt; from where the name SVM comes.&lt;/p&gt;
 
-&lt;h2 id=&quot;2-soft-margin-svm&quot;&gt;2. Soft-margin SVM&lt;/h2&gt;
+&lt;h1 id=&quot;2-soft-margin-svm&quot;&gt;2. Soft-margin SVM&lt;/h1&gt;
 
 &lt;p&gt;In practice, there are noise and outliers among the data, which makes the data nonlinearly separable. In that case, hard-margin fails to work. Now we introduce &lt;em&gt;soft-margin SVM&lt;/em&gt; which extends SVM to the nonlinearly separable data. Recall that in hard-margin SVM, we have the constraint&lt;/p&gt;
 
@@ -1060,7 +1086,7 @@ y_i(w^Tx_i-b)=\xi&lt; 1. %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;where $C$ is the &lt;em&gt;cost&lt;/em&gt; parameter that determines to what extent we allow for outliers. To solve the problem one can refer to the hard-margin case as they are actually similar.&lt;/p&gt;
 
-&lt;h1 id=&quot;4-conclusion&quot;&gt;4. Conclusion&lt;/h1&gt;
+&lt;h1 id=&quot;3-conclusion&quot;&gt;3. Conclusion&lt;/h1&gt;
 
 &lt;p&gt;In this post, we first introduced hard-margin SVM for linearly separable data. By introducing a loss function and slack variables, soft-margin SVM allows for noise and outliers so that it can handle non linear case. The two models can both be solved by &lt;em&gt;convex optimization&lt;/em&gt; methods. For convex optimization, we briefly reviewed &lt;em&gt;Lagrange duality&lt;/em&gt;, &lt;em&gt;Slater’s condition&lt;/em&gt; and &lt;em&gt;KKT conditions&lt;/em&gt;.&lt;/p&gt;
 </content>
@@ -1068,11 +1094,20 @@ y_i(w^Tx_i-b)=\xi&lt; 1. %]]&gt;&lt;/script&gt;
  
  <entry>
    <title>Machine Learning - 04 Dimensionality Reduction</title>
-   <link href="http://localhost:4000/2020/10/26/dimensionality_reduction-ml04/"/>
+   <link href="http://localhost:4000/machine-learning/dimensionality_reduction-ml04/"/>
    <updated>2020-10-26T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/10/26/dimensionality_reduction-ml04</id>
+   <id>http://localhost:4000/machine-learning/dimensionality_reduction-ml04</id>
    <content type="html">&lt;p&gt;&lt;em&gt;The notes are based on the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt;. For the fundamental of linear algebra, one can always refer to &lt;a href=&quot;http://math.mit.edu/~gs/linearalgebra/&quot;&gt;Introduction to Linear Algebra&lt;/a&gt; and &lt;a href=&quot;https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf&quot;&gt;The Matrix Cookbook&lt;/a&gt; for more details. Many thanks to these great works.&lt;/em&gt;&lt;/p&gt;
 
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#0-curse-of-dimensionality&quot; id=&quot;markdown-toc-0-curse-of-dimensionality&quot;&gt;0. Curse of Dimensionality&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-sample-mean-and-variance&quot; id=&quot;markdown-toc-1-sample-mean-and-variance&quot;&gt;1. Sample Mean and Variance&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2-principal-component-analysis&quot; id=&quot;markdown-toc-2-principal-component-analysis&quot;&gt;2. Principal Component Analysis&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-principal-component-analysis---an-svd-perspective&quot; id=&quot;markdown-toc-3-principal-component-analysis---an-svd-perspective&quot;&gt;3. Principal Component Analysis - An SVD Perspective&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4-principal-coordinates-analysis&quot; id=&quot;markdown-toc-4-principal-coordinates-analysis&quot;&gt;4. Principal Coordinates Analysis&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#5-probabilistic-principal-component-analysis&quot; id=&quot;markdown-toc-5-probabilistic-principal-component-analysis&quot;&gt;5. Probabilistic Principal Component Analysis&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#6-conclusion&quot; id=&quot;markdown-toc-6-conclusion&quot;&gt;6. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&quot;0-curse-of-dimensionality&quot;&gt;0. Curse of Dimensionality&lt;/h1&gt;
 
 &lt;p&gt;&lt;em&gt;The following introduction is derived from &lt;a href=&quot;http://users.isr.ist.utl.pt/~wurmd/Livros/school/Bishop%20-%20Pattern%20Recognition%20And%20Machine%20Learning%20-%20Springer%20%202006.pdf&quot;&gt;Pattern Recognition and Machine Learning&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
@@ -1272,11 +1307,26 @@ X=(x_1,x_2,\dots,x_N)^T=\begin{pmatrix}x_{1}^T\\x_{2}^T\\\vdots\\x_{N}^T\end{pma
  
  <entry>
    <title>Machine Learning - 03 Linear Classification</title>
-   <link href="http://localhost:4000/2020/10/14/linear_classification-ml03/"/>
+   <link href="http://localhost:4000/machine-learning/linear_classification-ml03/"/>
    <updated>2020-10-14T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/10/14/linear_classification-ml03</id>
+   <id>http://localhost:4000/machine-learning/linear_classification-ml03</id>
    <content type="html">&lt;p&gt;&lt;em&gt;The notes are based on the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt;. For the fundamental of linear algebra, one can always refer to &lt;a href=&quot;http://math.mit.edu/~gs/linearalgebra/&quot;&gt;Introduction to Linear Algebra&lt;/a&gt; and &lt;a href=&quot;https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf&quot;&gt;The Matrix Cookbook&lt;/a&gt; for more details. Many thanks to these great works.&lt;/em&gt;&lt;/p&gt;
 
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#0-introduction&quot; id=&quot;markdown-toc-0-introduction&quot;&gt;0. Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-perceptron&quot; id=&quot;markdown-toc-1-perceptron&quot;&gt;1. Perceptron&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2-linear-discriminant-analysis&quot; id=&quot;markdown-toc-2-linear-discriminant-analysis&quot;&gt;2. Linear Discriminant Analysis&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-discriminant-classifiers&quot; id=&quot;markdown-toc-3-discriminant-classifiers&quot;&gt;3. Discriminant Classifiers&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#31-logistic-regression&quot; id=&quot;markdown-toc-31-logistic-regression&quot;&gt;3.1. Logistic regression&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4-generative-classifiers&quot; id=&quot;markdown-toc-4-generative-classifiers&quot;&gt;4. Generative Classifiers&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#41-naive-bayes-classifier&quot; id=&quot;markdown-toc-41-naive-bayes-classifier&quot;&gt;4.1. Naive Bayes classifier&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#42-gaussian-discriminant-analysis&quot; id=&quot;markdown-toc-42-gaussian-discriminant-analysis&quot;&gt;4.2. Gaussian discriminant analysis&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#5-conclusion&quot; id=&quot;markdown-toc-5-conclusion&quot;&gt;5. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h1&gt;
 
 &lt;p&gt;&lt;em&gt;The following introduction is derived from the &lt;a href=&quot;http://pages.stat.wisc.edu/~wahba/stat860public/pdf1/liu.zhang.wu.lum.11.pdf&quot;&gt;paper&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
@@ -1541,11 +1591,22 @@ y_iw^Tx_i\ge0\iff\begin{cases}w^Tx_i\ge0,\ f(w)=1,&amp;\text{if } y_i=+1\\w^Tx_i
  
  <entry>
    <title>Machine Learning - 02 Linear Regression</title>
-   <link href="http://localhost:4000/2020/10/07/linear_regression-ml02/"/>
+   <link href="http://localhost:4000/machine-learning/linear_regression-ml02/"/>
    <updated>2020-10-07T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/10/07/linear_regression-ml02</id>
+   <id>http://localhost:4000/machine-learning/linear_regression-ml02</id>
    <content type="html">&lt;p&gt;&lt;em&gt;The notes are based on the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt;. Many thanks to the great work.&lt;/em&gt;&lt;/p&gt;
 
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-least-squares-method&quot; id=&quot;markdown-toc-1-least-squares-method&quot;&gt;1. Least Squares Method&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2-least-squares-method---a-matrix-perspective&quot; id=&quot;markdown-toc-2-least-squares-method---a-matrix-perspective&quot;&gt;2. Least Squares Method - A Matrix Perspective&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-least-squares-method---a-probabilistic-perspective&quot; id=&quot;markdown-toc-3-least-squares-method---a-probabilistic-perspective&quot;&gt;3. Least Squares Method - A Probabilistic Perspective&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#31-maximum-likelihood-estimation&quot; id=&quot;markdown-toc-31-maximum-likelihood-estimation&quot;&gt;3.1 Maximum likelihood estimation&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#32-maximum-a-posteriori&quot; id=&quot;markdown-toc-32-maximum-a-posteriori&quot;&gt;3.2 Maximum a posteriori&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4-regularization&quot; id=&quot;markdown-toc-4-regularization&quot;&gt;4. Regularization&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#5-conclusion&quot; id=&quot;markdown-toc-5-conclusion&quot;&gt;5. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&quot;1-least-squares-method&quot;&gt;1. Least Squares Method&lt;/h1&gt;
 
 &lt;p&gt;Suppose we have the IID data &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}=\{(x_1,y_1), (x_2,y_2),\dots,(x_N,y_N)\},&lt;/script&gt; where $x_i\in\mathbb{R}^{d\times 1}, y_i\in\mathbb{R}, i=1,2,\dots,N$. One can view $x_i$ as a feature vector and $y_i$ is the corresponding label. Denote&lt;/p&gt;
@@ -1700,11 +1761,23 @@ X=(x_1,x_2, x_3)^T=\begin{pmatrix}1&amp;0.2&amp;0.5\\0&amp;1&amp;0\\0&amp;0&amp;
  
  <entry>
    <title>Machine Learning - 01 Introduction</title>
-   <link href="http://localhost:4000/2020/09/28/intro-ml01/"/>
+   <link href="http://localhost:4000/machine-learning/intro-ml01/"/>
    <updated>2020-09-28T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/09/28/intro-ml01</id>
+   <id>http://localhost:4000/machine-learning/intro-ml01</id>
    <content type="html">&lt;p&gt;&lt;em&gt;The notes are based on the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt;. Many thanks to the great work.&lt;/em&gt;&lt;/p&gt;
 
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#0-motivation&quot; id=&quot;markdown-toc-0-motivation&quot;&gt;0. Motivation&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-frequentist-vs-bayesian&quot; id=&quot;markdown-toc-1-frequentist-vs-bayesian&quot;&gt;1. Frequentist vs Bayesian&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2maximum-likelihood-estimation-on-gaussian-distribution&quot; id=&quot;markdown-toc-2maximum-likelihood-estimation-on-gaussian-distribution&quot;&gt;2.Maximum Likelihood Estimation on Gaussian Distribution&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-gaussian-distribution&quot; id=&quot;markdown-toc-3-gaussian-distribution&quot;&gt;3. Gaussian Distribution&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4-calculations-on-gaussian&quot; id=&quot;markdown-toc-4-calculations-on-gaussian&quot;&gt;4. Calculations on Gaussian&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#41-calculations-on-the-union-distribution&quot; id=&quot;markdown-toc-41-calculations-on-the-union-distribution&quot;&gt;4.1. Calculations on the union distribution&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#42-calculations-on-the-marginal-and-conditional-distribution&quot; id=&quot;markdown-toc-42-calculations-on-the-marginal-and-conditional-distribution&quot;&gt;4.2 Calculations on the marginal and conditional distribution&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#5-conclusion&quot; id=&quot;markdown-toc-5-conclusion&quot;&gt;5. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&quot;0-motivation&quot;&gt;0. Motivation&lt;/h1&gt;
 
 &lt;p&gt;After setting up this blog, I actually had no idea about what should I post. I am definitely not good at writing, but still I enjoy it a lot. As I am weak in machine learning and mathematics, for writing and learning, a ‘&lt;em&gt;translation&lt;/em&gt;’ work of the &lt;a href=&quot;https://github.com/shuhuai007/Machine-Learning-Session&quot;&gt;session&lt;/a&gt; may be a good start. So here we are!&lt;/p&gt;
@@ -1935,9 +2008,9 @@ z\sim\mathcal{N}\left(\begin{pmatrix}\mu\\A\mu+b\end{pmatrix},\begin{pmatrix}\Si
  
  <entry>
    <title>Introduction to Reinforcement Learning</title>
-   <link href="http://localhost:4000/2020/09/21/intro-rl/"/>
+   <link href="http://localhost:4000/reinforcement-learning/intro-rl/"/>
    <updated>2020-09-21T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2020/09/21/intro-rl</id>
+   <id>http://localhost:4000/reinforcement-learning/intro-rl</id>
    <content type="html">&lt;p&gt;The introductory &lt;a href=&quot;https://github.com/19w6/Reinforcement_Learning_Notes&quot;&gt;notes&lt;/a&gt; included &lt;strong&gt;Bandit Algorithms&lt;/strong&gt;, &lt;strong&gt;MDP&lt;/strong&gt;, &lt;strong&gt;Model-free Methods&lt;/strong&gt;, &lt;strong&gt;Value Function Approximation&lt;/strong&gt;, &lt;strong&gt;Policy Optimization&lt;/strong&gt;. For the state-of-the-art advances, one can refer to paper directly and some excellent blogs.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://2ez4ai.github.io/assets/rl/Reinforcement Learning Notes.pdf&quot;&gt;Reinforcement Learning Notes (an integration of the following sections)&lt;/a&gt;&lt;/p&gt;

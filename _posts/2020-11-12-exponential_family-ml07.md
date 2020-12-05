@@ -1,5 +1,6 @@
 ---
 layout: post
+categories: machine-learning
 title: Machine Learning - 07 Exponential Family
 published: True
 description: Introduce concepts of exponential family.

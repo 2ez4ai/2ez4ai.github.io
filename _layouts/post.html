@@ -1,13 +1,90 @@
 ---
 layout: default
 ---
+<style>
+  .button {
+    border: 2px solid;
+    border-radius: 7.5px;
+    color: white;
+    padding: 2.5px 7.5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition-duration: 0.1s;
+    cursor: pointer;
+  }
 
+  .buttonC {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #2e3131;
+  }
+
+  .buttonC:hover {
+    background-color: #2e3131;
+    color: white;
+  }
+  a:hover{
+    text-decoration: none;
+  }
+</style>
 <div class="post">
   <h1 class="post-title">{{ page.title }} </h1>
-  <span class="post-date">{{ page.date | date_to_string }}</span>
+  <span class="post-date">
+    {{ page.date | date_to_string }}
+    <p></p>
+  <div class="post-categories">
+      {% if post %}
+        {% assign categories = post.categories %}
+      {% else %}
+        {% assign categories = page.categories %}
+      {% endif %}
+      {% for category in categories %}
+      <a class="button buttonC" href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>&nbsp;
+      {% unless forloop.last %}&nbsp;{% endunless %}
+      {% endfor %}
+    </div>
+  </span>
   {{ content }}
 </div>
 
+{% if site.related_posts.size >= 1 %} <!--https://blog.webjeda.com/jekyll-related-posts/-->
+<div class="related">
+  <h2>Related posts</h2>
+  {% assign maxRelated = 3 %}
+  {% assign minCommonTags =  1 %}
+  {% assign maxRelatedCounter = 0 %}
+
+  {% for post in site.posts %}
+
+    {% assign sameTagCount = 0 %}
+    {% assign commonTags = '' %}
+
+    {% for category in post.categories %}
+      {% if post.url != page.url %}
+        {% if page.categories contains category %}
+          {% assign sameTagCount = sameTagCount | plus: 1 %}
+          {% capture tagmarkup %} <span class="label label-default">{{ category }}</span> {% endcapture %}
+          {% assign commonTags = commonTags | append: tagmarkup %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% if sameTagCount >= minCommonTags %}
+      <div>
+      <h5><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}{{ commonTags }}</a></h5>
+      </div>
+      {% assign maxRelatedCounter = maxRelatedCounter | plus: 1 %}
+      {% if maxRelatedCounter >= maxRelated %}
+        {% break %}
+      {% endif %}
+    {% endif %}
+
+  {% endfor %}
+</div>
+{% endif %}
+
+<!--
 {% if site.related_posts.size >= 1 %}
 <div class="related">
   <h2>Related posts</h2>
@@ -25,6 +102,7 @@ layout: default
   </ul>
 </div>
 {% endif %}
+-->
 
 <!-- Comments -->
 <!--
