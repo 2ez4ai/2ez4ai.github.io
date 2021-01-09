@@ -22,7 +22,7 @@ Hard-margin SVM works only when data is completely linearly separable without an
 
 <div align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/SVM_margin.png/300px-SVM_margin.png" width="350" />
 </div>
-## 1.1. Problem formulation
+## 1.1. Problem Formulation
 
 Suppose we have data set $$\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}$$ where $x_i\in\mathbb{R}^{d\times 1}$ is the data feature and $y_i\in\{-1,1\}$ is the corresponding class label. A case where $d=2$ is shown in the figure above. The hyperplane that separates the data is defined as
 
@@ -54,7 +54,7 @@ $$\begin{alignat*}{3}&&\max_{w,b}\frac{1}{\vert\vert w\vert\vert}\min_i y_i(w^Tx
 
 which is a linearly constrained *quadratic optimization* (QP) problem.
 
-## 1.2. Lagrange duality
+## 1.2. Lagrange Duality
 
 The following content is about [convex optimization](https://web.stanford.edu/~boyd/cvxbook/). In section 1, we have the *primal problem*
 
@@ -118,7 +118,7 @@ $$\min_{w,b}\max_{\lambda} L(w,b,\lambda)\ge\max_{\lambda}\min_{w,b} L(w,b,\lamb
 
 Solving the dual problem in fact is used to find nontrivial lower bounds for difficult original problems. In our case, the strong duality holds for the linearly constrained QP problem. Thus to solve the primal problem is to solve the dual problem.
 
-## 1.3. Karush–Kuhn–Tucker conditions
+## 1.3. Karush–Kuhn–Tucker Conditions
 
 For the primal problem and its dual problem, if the strong duality holds, then *Karush–Kuhn–Tucker (KKT) conditions* are satisfied as
 

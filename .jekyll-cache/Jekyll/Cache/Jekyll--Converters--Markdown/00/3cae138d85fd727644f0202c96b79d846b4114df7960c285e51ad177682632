@@ -1,4 +1,4 @@
-I"h!<p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>. For the fundamental of linear algebra, one can always refer to <a href="http://math.mit.edu/~gs/linearalgebra/">Introduction to Linear Algebra</a> and <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">The Matrix Cookbook</a> for more details. Many thanks to these great works.</em></p>
+I"ç<p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>. For the fundamental of linear algebra, one can always refer to <a href="http://math.mit.edu/~gs/linearalgebra/">Introduction to Linear Algebra</a> and <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">The Matrix Cookbook</a> for more details. Many thanks to these great works.</em></p>
 
 <ul id="markdown-toc">
   <li><a href="#0-introduction" id="markdown-toc-0-introduction">0. Introduction</a></li>
@@ -12,10 +12,9 @@
 
 <h1 id="1-kernel-method">1. Kernel method</h1>
 
-<p>Define the data set as <script type="math/tex">\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}, X=\{x_1,x_2,\dots,x_N\}</script> and <script type="math/tex">Y=\{y_1,y_2,\dots,y_N\}</script> where $x_i\in\mathbb{R}^{d\times 1}$ and <script type="math/tex">y_i\in\{-1,1\}</script>. We further assume that the data set is non-linearly separable. Kernel method supposes that there is a non-linear transformation $\phi(x):\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1},d&lt;p,$  such that <script type="math/tex">\mathcal{D}_p=\{(\phi(x_1),y_1),(\phi(x_2),y_2),\dots,(\phi(x_N),y_N)\}</script> are linearly separable. For such a linearly separable data set, recalling the problem we formulated in section 1.3 of <a href="https://2ez4ai.github.io/2020/10/28/support_vector_machine-ml05/">SVM</a>, we have the duality problem</p>
+<p>Define the data set as \(\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}, X=\{x_1,x_2,\dots,x_N\}\) and \(Y=\{y_1,y_2,\dots,y_N\}\) where $x_i\in\mathbb{R}^{d\times 1}$ and \(y_i\in\{-1,1\}\). We further assume that the data set is non-linearly separable. Kernel method supposes that there is a non-linear transformation $\phi(x):\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1},d&lt;p,$  such that \(\mathcal{D}_p=\{(\phi(x_1),y_1),(\phi(x_2),y_2),\dots,(\phi(x_N),y_N)\}\) are linearly separable. For such a linearly separable data set, recalling the problem we formulated in section 1.3 of <a href="https://2ez4ai.github.io/2020/10/28/support_vector_machine-ml05/">SVM</a>, we have the duality problem</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\min_\lambda&\quad \frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^N\left(\lambda_i\lambda_jy_iy_j\phi^T(x_i)\phi(x_j)\right)-\sum_{i=1}^N\lambda_i\\\text{s.t.}&\quad \lambda_i\ge0,i=1,2,\dots,N\\&\quad \sum_{i=1}^N\lambda_iy_i=0.\end{aligned} %]]></script>
+\[\begin{aligned}\min_\lambda&amp;\quad \frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^N\left(\lambda_i\lambda_jy_iy_j\phi^T(x_i)\phi(x_j)\right)-\sum_{i=1}^N\lambda_i\\\text{s.t.}&amp;\quad \lambda_i\ge0,i=1,2,\dots,N\\&amp;\quad \sum_{i=1}^N\lambda_iy_i=0.\end{aligned}\]
 
 <p>However, after transforming, the inner product $\phi(x_i)^T\phi(x_j)=\langle\phi(x_i),\phi(x_j)\rangle$ could be hard to obtain (consider the case that $\phi(\cdot)$ has infinite dimensions), which requires the aid of <em>kernel function</em>.</p>
 
@@ -23,53 +22,51 @@
 
 <p>A kernel function is defined as $K:\mathbb{R}^{d\times 1}\times\mathbb{R}^{d\times 1}\to\mathbb{R}$. Specifically, for non-linear transformation $\phi(\cdot)\in\mathcal{H}\text{ (Hilbert space) }:\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1}$ and any $x_i,x_j\in\mathbb{R}^{d\times 1}$, we call $K(x_i,x_j)=\langle\phi(x_i),\phi(x_j)\rangle$ a kernel function. Such a kernel function is regarded <em>positive definite</em>, which satisfies</p>
 
-<script type="math/tex; mode=display">K(x_i,x_j)=K(x_j,x_i),</script>
+\[K(x_i,x_j)=K(x_j,x_i),\]
 
-<p>and for <script type="math/tex">x_{1},x_{2},\dots,x_{N}\in\mathbb{R}^{d\times 1},</script></p>
+<p>and for \(x_{1},x_{2},\dots,x_{N}\in\mathbb{R}^{d\times 1},\)</p>
 
-<script type="math/tex; mode=display">\mathcal{K}=[K(x_{i},x_{j})]_{N\times N}\text{ is a positive semi-definite (PSD) matrix},</script>
+\[\mathcal{K}=[K(x_{i},x_{j})]_{N\times N}\text{ is a positive semi-definite (PSD) matrix},\]
 
-<p>where <script type="math/tex">\mathcal{K}</script> is called <em>Gram matrix</em> of $K$ over set <script type="math/tex">\{x_{1},x_{2},\dots,x_{N}\}</script>. When the explicit expression of $\phi(\cdot)$ is hard to be determined, it quite often to show the positive definiteness of a kernel function via its corresponding Gram matrix.</p>
+<p>where \(\mathcal{K}\) is called <em>Gram matrix</em> of $K$ over set \(\{x_{1},x_{2},\dots,x_{N}\}\). When the explicit expression of $\phi(\cdot)$ is hard to be determined, it quite often to show the positive definiteness of a kernel function via its corresponding Gram matrix.</p>
 
 <p><strong>(Properties)</strong> We now show two <em>properties</em> of kernel functions.</p>
 
 <ul>
-  <li>Let $K$ be kernel function such that <script type="math/tex">K:\mathbb{R}^{d\times 1}\times\mathbb{R}^{d\times 1}\to\mathbb{R}</script>, then we define its Gram matrix $\mathcal{K}\in\mathbb{R}^{N\times N}$ over <script type="math/tex">\{x_1,x_2,\dots,x_N\}</script> where $x_i\in\mathbb{R}^{d\times 1}$. Considering the mapping function $\phi(\cdot):\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1}$, we have</li>
+  <li>Let $K$ be kernel function such that \(K:\mathbb{R}^{d\times 1}\times\mathbb{R}^{d\times 1}\to\mathbb{R}\), then we define its Gram matrix $\mathcal{K}\in\mathbb{R}^{N\times N}$ over \(\{x_1,x_2,\dots,x_N\}\) where $x_i\in\mathbb{R}^{d\times 1}$. Considering the mapping function $\phi(\cdot):\mathbb{R}^{d\times 1}\to\mathbb{R}^{p\times 1}$, we have</li>
 </ul>
 
-<script type="math/tex; mode=display">K(x_i,x_j)=\langle\phi(x_i),\phi(x_j)\rangle, \phi(\cdot)\in\mathcal{H}\implies \begin{cases}K(x_i,x_j)=K(x_j,x_i)\\ \mathcal{K}\text{ is a PSD matrix}\end{cases}.</script>
+\[K(x_i,x_j)=\langle\phi(x_i),\phi(x_j)\rangle, \phi(\cdot)\in\mathcal{H}\implies \begin{cases}K(x_i,x_j)=K(x_j,x_i)\\ \mathcal{K}\text{ is a PSD matrix}\end{cases}.\]
 
 <p><em>Proof</em>:</p>
 
 <p>By the definition of $K(x_i,x_j)$, we have</p>
 
-<script type="math/tex; mode=display">K(x_i,x_j)=\langle \phi(x_i),\phi(x_j)\rangle,\quad K(x_j,x_i)=\langle \phi(x_j),\phi(x_i)\rangle.</script>
+\[K(x_i,x_j)=\langle \phi(x_i),\phi(x_j)\rangle,\quad K(x_j,x_i)=\langle \phi(x_j),\phi(x_i)\rangle.\]
 
-<p>By the symmetry of inner product, we have <script type="math/tex">\langle \phi(x_i),\phi(x_j)\rangle=\langle \phi(x_j),\phi(x_i)\rangle</script>. It then follows that</p>
+<p>By the symmetry of inner product, we have \(\langle \phi(x_i),\phi(x_j)\rangle=\langle \phi(x_j),\phi(x_i)\rangle\). It then follows that</p>
 
-<script type="math/tex; mode=display">K(x_i,x_j)=K(x_j,x_i).</script>
+\[K(x_i,x_j)=K(x_j,x_i).\]
 
-<p>Therefore the Gramian matrix $\mathcal{K}=[K(x_{i},x_{j})]_{N\times N}$ is symmetric real matrix. Now we show that <script type="math/tex">\forall\alpha\in\mathbb{R}^{R\times 1}, \alpha^T\mathcal{K}\alpha\ge 0.</script> The notation is given by</p>
+<p>Therefore the Gramian matrix $\mathcal{K}=[K(x_{i},x_{j})]_{N\times N}$ is symmetric real matrix. Now we show that \(\forall\alpha\in\mathbb{R}^{R\times 1}, \alpha^T\mathcal{K}\alpha\ge 0.\) The notation is given by</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\alpha^T\mathcal{K}\alpha=(\alpha_1,\alpha_2,\dots,\alpha_N)\begin{bmatrix}K_{11}&K_{12}&\dots&K_{1N}\\K_{21}&K_{22}&\dots&K_{2N}\\\vdots&\vdots&\ddots&\vdots\\K_{N1}&K_{N2}&\dots&K_{NN}\end{bmatrix}\begin{pmatrix}\alpha_1\\\alpha_2\\\vdots\\\alpha_N\end{pmatrix}\end{aligned}, %]]></script>
+\[\begin{aligned}\alpha^T\mathcal{K}\alpha=(\alpha_1,\alpha_2,\dots,\alpha_N)\begin{bmatrix}K_{11}&amp;K_{12}&amp;\dots&amp;K_{1N}\\K_{21}&amp;K_{22}&amp;\dots&amp;K_{2N}\\\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\K_{N1}&amp;K_{N2}&amp;\dots&amp;K_{NN}\end{bmatrix}\begin{pmatrix}\alpha_1\\\alpha_2\\\vdots\\\alpha_N\end{pmatrix}\end{aligned},\]
 
 <p>where $K_{ij}=K(x_{ri},x_{rj})$. We then have</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\alpha^T\mathcal{K}\alpha&=\sum_{i=1}^R\sum_{j=1}^R \alpha_i\alpha_jK_{ij}\\&=\sum_{i=1}^R\sum_{j=1}^R \alpha_i\alpha_j\phi^T(x_{ri})\phi(x_{rj})\\&=\sum_{i=1}^R \alpha_i\phi^T(x_{ri})\sum_{j=1}^R\alpha_j\phi(x_{rj})\\&=\left(\sum_{i=1}^R \alpha_i\phi(x_{ri})\right)^T\left(\sum_{j=1}^R\alpha_j\phi(x_{rj})\right)\\&=\left\langle\left(\sum_{i=1}^R \alpha_i\phi(x_{ri})\right), \left(\sum_{j=1}^R \alpha_i\phi(x_{rj})\right)\right\rangle\\&=\left\vert\left\vert\sum_{i=1}^R \alpha_i\phi(x_{ri})\right\vert\right\vert^2,\end{aligned} %]]></script>
+\[\begin{aligned}\alpha^T\mathcal{K}\alpha&amp;=\sum_{i=1}^R\sum_{j=1}^R \alpha_i\alpha_jK_{ij}\\&amp;=\sum_{i=1}^R\sum_{j=1}^R \alpha_i\alpha_j\phi^T(x_{ri})\phi(x_{rj})\\&amp;=\sum_{i=1}^R \alpha_i\phi^T(x_{ri})\sum_{j=1}^R\alpha_j\phi(x_{rj})\\&amp;=\left(\sum_{i=1}^R \alpha_i\phi(x_{ri})\right)^T\left(\sum_{j=1}^R\alpha_j\phi(x_{rj})\right)\\&amp;=\left\langle\left(\sum_{i=1}^R \alpha_i\phi(x_{ri})\right), \left(\sum_{j=1}^R \alpha_i\phi(x_{rj})\right)\right\rangle\\&amp;=\left\vert\left\vert\sum_{i=1}^R \alpha_i\phi(x_{ri})\right\vert\right\vert^2,\end{aligned}\]
 
 <p>therefore, $\alpha^T\mathcal{K}\alpha\ge 0$ and $\mathcal{K}$ is a PSD matrix.$\tag*{$\blacksquare$}$</p>
 
 <ul>
-  <li>Let $\mathcal{K}\in\mathbb{R}^{d\times d}$ be a symmetric PSD matrix, then for <script type="math/tex">\{x_1,x_2,\dots,x_N\}</script> where $x_i\in\mathbb{R}^{d\times 1}$, we have kernel function $K(x_i,x_j)=x_i^T\mathcal{K}x_j$.</li>
+  <li>Let $\mathcal{K}\in\mathbb{R}^{d\times d}$ be a symmetric PSD matrix, then for \(\{x_1,x_2,\dots,x_N\}\) where $x_i\in\mathbb{R}^{d\times 1}$, we have kernel function $K(x_i,x_j)=x_i^T\mathcal{K}x_j$.</li>
 </ul>
 
 <p><em>Proof</em>:</p>
 
-<p>Consider the <em>diagonalisation</em> of $\mathcal{K}=Q^T\Lambda Q$ by an orthogonal matrix $Q$, where $\Lambda$ is a diagnoal matrix containing the non-negative eigenvalues of $\mathcal{K}$. Let $\sqrt{\Lambda}$ be the diagonal matrix with the square roots of the eigenvalues and set $A=\sqrt{\Lambda}Q$.  Then for <script type="math/tex">\{x_1,x_2,\dots,x_N\}</script> where $x_i\in\mathbb{R}^{d\times 1}$, we have</p>
+<p>Consider the <em>diagonalisation</em> of $\mathcal{K}=Q^T\Lambda Q$ by an orthogonal matrix $Q$, where $\Lambda$ is a diagnoal matrix containing the non-negative eigenvalues of $\mathcal{K}$. Let $\sqrt{\Lambda}$ be the diagonal matrix with the square roots of the eigenvalues and set $A=\sqrt{\Lambda}Q$.  Then for \(\{x_1,x_2,\dots,x_N\}\) where $x_i\in\mathbb{R}^{d\times 1}$, we have</p>
 
-<script type="math/tex; mode=display">x_i^T\mathcal{K}x_j=x_i^TQ^T\Lambda Qx_j=x_i^TA^TA x_j=\langle A x_i,Ax_j\rangle.</script>
+\[x_i^T\mathcal{K}x_j=x_i^TQ^T\Lambda Qx_j=x_i^TA^TA x_j=\langle A x_i,Ax_j\rangle.\]
 
 <p>Therefore we have kernel function $K(x_i,x_j)=x_i^T\mathcal{K}x_j=\langle Ax_i,Ax_j\rangle$ with linear transformation $\phi(\cdot)=A\cdot. \tag*{$\blacksquare$}$</p>
 

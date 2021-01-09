@@ -1,4 +1,4 @@
-I"p<p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a> and <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf">PRML</a>. For the fundamental of probability, one can refer to <a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Introduction to Probability</a>. Many thanks to these great works.</em></p>
+I"�e<p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a> and <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf">PRML</a>. For the fundamental of probability, one can refer to <a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Introduction to Probability</a>. Many thanks to these great works.</em></p>
 
 <ul id="markdown-toc">
   <li><a href="#0-introduction" id="markdown-toc-0-introduction">0. Introduction</a></li>
@@ -24,23 +24,23 @@
 </ul>
 <h1 id="0-introduction">0. Introduction</h1>
 
-<p>For a vector featured with multiple random variables like <script type="math/tex">X=[x_1,x_2,\dots,x_n]</script>, what we care most are  <em>marginal probability</em> <script type="math/tex">P(x_i)</script>, <em>joint distribution</em> <script type="math/tex">P(X)</script> and <em>conditional probability</em> <script type="math/tex">P(x_i\vert x_j)</script>:</p>
+<p>For a vector featured with multiple random variables like \(X=[x_1,x_2,\dots,x_n]\), what we care most are  <em>marginal probability</em> \(P(x_i)\), <em>joint distribution</em> \(P(X)\) and <em>conditional probability</em> \(P(x_i\vert x_j)\):</p>
 
 <ul>
   <li>
     <p>Marginal distribution:</p>
 
-    <script type="math/tex; mode=display">P(x_i)=\sum_{x_n}\dots\sum_{x_{i+1}}\sum_{x_{i-1}}\dots\sum_{x_1}P(X);</script>
+\[P(x_i)=\sum_{x_n}\dots\sum_{x_{i+1}}\sum_{x_{i-1}}\dots\sum_{x_1}P(X);\]
   </li>
   <li>
     <p>Joint distribution:</p>
 
-    <script type="math/tex; mode=display">P(X)=P(x_1)\cdot\prod_{i=2}^{n}P(x_i\vert x_1,\dots,x_{i-1});</script>
+\[P(X)=P(x_1)\cdot\prod_{i=2}^{n}P(x_i\vert x_1,\dots,x_{i-1});\]
   </li>
   <li>
     <p>Conditional probability (<em>Bayesian rule</em>):</p>
 
-    <script type="math/tex; mode=display">P(x_i\vert x_j)=\frac{P(x_i,x_j)}{P(x_j)}.</script>
+\[P(x_i\vert x_j)=\frac{P(x_i,x_j)}{P(x_j)}.\]
   </li>
 </ul>
 
@@ -50,17 +50,17 @@
   <li>
     <p>assuming all the features are totally <em>independent</em>:</p>
 
-    <script type="math/tex; mode=display">P(X)=\prod_{i=1}^nP(x_i);</script>
+\[P(X)=\prod_{i=1}^nP(x_i);\]
   </li>
   <li>
     <p>or,  assuming that the features are <em>conditional independent</em>, which is used in <strong>naive Bayes classifier</strong> as class conditional independence:</p>
 
-    <script type="math/tex; mode=display">P(X\vert Y)=\prod_{i=1}^n P(x_i\vert Y)\implies P(X)=\int_y \prod_{i=1}^nP(x_i\vert y)P(y)\text{d}y;</script>
+\[P(X\vert Y)=\prod_{i=1}^n P(x_i\vert Y)\implies P(X)=\int_y \prod_{i=1}^nP(x_i\vert y)P(y)\text{d}y;\]
   </li>
   <li>
     <p>or, based on <em>conditional independent</em>, assuming that the features process the <em>Markov Property</em>, which is used in <strong>hidden Markov models</strong>:</p>
 
-    <script type="math/tex; mode=display">P(x_j\vert x_1,x_2,\dots,x_{j-1})=P(x_j\vert x_{j-1})\implies P(X)=P(x_1)\cdot\prod_{i=2}^nP(x_i\vert x_{i-1}).</script>
+\[P(x_j\vert x_1,x_2,\dots,x_{j-1})=P(x_j\vert x_{j-1})\implies P(X)=P(x_1)\cdot\prod_{i=2}^nP(x_i\vert x_{i-1}).\]
   </li>
 </ul>
 
@@ -83,11 +83,11 @@ Figure 1. Example of a directed acyclic graph (Figure 8.2 of PRML).
 
 <p>A Bayesian network actually represents a joint distribution over all the random variables represented by its nodes. As it is shown in Figure 1 (from PRML), there are 7 random variables. The edge going from a node $x_i$ to a node $x_j$ indicates that $x_j$ is dependent to $x_i$. The joint distribution of the model in Figure 1 is then given by</p>
 
-<script type="math/tex; mode=display">P(x_1,x_2,\dots,x_7)=P(x_1)P(x_2)P(x_3)P(x_4\vert x_1,x_2,x_3)P(x_5\vert x_1,x_3)P(x_6\vert x_4)P(x_7\vert x_4,x_5).</script>
+\[P(x_1,x_2,\dots,x_7)=P(x_1)P(x_2)P(x_3)P(x_4\vert x_1,x_2,x_3)P(x_5\vert x_1,x_3)P(x_6\vert x_4)P(x_7\vert x_4,x_5).\]
 
 <p>More generally, for a graph with $K$ nodes, the corresponding joint distribution is given by</p>
 
-<script type="math/tex; mode=display">P(X)=\prod_{k=1}^KP(x_k\vert \mathbb{Pa}_k),</script>
+\[P(X)=\prod_{k=1}^KP(x_k\vert \mathbb{Pa}_k),\]
 
 <p>where $\mathbb{Pa}_k$ denotes the set of parents of $x_k$ and $X=(x_1,x_2,\dots,x_k)$. Such a key equation expresses the <em>factorization</em> properties of the joint distribution for a directed graph. Compared with the joint distribution expression mentioned in Section 0, the expression of that of Figure 1 we show above definitely is simplified a lot. Such simplification is actually introduced by the <em>absence</em> of edges in the graph, which conveys the <em>conditional independence</em> information of those variables.</p>
 
@@ -109,28 +109,27 @@ Figure 2. Example of tail-to-tail for conditional independence (Figure 8.15 of P
 
 <p>By the definition given in section 1, the joint distribution of the graph in Figure 2 is</p>
 
-<script type="math/tex; mode=display">P(a,b,c)=P(c)P(a\vert c)P(b\vert c).</script>
+\[P(a,b,c)=P(c)P(a\vert c)P(b\vert c).\]
 
 <p>By the general definition of the marginal distribution, we have</p>
 
-<script type="math/tex; mode=display">P(a,b)=\sum_c P(c)P(a\vert c)P(b\vert c),</script>
+\[P(a,b)=\sum_c P(c)P(a\vert c)P(b\vert c),\]
 
-<p>which generally dose not factorize into the product <script type="math/tex">P(a)\cdot P(b)</script>, therefore $a$ and $b$ are dependent, denoted as</p>
+<p>which generally dose not factorize into the product \(P(a)\cdot P(b)\), therefore $a$ and $b$ are dependent, denoted as</p>
 
-<script type="math/tex; mode=display">a\not\perp b\ \ \ \ \ \ \text{or, equivalenly,}\ \ \ \ \ \ a\not\!\perp\!\!\!\perp b\vert \emptyset.</script>
+\[a\not\perp b\ \ \ \ \ \ \text{or, equivalenly,}\ \ \ \ \ \ a\not\!\perp\!\!\!\perp b\vert \emptyset.\]
 
 <p>By the general definition of the joint distribution, we have</p>
 
-<script type="math/tex; mode=display">P(a,b,c)=P(c)P(a\vert c)P(b\vert a,c).</script>
+\[P(a,b,c)=P(c)P(a\vert c)P(b\vert a,c).\]
 
 <p>Thus it follows that</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{alignat*}{3}&&P(c)P(a\vert c)P(b\vert a,c)&=P(c)P(a\vert c)P(b\vert c)\\\implies&&P(b\vert a,c)&=P(b\vert c)\\\implies&&\frac{P(a,b\vert c)}{P(a\vert c)}&=P(b\vert c)\\\implies&&P(a,b\vert c)&=P(a\vert c)P(b\vert c),\end{alignat*} %]]></script>
+\[\begin{alignat*}{3}&amp;&amp;P(c)P(a\vert c)P(b\vert a,c)&amp;=P(c)P(a\vert c)P(b\vert c)\\\implies&amp;&amp;P(b\vert a,c)&amp;=P(b\vert c)\\\implies&amp;&amp;\frac{P(a,b\vert c)}{P(a\vert c)}&amp;=P(b\vert c)\\\implies&amp;&amp;P(a,b\vert c)&amp;=P(a\vert c)P(b\vert c),\end{alignat*}\]
 
 <p>which means</p>
 
-<script type="math/tex; mode=display">a\perp\!\!\!\perp b\vert c.</script>
+\[a\perp\!\!\!\perp b\vert c.\]
 
 <h3 id="112-head-to-tail">1.1.2. Head-to-tail</h3>
 
@@ -146,23 +145,21 @@ Figure 3. Example of head-to-tail for conditional independence (Figure 8.17 of P
 
 <p>The joint distribution of the model in Figure 3 is</p>
 
-<script type="math/tex; mode=display">P(a,b,c)=P(a)P(c\vert a)P(b\vert c).</script>
+\[P(a,b,c)=P(a)P(c\vert a)P(b\vert c).\]
 
 <p>Marginalizing the distribution over $c$, we have</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}P(a,b)&=\sum_c P(a)P(c\vert a)P(b\vert c)\\&=P(a)\sum_c P(b,c\vert a)\\&=P(a)P(b\vert a),\end{aligned} %]]></script>
+\[\begin{aligned}P(a,b)&amp;=\sum_c P(a)P(c\vert a)P(b\vert c)\\&amp;=P(a)\sum_c P(b,c\vert a)\\&amp;=P(a)P(b\vert a),\end{aligned}\]
 
-<p>which means <script type="math/tex">a\not\perp b</script>.</p>
+<p>which means \(a\not\perp b\).</p>
 
 <p>By rewriting the general joint distribution expression, we have</p>
 
-<script type="math/tex; mode=display">P(a,b,c)=P(a)P(b\vert a)P(c\vert a,b).</script>
+\[P(a,b,c)=P(a)P(b\vert a)P(c\vert a,b).\]
 
 <p>Then we have</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{alignat*}{3}&&P(a)P(b\vert a)P(c\vert a,b)&=P(a)P(c\vert a)P(b\vert c)\\\implies&& P(b\vert a)\cdot\frac{P(a,b\vert c)P(c)}{P(b\vert a)P(a)}&=\frac{P(a\vert c)P(c)}{P(a)}\cdot P(b\vert c)\\\implies&&P(a,b\vert c)&=P(a\vert c)P(b\vert c)\\\implies&&a&\perp\!\!\!\perp b\vert c.\end{alignat*} %]]></script>
+\[\begin{alignat*}{3}&amp;&amp;P(a)P(b\vert a)P(c\vert a,b)&amp;=P(a)P(c\vert a)P(b\vert c)\\\implies&amp;&amp; P(b\vert a)\cdot\frac{P(a,b\vert c)P(c)}{P(b\vert a)P(a)}&amp;=\frac{P(a\vert c)P(c)}{P(a)}\cdot P(b\vert c)\\\implies&amp;&amp;P(a,b\vert c)&amp;=P(a\vert c)P(b\vert c)\\\implies&amp;&amp;a&amp;\perp\!\!\!\perp b\vert c.\end{alignat*}\]
 
 <h3 id="113-head-to-head">1.1.3. Head-to-head</h3>
 
@@ -178,31 +175,29 @@ Figure 4. Example of head-to-head for conditional independence (Figure 8.19 of P
 
 <p>The joint distribution of the model in Figure 4 is</p>
 
-<script type="math/tex; mode=display">P(a,b,c)=P(a)P(b)P(c\vert a,b).</script>
+\[P(a,b,c)=P(a)P(b)P(c\vert a,b).\]
 
 <p>Marginalizing the distribution over $c$, we have</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}P(a,b)&=\sum_c P(a)P(b)P(c\vert a,b)\\&=P(a)P(b)\sum_c P(c\vert a)\\&=P(a)P(b)\end{aligned} %]]></script>
+\[\begin{aligned}P(a,b)&amp;=\sum_c P(a)P(b)P(c\vert a,b)\\&amp;=P(a)P(b)\sum_c P(c\vert a)\\&amp;=P(a)P(b)\end{aligned}\]
 
-<p>which means <script type="math/tex">a\perp b</script>. In particular, the third equation is given by the fact ‘<em>conditional probabilities are probabilities</em>’ (<a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Introduction to Probability</a>).</p>
+<p>which means \(a\perp b\). In particular, the third equation is given by the fact ‘<em>conditional probabilities are probabilities</em>’ (<a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Introduction to Probability</a>).</p>
 
 <p>By rewriting the general joint distribution expression, we have</p>
 
-<script type="math/tex; mode=display">P(a,b,c)=P(a,b\vert c)P(c).</script>
+\[P(a,b,c)=P(a,b\vert c)P(c).\]
 
 <p>Then we have</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{alignat*}{3}&&P(a,b\vert c)P(c)&=P(a)P(b)P(c\vert a,b)\\\implies&&P(a,b\vert c)&=\frac{P(a)P(b)P(c\vert a,b)}{P(c)},\end{alignat*} %]]></script>
+\[\begin{alignat*}{3}&amp;&amp;P(a,b\vert c)P(c)&amp;=P(a)P(b)P(c\vert a,b)\\\implies&amp;&amp;P(a,b\vert c)&amp;=\frac{P(a)P(b)P(c\vert a,b)}{P(c)},\end{alignat*}\]
 
 <p>where the last term in general does not factorize into the product $P(a\vert c)P(b\vert c)$, hence we have</p>
 
-<script type="math/tex; mode=display">a\not\!\perp\!\!\!\perp b\vert c.</script>
+\[a\not\!\perp\!\!\!\perp b\vert c.\]
 
 <h3 id="114-d-separation">1.1.4. D-separation</h3>
 
-<p>With the three examples, we now introduce <em>D-separation</em> which is used to determine the independence of those random variables in a graph. Specifically, given three arbitrary nonintersecting sets $\mathcal{A}$, $\mathcal{B}$ and $\mathcal{C}$ of the nodes of the graph, by D-separation we can determine whether the statement <script type="math/tex">\mathcal{A}\perp\!\!\!\perp\mathcal{B}\vert \mathcal{C}</script> is true under the graph.</p>
+<p>With the three examples, we now introduce <em>D-separation</em> which is used to determine the independence of those random variables in a graph. Specifically, given three arbitrary nonintersecting sets $\mathcal{A}$, $\mathcal{B}$ and $\mathcal{C}$ of the nodes of the graph, by D-separation we can determine whether the statement \(\mathcal{A}\perp\!\!\!\perp\mathcal{B}\vert \mathcal{C}\) is true under the graph.</p>
 
 <p>The method proceeds as follows. (I am sure this great <a href="https://www.youtube.com/watch?v=yDs_q6jKHb0">video</a> can help you get into <em>D-separation</em> easily.)</p>
 
@@ -215,20 +210,20 @@ Figure 4. Example of head-to-head for conditional independence (Figure 8.19 of P
       <li>if there is at least one triple blocked, the path is said to be blocked, otherwise, the path is unblocked;</li>
     </ul>
   </li>
-  <li>If all the paths are blocked, the statement <script type="math/tex">\mathcal{A}\perp\!\!\!\perp\mathcal{B}\vert \mathcal{C}</script> is true and $\mathcal{A}$ is said to be d-separated from $\mathcal{B}$ by $\mathcal{C}$.</li>
+  <li>If all the paths are blocked, the statement \(\mathcal{A}\perp\!\!\!\perp\mathcal{B}\vert \mathcal{C}\) is true and $\mathcal{A}$ is said to be d-separated from $\mathcal{B}$ by $\mathcal{C}$.</li>
 </ul>
 
 <h2 id="12-markov-blanket">1.2. Markov Blanket</h2>
 
 <p>We now introduce the concept of a <em>Markov blanket</em> or <em>Markov boundary</em>. Consider a joint distribution $P(x_1,x_2,\dots,x_N)$ represented by a directed graph having $N$ nodes. In particular, we want to determine the conditional distribution</p>
 
-<script type="math/tex; mode=display">P(x_i\vert x_{\{j\ne i\}})=\frac{\prod_k P(x_k\vert \mathbb{Pa}_k)}{\int\prod_k P(x_k\vert \mathbb{Pa}_k)\text{d}x_i}.</script>
+\[P(x_i\vert x_{\{j\ne i\}})=\frac{\prod_k P(x_k\vert \mathbb{Pa}_k)}{\int\prod_k P(x_k\vert \mathbb{Pa}_k)\text{d}x_i}.\]
 
-<p>Notice that if the term <script type="math/tex">p(x_k\vert \mathbb{Pa}_k)</script> does not involve $x_i$, that is to say $k\ne i$ and/or $x_i\notin\mathbb{Pa}_k$, we then can remove the term from both numerator and denominator. The remaining terms in the conditional distribution then must be</p>
+<p>Notice that if the term \(p(x_k\vert \mathbb{Pa}_k)\) does not involve $x_i$, that is to say $k\ne i$ and/or $x_i\notin\mathbb{Pa}_k$, we then can remove the term from both numerator and denominator. The remaining terms in the conditional distribution then must be</p>
 
-<script type="math/tex; mode=display">P(x_k\vert \mathbb{Pa}_k), k\in\{i\}\cup\{k\vert x_i\in\mathbb{Pa}_k\},</script>
+\[P(x_k\vert \mathbb{Pa}_k), k\in\{i\}\cup\{k\vert x_i\in\mathbb{Pa}_k\},\]
 
-<p>and the conditional distribution <script type="math/tex">P(x_i\vert x_{\{j\ne i\}})</script> depends only on those terms. We now discuss which nodes those terms are related to. Obviously, when <script type="math/tex">k\in\{i\}</script>, the term <script type="math/tex">P(x_i\vert \mathbb{Pa}_i)</script> would only involve $x_i$ and <strong>the parents</strong> of it. When <script type="math/tex">k\in\{j\vert x_i\in\mathbb{Pa}_j\}</script> and $k\ne i$, the term $P(x_k\vert \mathbb{Pa}_k)$ are related to two parts. The first part $x_k$ is <strong>the child</strong> of $x_i$ as $x_i\in\mathbb{Pa}_k$, while the second part $\mathbb{Pa}_k$ is <strong>the co-parents</strong> of the child $x_k$.</p>
+<p>and the conditional distribution \(P(x_i\vert x_{\{j\ne i\}})\) depends only on those terms. We now discuss which nodes those terms are related to. Obviously, when \(k\in\{i\}\), the term \(P(x_i\vert \mathbb{Pa}_i)\) would only involve $x_i$ and <strong>the parents</strong> of it. When \(k\in\{j\vert x_i\in\mathbb{Pa}_j\}\) and $k\ne i$, the term $P(x_k\vert \mathbb{Pa}_k)$ are related to two parts. The first part $x_k$ is <strong>the child</strong> of $x_i$ as $x_i\in\mathbb{Pa}_k$, while the second part $\mathbb{Pa}_k$ is <strong>the co-parents</strong> of the child $x_k$.</p>
 
 <div align="center"><img src="../../../../assets/images/Figure8.26.png" alt="Figure8.26 in PRML" width="250" />
 </div>
@@ -238,7 +233,7 @@ Figure 5. The Markov blanket of $x_i$ is denoted by colored nodes. (Figure 8.26 
   </p>
 </center>
 
-<p>As shown in Figure 5, we say that a <em>Markov blanket</em> $\mathcal{M}_i$ of a node $x_i$ comprises the set of its <em>parents</em>, <em>child</em> and <em>co-parents</em>. Given the Markov blanket, the conditional distribution <script type="math/tex">P(x_i\vert x_{\{j\ne i\}})</script> can be rewritten as <script type="math/tex">P(x_i\vert \mathcal{M}_i)</script>.</p>
+<p>As shown in Figure 5, we say that a <em>Markov blanket</em> $\mathcal{M}_i$ of a node $x_i$ comprises the set of its <em>parents</em>, <em>child</em> and <em>co-parents</em>. Given the Markov blanket, the conditional distribution \(P(x_i\vert x_{\{j\ne i\}})\) can be rewritten as \(P(x_i\vert \mathcal{M}_i)\).</p>
 
 <h1 id="2-markov-network">2. Markov Network</h1>
 
@@ -250,21 +245,21 @@ Figure 5. The Markov blanket of $x_i$ is denoted by colored nodes. (Figure 8.26 
 
 <p><strong>Pairwise Markov Property</strong>: the <em>absence</em> of an edge between two nodes $x_i$ and $x_j$ means the corresponding random variables of the two nodes are conditionally independent given all the other random variables, which is</p>
 
-<script type="math/tex; mode=display">x_i\text{ and }x_j\text{ are not adjacent}\implies x_i\perp\!\!\!\perp x_j\vert X_{\setminus \{i,j\}},</script>
+\[x_i\text{ and }x_j\text{ are not adjacent}\implies x_i\perp\!\!\!\perp x_j\vert X_{\setminus \{i,j\}},\]
 
-<p>where <script type="math/tex">X_{\setminus\{i,j\}}</script> denotes the set of all the variables with $x_i$ and $x_j$ removed.</p>
+<p>where \(X_{\setminus\{i,j\}}\) denotes the set of all the variables with $x_i$ and $x_j$ removed.</p>
 
 <p><strong>Local Markov Property</strong>: a random variable $x_i$ is conditionally independent of all other random variables given its neighbors, which is</p>
 
-<script type="math/tex; mode=display">x_i\perp\!\!\!\perp X_{\setminus \mathbb{Ne}_i}\vert \mathbb{Ne}_{i},</script>
+\[x_i\perp\!\!\!\perp X_{\setminus \mathbb{Ne}_i}\vert \mathbb{Ne}_{i},\]
 
-<p>where $\mathbb{Ne}_i$ is the set of neighbors of $x_i$, <em>i.e.,</em> every node directly connected with $x_i$ is in $\mathbb{Ne}_i$. Recalling the definition of the <em>Markov blanket</em>, we can find that <script type="math/tex">\mathbb{Ne}_i</script> is the <em>Markov blanket</em> in the undirected graph.</p>
+<p>where $\mathbb{Ne}_i$ is the set of neighbors of $x_i$, <em>i.e.,</em> every node directly connected with $x_i$ is in $\mathbb{Ne}_i$. Recalling the definition of the <em>Markov blanket</em>, we can find that \(\mathbb{Ne}_i\) is the <em>Markov blanket</em> in the undirected graph.</p>
 
 <p>The property below is to Markov networks as <em>D-separation</em> is to Bayesian networks</p>
 
 <p><strong>Global Markov Property</strong>: for any three nonintersecting sets $\mathcal{A}$, $\mathcal{B}$ and $\mathcal{C}$ of the nodes of the graph, we can determine whether</p>
 
-<script type="math/tex; mode=display">\mathcal{A}\perp\!\!\!\perp \mathcal{B}\vert\mathcal{C}</script>
+\[\mathcal{A}\perp\!\!\!\perp \mathcal{B}\vert\mathcal{C}\]
 
 <p>by the following steps:</p>
 
@@ -282,24 +277,23 @@ Figure 5. The Markov blanket of $x_i$ is denoted by colored nodes. (Figure 8.26 
 
 <p>As a Bayesian network can represent a joint distribution over finite random variables, there also exists a probability density function for each Markov network that is consistent with the three properties we mentioned above. Before moving on, we introduce a concept for a Markov network called a <em>clique</em>, which is defined as a subset of fully connected notes of the undirected graph. Obviously, there may be many different cliques for a Markov network. Among them, we particularly focus on the cliques each of which allows no other nodes to be added without it ceasing to be a clique, and we call such a clique a <em>maximal clique</em>.</p>
 
-<p>Denote the maximal cliques set of a Markov network with <script type="math/tex">\{x_1,x_2,\dots,x_N\}</script> by <script type="math/tex">C_m=\{C\vert C\text{ is a maximal clique}\}</script>, and the nodes in maximal clique $C$ by <script type="math/tex">\text{x}_C=\{x_i\vert x_i\in C\}</script>. Then the joint distribution represented by the Markov network can be written as</p>
+<p>Denote the maximal cliques set of a Markov network with \(\{x_1,x_2,\dots,x_N\}\) by \(C_m=\{C\vert C\text{ is a maximal clique}\}\), and the nodes in maximal clique $C$ by \(\text{x}_C=\{x_i\vert x_i\in C\}\). Then the joint distribution represented by the Markov network can be written as</p>
 
-<script type="math/tex; mode=display">P(x_1,x_2,\dots,x_N)=\frac{1}{Z}\prod_{C}^{C_m}\psi_C(\text{x}_C),</script>
+\[P(x_1,x_2,\dots,x_N)=\frac{1}{Z}\prod_{C}^{C_m}\psi_C(\text{x}_C),\]
 
 <p>where $\psi_C(\cdot)$ are positive functions called <em>potential functions</em>, and the quantity $Z$ is called <em>partition function</em> that validates the distribution, <em>i.e.</em>,</p>
 
-<script type="math/tex; mode=display">Z=\sum_x\prod_C^{C_m}\psi_C(\text{x}_C).</script>
+\[Z=\sum_x\prod_C^{C_m}\psi_C(\text{x}_C).\]
 
 <p>Given a Markov network, the equivalence of the joint distribution and the conditional independence can be shown by <em>Hammesley-Clifford theorem</em>.</p>
 
 <p>We now consider the choice of potential functions. Given the existence of partition function, we have great flexibilities in choosing potential functions. However, it naturally raises the question of how to motivate a choice of potential function for a particular application. Since it requires the potential functions to be positive, a widely used function is <em>exponential function</em>:</p>
 
-<script type="math/tex; mode=display">\psi_C(\text{x}_C)=\exp\{-E(\text{x}_C)\},</script>
+\[\psi_C(\text{x}_C)=\exp\{-E(\text{x}_C)\},\]
 
 <p>where $E(\text{x}_C)$ is called <em>energy function</em>. The joint distribution then is</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}P(x_1,x_2,\dots,x_N)&=\frac{1}{Z}\prod_{C}^{C_m}\psi_C(\text{x}_C)\\&=\frac{1}{Z}\exp\left\{-\sum_{C}^{C_m}E(\text{x}_C)\right\},\end{aligned} %]]></script>
+\[\begin{aligned}P(x_1,x_2,\dots,x_N)&amp;=\frac{1}{Z}\prod_{C}^{C_m}\psi_C(\text{x}_C)\\&amp;=\frac{1}{Z}\exp\left\{-\sum_{C}^{C_m}E(\text{x}_C)\right\},\end{aligned}\]
 
 <p>which is known as <em>Boltzmann distribution</em> (or, <em>Gibbs distribution</em>). Moreover, we can see that the distribution is consistent with the definition of <a href="https://2ez4ai.github.io/2020/11/12/exponential_family-ml07/">exponential families</a>. The joint distribution of any Markov network in which every potential has the form of exponentials is in exponential families.</p>
 
@@ -311,35 +305,33 @@ Figure 5. The Markov blanket of $x_i$ is denoted by colored nodes. (Figure 8.26 
   <li>
     <p>Tail-to-tail: Given the tail-to-tail case shown in Figure 2, we have the joint distribution</p>
 
-    <script type="math/tex; mode=display">P(a,b,c)=P(c)P(a\vert c)P(b\vert c).</script>
+\[P(a,b,c)=P(c)P(a\vert c)P(b\vert c).\]
 
     <p>A factorization can be easily obtained by identifying</p>
 
-    <script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}P(a,b,c)&=\psi(a,c)\psi(b,c),\\\psi(a,c)&=P(c)P(a\vert c),\\\psi(b,c)&=P(b\vert c),\end{aligned} %]]></script>
+\[\begin{aligned}P(a,b,c)&amp;=\psi(a,c)\psi(b,c),\\\psi(a,c)&amp;=P(c)P(a\vert c),\\\psi(b,c)&amp;=P(b\vert c),\end{aligned}\]
 
-    <p>which is actually the joint distribution represented by the Markov network whose maximum cliques are <script type="math/tex">\{a,c\}</script> and <script type="math/tex">\{b,c\}</script> and potential functions are <script type="math/tex">\psi(a,c)</script> and <script type="math/tex">\psi(b,c)</script>. Obviously, such a Markov network is the same as the Bayesian network in Figure 2 with removing its arrows.</p>
+    <p>which is actually the joint distribution represented by the Markov network whose maximum cliques are \(\{a,c\}\) and \(\{b,c\}\) and potential functions are \(\psi(a,c)\) and \(\psi(b,c)\). Obviously, such a Markov network is the same as the Bayesian network in Figure 2 with removing its arrows.</p>
   </li>
   <li>
     <p>Head-to-tail: For the graph in Figure 3, we have</p>
 
-    <script type="math/tex; mode=display">P(a,b,c)=P(a)P(c\vert a)P(b\vert c).</script>
+\[P(a,b,c)=P(a)P(c\vert a)P(b\vert c).\]
 
     <p>Similarly, by identifying</p>
 
-    <script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\psi(a,c)&=P(a)P(c\vert a),\\\psi(b,c)&=P(b\vert c).\end{aligned} %]]></script>
+\[\begin{aligned}\psi(a,c)&amp;=P(a)P(c\vert a),\\\psi(b,c)&amp;=P(b\vert c).\end{aligned}\]
 
-    <p>We have the corresponding Markov network with maximum cliques <script type="math/tex">\{a,c\}</script> and <script type="math/tex">\{b,c\}</script>, which also can be obtained by removing the arrows of the graph.</p>
+    <p>We have the corresponding Markov network with maximum cliques \(\{a,c\}\) and \(\{b,c\}\), which also can be obtained by removing the arrows of the graph.</p>
   </li>
   <li>
     <p>Head-to-head: The case shown in Figure 4 is a little tricky. Given the joint distribution</p>
 
-    <script type="math/tex; mode=display">P(a,b,c)=P(a)P(b)P(c\vert a,b),</script>
+\[P(a,b,c)=P(a)P(b)P(c\vert a,b),\]
 
-    <p>we can find that the term <script type="math/tex">P(c\vert a,b)</script> leads to a factor that depends on three nodes. Therefore the corresponding Markov network must have a maximum clique consists of <script type="math/tex">\{a,b,c\}</script>. To this end, we need to not only remove the arrows of the graph but also add an edge between $a$ and $b$. Then we have the corresponding Markov network with potential function</p>
+    <p>we can find that the term \(P(c\vert a,b)\) leads to a factor that depends on three nodes. Therefore the corresponding Markov network must have a maximum clique consists of \(\{a,b,c\}\). To this end, we need to not only remove the arrows of the graph but also add an edge between $a$ and $b$. Then we have the corresponding Markov network with potential function</p>
 
-    <script type="math/tex; mode=display">\psi(a,b,c)=P(a)P(b)P(c\vert a,b).</script>
+\[\psi(a,b,c)=P(a)P(b)P(c\vert a,b).\]
   </li>
 </ul>
 
@@ -388,11 +380,11 @@ Figure 6. (a) A directed graph. (b) The corresponding moral graph of the directe
 </center>
 <p>An example is shown in Figure 6. The directed graph represents the joint distribution</p>
 
-<script type="math/tex; mode=display">P(x_1,x_2,x_3)=P(x_1)P(x_2)P(x_3\vert x_1,x_2).</script>
+\[P(x_1,x_2,x_3)=P(x_1)P(x_2)P(x_3\vert x_1,x_2).\]
 
-<p>The moralization of the directed graph incurs a loop among $x_1,x_2,x_3$ as shown in Figure 6 (b). Defining $f_a(x_1)=P(x_1)$, $f_b(x_2)=P(x_2)$ and <script type="math/tex">f_c(x_1,x_2,x_3)=P(x_3\vert x_1,x_2)</script>, we have</p>
+<p>The moralization of the directed graph incurs a loop among $x_1,x_2,x_3$ as shown in Figure 6 (b). Defining $f_a(x_1)=P(x_1)$, $f_b(x_2)=P(x_2)$ and \(f_c(x_1,x_2,x_3)=P(x_3\vert x_1,x_2)\), we have</p>
 
-<script type="math/tex; mode=display">P(x_1,x_2,x_3)=f_a(x_1)f_b(x_2)f_c(x_1,x_2,x_3).</script>
+\[P(x_1,x_2,x_3)=f_a(x_1)f_b(x_2)f_c(x_1,x_2,x_3).\]
 
 <p>The factor graph corresponding to such a factorization is shown in Figure 6 (c). Moreover, all factor graphs are <em>bipartite</em> as they consist of two distinct kinds of nodes. With factor graphs, we can conduct the related computation based on the factor nodes rather than variable nodes so that the loop can be avoided.</p>
 

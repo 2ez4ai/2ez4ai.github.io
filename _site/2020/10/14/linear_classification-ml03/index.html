@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-51FFV4BDWW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-51FFV4BDWW');
+</script>
+  
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    Machine Learning - 03 Linear Classification &middot; Jingye Wang
+  </title>
+
+  
+  <link rel="canonical" href="/2020/10/14/linear_classification-ml03/">
+  
+
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ["\\(", "\\)"] ],
+      displayMath: [ ['$$', '$$'], ["\\[", "\\]"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+    //,
+    //displayAlign: "left",
+    //displayIndent: "2em"
+  });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+  
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>"You can’t connect the dots looking forward; you can only connect them looking backward."</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/categories/">Archive</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+    <span class="sidebar-nav-item">Currently v0.1.2</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2021. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Jingye Wang</a>
+            <small>A personal blog.</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <style>
+  .button {
+    border: 2px solid;
+    border-radius: 7.5px;
+    color: white;
+    padding: 2.5px 7.5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition-duration: 0.1s;
+    cursor: pointer;
+  }
+
+  .buttonC {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #2e3131;
+  }
+
+  .buttonC:hover {
+    background-color: #2e3131;
+    color: white;
+  }
+  a:hover{
+    text-decoration: none;
+  }
+</style>
+<div class="post">
+  <h1 class="post-title">Machine Learning - 03 Linear Classification </h1>
+  <span class="post-date">
+    14 Oct 2020
+    <p></p>
+  <div class="post-categories">
+      
+      
+      <a class="button buttonC" href="/categories/#machine-learning">machine-learning</a>&nbsp;
+      
+      
+    </div>
+  </span>
+  <p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>. For the fundamental of linear algebra, one can always refer to <a href="http://math.mit.edu/~gs/linearalgebra/">Introduction to Linear Algebra</a> and <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">The Matrix Cookbook</a> for more details. Many thanks to these great works.</em></p>
+
+<ul id="markdown-toc">
+  <li><a href="#0-introduction" id="markdown-toc-0-introduction">0. Introduction</a></li>
+  <li><a href="#1-perceptron" id="markdown-toc-1-perceptron">1. Perceptron</a></li>
+  <li><a href="#2-linear-discriminant-analysis" id="markdown-toc-2-linear-discriminant-analysis">2. Linear Discriminant Analysis</a></li>
+  <li><a href="#3-discriminant-classifiers" id="markdown-toc-3-discriminant-classifiers">3. Discriminant Classifiers</a>    <ul>
+      <li><a href="#31-logistic-regression" id="markdown-toc-31-logistic-regression">3.1. Logistic Regression</a></li>
+    </ul>
+  </li>
+  <li><a href="#4-generative-classifiers" id="markdown-toc-4-generative-classifiers">4. Generative Classifiers</a>    <ul>
+      <li><a href="#41-naive-bayes-classifier" id="markdown-toc-41-naive-bayes-classifier">4.1. Naive Bayes Classifier</a></li>
+      <li><a href="#42-gaussian-discriminant-analysis" id="markdown-toc-42-gaussian-discriminant-analysis">4.2. Gaussian Discriminant Analysis</a></li>
+    </ul>
+  </li>
+  <li><a href="#5-conclusion" id="markdown-toc-5-conclusion">5. Conclusion</a></li>
+</ul>
+<h1 id="0-introduction">0. Introduction</h1>
+
+<p><em>The following introduction is derived from the <a href="http://pages.stat.wisc.edu/~wahba/stat860public/pdf1/liu.zhang.wu.lum.11.pdf">paper</a>.</em></p>
+
+<p>As a supervised learning technique, the goal of classification is to construct a classification rule based on a training set where both data and class labels are given. Once obtained, the classification rule can then be used for class prediction of new objects whose covariates are available.</p>
+
+<p>Among various classification methods, there are two main groups: <em>soft</em> and <em>hard</em> classification. In particular, a soft classification rule generally estimates the class <em>conditional probabilities</em> explicitly and then makes the class prediction <em>based on the estimated probability</em>. Depending on whether calculating the conditional probability directly or approximating it by a model, there are <em>generative classifiers</em> and <em>discriminant classifiers</em> among the <em>soft</em> methods. In contrast, hard classification bypasses the requirement of class probability estimation and directly estimates the <em>classification boundary</em>.</p>
+
+<p>Typical soft classifiers include some traditional distribution-based likelihood approaches such as logistic regression. On the other hand, some margin-based approaches such as perceptron and the SVM, generally distributional assumption-free, belong to the class of hard classification methods.</p>
+
+<p>We assume the data set is linearly separable in the following subsections.</p>
+
+<h1 id="1-perceptron">1. Perceptron</h1>
+
+<p>Perceptron is a <em>hard</em> method for <em>binary classification</em>. Suppose we have i.i.d. data \(\mathcal{D}=\{(x_1,y_1), (x_2,y_2),\dots,(x_N,y_N)\},X=\{x_1,x_2,\dots,x_N\}, Y=\{y_1,y_2,\dots,y_N\}\) where $x_i\in\mathbb{R}^{d\times 1}$ can be viewed as the feature and \(y_i\in\{-1,1\}\) is the corresponding label. In particular, we denote \(X_{c1}=\{x_i\vert y_i=+1\}\) and \(X_{c2}=\{x_i\vert y_i=-1\}\) as the set of class $c_1$ and class $c_2$, respectively. Moreover, let $N_1=| X_{c1}|$ and $N_2=|X_{c2}|$, where $N_1+N_2=N$. The model of perceptron follows</p>
+
+\[f(w)=\text{sign}(w^Tx),\]
+
+<p>where $w\in\mathbb{R}^{d\times 1}$ and $\text{sign}(\cdot)$ is the sign function. Perceptron is actually an error-driven method. Specifically, for data $(x_i,y_i)$, the correctness of perceptron can be described as</p>
+
+\[y_iw^Tx_i\ge0\iff\begin{cases}w^Tx_i\ge0,\ f(w)=1,&amp;\text{if } y_i=+1\\w^Tx_i&lt;0,\ f(w)=-1, &amp;\text{if }y_i=-1\end{cases}\]
+
+<p>Define \(\tilde D=\{(x,y)\vert y_iw^T x_i&lt;0, i=1,\dots,N\}\) be the set of data that was classified incorrectly. Then the loss function of the model can be defined as the size of $\tilde D$:</p>
+
+\[\mathcal{L}(w)=\sum_{i=1}^NI(y_iw^Tx_i&lt;0),\]
+
+<p>where $I(\cdot)$ is the indicator function. Though such a loss function is intuitive, it is uncontinuous and can be hard to be optimized. From the standpoint of the model, to make $y_iw^Tx_i\ge0$ is equivalent to make $y_iw^Tx_i$ as larger as possible, thus we can transform the loss function into</p>
+
+\[\mathcal{L}(w)=\sum_{i=1}^N-y_iw^Tx_i,\]
+
+<p>which can be minimized by various optimization methods such as <em>stochastic gradient descent</em>.</p>
+
+<h1 id="2-linear-discriminant-analysis">2. Linear Discriminant Analysis</h1>
+
+<p>Now we introduce <em>linear discriminant analysis</em> (LDA), which is a method for <em>binary classification</em>. Note that in some materials, LDA is defined as a dimensionality reduction technique. Further, we introduce LDA method  in this note from a hard classification perspective. The soft perspective can be also found in other materials. The notations for data in this subsection are the same as that in subsection 1. We further define the mean</p>
+
+\[\bar x_{c1}=\frac{1}{N_1}\sum_{x\in X_{c1}}x,\quad \bar x_{c2}=\frac{1}{N_2}\sum_{x\in X_{c2}}x,\]
+
+<p>and the variance</p>
+
+\[S_{c1}=\frac{1}{N_1}\sum_{x\in X_{c1}}(x-\bar x_{c1})(x-\bar x_{c1})^T,\quad S_{c2}=\frac{1}{N_2}\sum_{x\in X_{c2}}(x-\bar x_{c2})(x-\bar x_{c2})^T.\]
+
+<blockquote>
+  <p>The idea of LDA is proposed by Ronald Fisher in 1988: maximize the distance between the mean of each class and minimize the spreading within the class itself.</p>
+
+</blockquote>
+
+<p>In LDA, we consider the ‘<em>projection</em>’ of $x$:</p>
+
+\[z=w^Tx,\]
+
+<p>where $w\in\mathbb{R}^{d\times 1}$ is a unit vector to be learned. Specifically, the scalar $z$ is the length of the projection of $x$ on $w$, thus we can view such $z$ as the projection of $x$ into a <em>one dimensional subspace</em>. Note that the definition here is different from the definition of projection in <em>Introduction to Linear Algebra</em>.</p>
+
+<p>Then we have the following definitions about the <em>mean</em>,</p>
+
+\[\bar z =\frac{1}{N}\sum_{i=1}^Nw^Tx_i,\quad \bar z_1=\frac{1}{N_1}\sum_{x\in X_{c1}}w^Tx,\quad \bar z_2=\frac{1}{N_2}\sum_{x\in X_{c2}}w^Tx.\]
+
+<p>Similarly, we have the definitions related to the variance as</p>
+
+\[S=\frac{1}{N}\sum_{i=1}^{N}(w^Tx_i-\bar z)^2,\quad S_1=\frac{1}{N_1}\sum_{x\in X_{c1}}(w^Tx-\bar z_1)^2,\quad S_2=\frac{1}{N_2}\sum_{x\in X_{c2}}(w^Tx-\bar z_2)^2.\]
+
+<p>Then we use the mean to define the distance between the two class and the variance to represent the spreading within the class itself. LDA is then to find the unit vector $\hat w$ that maximizes</p>
+
+\[\mathcal{J}(w)=\frac{(\bar z_1-\bar z_2)^2}{S_1+S_2}.\]
+
+<p>For the numerator, it follows that</p>
+
+\[\begin{aligned}(\bar z_1-\bar z_2)^2&amp;=\left(\frac{1}{N_1}\sum_{x\in X_{c1}}w^Tx_i-\frac{1}{N_2}\sum_{x\in X_{c2}}w^Tx_i\right)^2\\&amp;=w^T\left(\bar x_{c1}-\bar x_{c_2}\right)\left(\bar x_{c1}-\bar x_{c_2}\right)^Tw\end{aligned}.\]
+
+<p>For the denominator, it follows that</p>
+
+\[\begin{aligned}S_1+S_2&amp;=\frac{1}{N_1}\sum_{x\in X_{c1}}(w^Tx-\bar z_1)^2+\frac{1}{N_2}\sum_{x\in X_{c2}}(w^Tx-\bar z_2)^2\\&amp;=w^T\left[\frac{1}{N_1}\sum_{x\in X_{c1}}(x-\bar x_{c1})(x-\bar x_{c1})^T\right]w+w^T\left[\frac{1}{N_2}\sum_{x\in X_{c2}}(x-\bar x_{c2})(x-\bar x_{c2})^T\right]w\\&amp;=w^TS_{c1}w+w^TS_{c2}w\\&amp;=w^T(S_{c1}+S_{c2})w\end{aligned}.\]
+
+<p>Therefore, we have</p>
+
+\[\mathcal{J}(w)=\frac{w^TS_bw}{w^TS_ww},\]
+
+<p>where $S_b=\left(\bar x_{c1}-\bar x_{c_2}\right)\left(\bar x_{c1}-\bar x_{c_2}\right)^T$ represents the distance <em>between-class</em>, $S_w=S_{c1}+S_{c2}$ represents the spreading <em>within-class</em>. Such transformation is actually for computing derivation. $J(w)$ can be maximized by taking the derivative w.r.t $w$ and setting it to be $0$. Specifically,</p>
+
+\[\begin{aligned}\frac{\partial \mathcal{J}(w)}{\partial w}&amp;=\frac{\left(\frac{\partial}{\partial w}w^TS_b w\right)w^TS_ww-w^TS_bw\left(\frac{\partial}{\partial w}w^TS_w w\right)}{(w^TS_ww)^2}\\&amp;=\frac{(2S_bw)w^TS_ww-w^TS_bw(2S_ww)}{(w^TS_ww)^2}\end{aligned}.\]
+
+<p>Setting it to be 0 is equivalent to</p>
+
+\[\begin{aligned}(2S_bw)w^TS_ww-w^TS_bw(2S_ww)&amp;=0\\ (w^TS_bw)S_ww&amp;=S_bw(w^TS_ww)\\S_w w&amp;=\frac{w^TS_ww}{w^TS_bw}S_bw\end{aligned}.\]
+
+<p>As $w\in\mathbb{R}^{d\times 1}$ and $S_w,S_b\in\mathbb{R}^{d\times d}$, the term $(w^TS_ww)/(w^TS_bw)\in\mathbb{R}$. For convenience, we denote it as $\lambda$. Then we have an equivalent <em>generalized eigenvalue problem</em></p>
+
+\[S_ww=\lambda S_bw.\]
+
+<p>If one of $S_b$ and $S_w$ has full rank, the generalized eigenvalue problem can be converted into a standard eigenvalue problem. However, to solve the problem entails complex computation. We now assume $S_w^{-1}$ exists. Recall that $w$ is a unit vector. Thus what we need to care is only the direction of $w$:</p>
+
+\[\begin{aligned}\hat w&amp;\propto \lambda S_w^{-1}S_bw\\&amp;\propto \lambda S_w^{-1}\left(\bar x_{c1}-\bar x_{c_2}\right)\left(\bar x_{c1}-\bar x_{c_2}\right)^Tw\\&amp;\propto\lambda_1S_w^{-1}\left(\bar x_{c1}-\bar x_{c_2}\right)\\&amp;\propto S_w^{-1}\left(\bar x_{c1}-\bar x_{c_2}\right)\end{aligned},\]
+
+<p>where $\lambda_1=\lambda \left(\bar x_{c1}-\bar x_{c_2}\right)^Tw$ is a scalar as $\left(\bar x_{c1}-\bar x_{c_2}\right)^Tw\in\mathbb{R}$.</p>
+
+<h1 id="3-discriminant-classifiers">3. Discriminant Classifiers</h1>
+
+<p>Discriminant classifiers focus on the classification problem directly. Specifically, discriminant classifiers  model the posterior $P(Y\vert X)$, then makes the class prediction based on the estimated probability.</p>
+
+<h2 id="31-logistic-regression">3.1. Logistic Regression</h2>
+
+<p>Logistic regression inputs the result of a <em>linear regression</em> to a <em>sigmoid function</em> to make classification. A sigmoid function is</p>
+
+\[\sigma(z)=\frac{1}{1+e^{-z}}\]
+
+<p>which maps $z\in(-\infty,+\infty)$ into a probability $[0,1]$. Therefore we can model the posterior probability as</p>
+
+\[P(y=1|x;w)=\sigma(w^Tx)=\frac{1}{1+e^{-w^Tx}},\]
+
+<p>where $w$ is the parameter to be learned. As for $P(y=-1\vert x;w)$, it can be obtained by $1-P(y=1\vert x;w)$ since we are considering a binary classification problem. However, for a supervised learning technique, it would be convenient to consider both two labels into one function. To this end, we set the label value to be \(y_i\in\{0,1\}\) . Moreover, we denote $P(y_i=1\vert x_i;w)$ and $P(y_i=0\vert x_i;w)$ as $p_{i\cdot 1}$ and $p_{i\cdot 0}$, respectively. Then logistic regression is to find $\hat w$ that maximizes</p>
+
+\[\mathcal{J}(w)=P(Y|X;w)=\prod_{i=1}^N p_{i\cdot 1}^{y_i}p_{i\cdot 0}^{1-y_i}.\]
+
+<p>Given the dataset $\mathcal{D}$, such maximization problem can be solved by <em>maximum likelihood estimation</em>:</p>
+
+\[\begin{aligned}\hat w&amp;=\arg\max_w \log P(Y\vert X;w)\\&amp;=\arg\max_w \log\prod_{i=1}^N p_{i\cdot 1}^{y_i}p_{i\cdot 0}^{1-y_i}\\&amp;=\arg\max_w \sum_{i=1}^N(y_i\log p_{i\cdot 1}+(1-y_i)\log p_{i\cdot 0})\\&amp;=\arg\max_w \sum_{i=1}^N[y_i\log \sigma(w^Tx_i)+(1-y_i)\log (1-\sigma(w^Tx_i))]\end{aligned}.\]
+
+<blockquote>
+  <p>The term \(\sum_{i=1}^N(y_i\log \sigma(w^Tx_i)+(1-y_i)\log (1-\sigma(w^Tx_i)))\) is actually the negative of <em>cross entropy</em> over $P(Y)$ and $\sigma(w^TX)$.</p>
+</blockquote>
+
+<p>To solve the above problem, one can refer to SGD method.</p>
+
+<h1 id="4-generative-classifiers">4. Generative Classifiers</h1>
+
+<p>For a binary classification problem, we actually have no need to know the specfic value of \(P(y=1\vert x)\) and \(P(y=0\vert x)\). What matters is whether \(P(y=1\vert x)&gt;P(y=0\vert x)\) or not. Unlike discriminant methods which model and compute the posterior probability directly, in <em>generative classifiers</em>, we compare the posterior probability in an indirect way. Specifically, by <em>Bayes’s theorem</em>, we have</p>
+
+\[P(Y|X)=\frac{P(X|Y)P(Y)}{P(X)}\propto P(X|Y)P(Y).\]
+
+<p>Therefore, to compare the posterior probability is to compare the union probability. The classification predicted by generative classifiers is</p>
+
+\[\hat y=\arg\max_{y\in\{0,1\}}P(y\vert x)=\arg\max_{y\in\{0,1\}}P(x\vert y)P(y).\]
+
+<p>In generative classifier methods, a key problem is how to model the likelihood \(P(x\vert y)\) and the prior $P(y)$.</p>
+
+<h2 id="41-naive-bayes-classifier">4.1. Naive Bayes Classifier</h2>
+
+<p>Naive Bayes classifier is the simplest generative classifier. For a binary classification problem, suppose the feature of $x_i$ is composed of $(x_{i1},x_{i2},\dots,x_{id})$. Then naive Bayes classifier assumes not only the independence among the data but also that <em>every pair of the feature is independent</em>, <em>i.e.,</em></p>
+
+\[x_{im}\vert y_i\perp x_{in}\vert y_i,m,n=1,2,\dots,d \text{ and }m\ne n.\]
+
+<p>Then the likelihood becomes</p>
+
+\[P(x_i\vert y_i)=\prod_{j=1}^dP(x_{ij}\vert y_i).\]
+
+<p>Further, it models the prior and each feature as,</p>
+
+\[y_i\sim\text{Bern}(\phi),\quad x_{ij}\vert y_i\sim\mathcal{N}(\mu_{j},\sigma_j^2),\]
+
+<p>where $\phi,\mu_j$, and $\sigma_{j}$ are parameters that can be learned by MLE method. Note that such model is just a common case. The key idea of naive Bayes classifier is its independence assumption. Specifically, naive Bayes classifier is not a single method but a family of methods. By assuming the independence, it can be extremely fast compared with other classification methods.</p>
+
+<h2 id="42-gaussian-discriminant-analysis">4.2. Gaussian Discriminant Analysis</h2>
+
+<p>As a generative method, <em>Gaussian discriminant analysis</em> (GDA) models the prior and the likelihood as follows,</p>
+
+\[y\sim\text{Bern}(\phi),\quad x\vert y=0\sim\mathcal{N}(\mu_1,\Sigma),\quad x\vert y=1\sim\mathcal{N}(\mu_2,\Sigma),\]
+
+<p>where \(\phi,\mu_1,\mu_2\), and \(\Sigma\) are parameters to be learned. We define $w=(\phi, \mu_1,\mu_2,\Sigma)$. Then GDA is to find $\hat w$ that maximizes</p>
+
+\[\begin{aligned}\mathcal{J}(w)&amp;=\log \prod_{i=1}^N P(x_i\vert y_i;\mu_1,\mu_2,\Sigma)P(y_i;\phi)\\&amp;=\sum_{i=1}^N\left(\log P(x_i\vert y_i;\mu_1,\mu_2,\Sigma)+\log P(y_i;\phi)\right)\end{aligned}.\]
+
+<p>Similar to the case in section 3.1, we represent the likelihood and the prior as</p>
+
+\[P(x_i\vert y_i;\mu_1,\mu_2,\Sigma)=\rho^{y_i}(\mu_1,\Sigma)\rho^{1-y_i}(\mu_2,\Sigma),\quad P(y_i;\phi)=\phi^{y_i}(1-\phi)^{1-y_i},\]
+
+<p>where $\rho(\mu_1,\Sigma)$ and $\rho(\mu_2,\Sigma)$ are the PDF of \(x\vert y=0\) and \(x\vert y=1\), respectively. Then it follows that</p>
+
+\[\begin{aligned}\mathcal{J}(w)&amp;=\sum_{i=1}^N\left(\log\rho^{y_i}(\mu_1,\Sigma)\rho^{1-y_i}(\mu_2,\Sigma)+\log\phi^{y_i}(1-\phi)^{1-y_i}\right)\\&amp;=\sum_{i=1}^N\left(y_i\log \rho(\mu_1,\Sigma)+(1-y_i)\log\rho(\mu_2,\Sigma)+y_i\log\phi+(1-y_i)\log(1-\phi)\right)\end{aligned}.\]
+
+<p>Then to find \(\hat w\) that maximizes $\mathcal{J}(w)$ is equivalent to set the derivation of $\mathcal{J}(w)$ w.r.t $w$ to be zero.</p>
+
+<p>For $\hat \phi$:</p>
+
+\[\begin{aligned}\frac{\partial \mathcal{J}(w)}{\partial\phi}=\sum_{i=1}^N\left(\frac{y_i}{\phi}-\frac{1-y_i}{1-\phi}\right)\end{aligned}.\]
+
+<p>Solving \(\partial \mathcal{J}(w)/\partial\phi=0\), we have</p>
+
+\[\hat \phi=\frac{1}{N}\sum_{i=1}^N y_i=\frac{N_1}{N}.\]
+
+<p>For $\hat\mu_1$ (or \(\hat\mu_2\) likewise):</p>
+
+\[\begin{aligned}\frac{\partial\mathcal{J}(w)}{\partial\mu_1}&amp;=\frac{\partial\left(\sum_{i=1}^N y_i\log \rho(\mu_1,\Sigma)\right)}{\partial\mu_1}\\&amp;=\frac{\partial\left(\sum_{i=1}^Ny_i\log\left(\frac{1}{(2\pi)^{d/2}\vert\Sigma\vert^{1/2}}\exp\left(-\frac{1}{2}(x_i-\mu_1)^T\Sigma^{-1}(x_i-\mu_1)\right)\right)\right)}{\partial\mu_1}\\&amp;=\frac{\partial\left(-\frac{1}{2}\sum_{i=1}^Ny_i(x_i-\mu_1)^T\Sigma^{-1}(x_i-\mu_1)\right)}{\partial\mu_1}\\&amp;=\frac{\partial\left(-\frac{1}{2}\sum_{i=1}^Ny_i(x_i^T\Sigma^{-1}x_i-x_i^T\Sigma^{-1}\mu_1-\mu_1^T\Sigma^{-1}x_i+\mu_1^T\Sigma^{-1}\mu_1)\right)}{\partial\mu_1}\\&amp;=\sum_{i=1}^Ny_i\left(\Sigma^{-1}\mu_1-\Sigma^{-1}x_i\right)\end{aligned}.\]
+
+<blockquote>
+  <p><a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">The Matrix Cookbook</a>:</p>
+
+\[\frac{\partial x^Ta}{\partial x}=\frac{\partial a^Tx}{\partial x}=a.\]
+
+\[\frac{\partial x^TBx}{\partial x}=(B+B^T)x.\]
+</blockquote>
+
+<p>Solving \(\partial \mathcal{J}(w)/\partial\mu_1=0\), we have</p>
+
+\[\hat \mu_1=\frac{\sum_{i=1}^N y_ix_i}{\sum_{i=1}^N y_i}=\bar x_{c1}.\]
+
+<p>Similarly, we have</p>
+
+\[\hat\mu_2=\bar x_{c2}.\]
+
+<p>For $\hat\Sigma$, we first consider the following transformation</p>
+
+\[\begin{aligned}\sum_{i=1}^N\left(y_i\log \rho(\mu_1,\Sigma)+(1-y_i)\log\rho(\mu_2,\Sigma)\right)&amp;=\sum_{x\in X_{c1}}\log\rho(\mu_1,\Sigma)+\sum_{x\in X_{c2}}\log\rho(\mu_2,\Sigma)\end{aligned}.\]
+
+<p>As $\Sigma$ is shared by both \(\rho(\mu_1,\Sigma)\) and \(\rho(\mu_2,\Sigma)\), we consider the expansion of $\rho(\mu_1,\Sigma)$ for example,</p>
+
+\[\begin{aligned}\sum_{x\in X_{c1}}\log\rho(\mu_1,\Sigma)&amp;=\sum_{x\in X_{c1}}\log\left(\frac{1}{(2\pi)^{d/2}\vert\Sigma\vert^{1/2}}\exp\left(-\frac{1}{2}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1)\right)\right)\\&amp;=\underbrace{\sum_{x\in X_{c1}}-\frac{d}{2}\log2\pi}_{\text{constant }\lambda_1}-\sum_{x\in X_{c1}}\left(\frac{1}{2}\log\vert \Sigma\vert+\frac{1}{2}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1)\right)\\&amp;=\lambda_1-\frac{N_1}{2}\log\vert\Sigma\vert-\frac{1}{2}\sum_{x\in X_{c1}}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1)\end{aligned}.\]
+
+<p>For the third term, notice that $(x-\mu_1)^T\Sigma^{-1}(x-\mu_1)\in\mathbb{R}$, thus</p>
+
+\[\begin{aligned}\sum_{x\in X_{c1}}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1)&amp;=\text{tr}\left(\sum_{x\in X_{c1}}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1)\right)\\&amp;=\text{tr}\left(\sum_{x\in X_{c1}}(x-\mu_1)(x-\mu_1)^T\Sigma^{-1}\right)\\&amp;=N_1\text{tr}\left(S_{c1}\Sigma^{-1}\right)\end{aligned}.\]
+
+<blockquote>
+  <p><a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">The Matrix Cookbook</a>:</p>
+
+\[\text{tr}(ABC)=\text{tr}(CAB)=\text{tr}(BCA).\]
+
+\[\frac{\partial\text{tr}(AB)}{\partial A}=B^T.\]
+
+\[\frac{\partial \vert A\vert}{\partial A}=\vert A\vert A^{-1}.\]
+</blockquote>
+
+<p>Hence,</p>
+
+\[\sum_{x\in X_{c1}}\log\rho(\mu_1,\Sigma)=\lambda_1-\frac{N_1}{2}\log\vert\Sigma\vert-\frac{N_1}{2}\text{tr}\left(S_{c1}\Sigma^{-1}\right).\]
+
+<p>Similarly,</p>
+
+\[\sum_{x\in X_{c2}}\log\rho(\mu_2,\Sigma)=\lambda_2-\frac{N_2}{2}\log\vert\Sigma\vert-\frac{N_2}{2}\text{tr}\left(S_{c2}\Sigma^{-1}\right).\]
+
+<p>Then it follows that</p>
+
+\[\begin{aligned}\frac{\partial\mathcal{J}(w)}{\partial\Sigma}&amp;=\frac{\partial \left(\sum_{i=1}^N\left(y_i\log \rho+(1-y_i)\log\rho\right)\right)}{\partial\Sigma}\\&amp;=\frac{\partial \left(\sum_{x\in X_{c1}}\log\rho+\sum_{x\in X_{c2}}\log\rho\right)}{\partial\Sigma}\\&amp;=-\frac{1}{2}\frac{\partial \left(N\log\vert\Sigma\vert+N_1\text{tr}\left(S_{c1}\Sigma^{-1}\right)+N_2\text{tr}\left(S_{c2}\Sigma^{-1}\right)\right)}{\partial\Sigma}\\&amp;=-\frac{1}{2}\left(N\Sigma^{-1}-N_1S_{c1}\Sigma^{-2}-N_2S_{c2}\Sigma^{-2}\right)\end{aligned}.\]
+
+<p>By setting \(\partial \mathcal{J}(w)/\partial\Sigma=0\), we finally arrive at</p>
+
+\[\hat\Sigma=\frac{N_1S_{c1}+N_2S_{c2}}{N}.\]
+
+<h1 id="5-conclusion">5. Conclusion</h1>
+
+<p>In this post, we introduced five linear classifiers. Among these models, $\mathcal{L}(w)$ is to be minimized, while $\mathcal{J}(w)$ is to be maximized. We omitted the prediction part of a classification problem. What we focused is actually how to model these data, especially in those generative cases.</p>
+
+<p>This post is obviously a long story. Moreover, there are many other things stoped my writing occasionally these days. It definitely has some logical problems, let alone typos, to be fixed. Anyway, I made it. Hope next time I can do better.</p>
+
+
+</div>
+
+ <!--https://blog.webjeda.com/jekyll-related-posts/-->
+<div class="related">
+  <h2>Related posts</h2>
+  
+  
+  
+
+  
+
+    
+    
+
+    
+
+    
+      <div>
+      <h5><a href="/2020/12/05/inference-ml09/">Machine Learning - 09 Exact Inference of Graphical Models <span class="label label-default">machine-learning</span> </a></h5>
+      </div>
+      
+      
+    
+
+  
+
+    
+    
+
+    
+
+    
+      <div>
+      <h5><a href="/2020/11/29/probabilistic_graphical_models-ml08/">Machine Learning - 08 Probabilistic Graphical Models <span class="label label-default">machine-learning</span> </a></h5>
+      </div>
+      
+      
+    
+
+  
+
+    
+    
+
+    
+
+    
+      <div>
+      <h5><a href="/2020/11/12/exponential_family-ml07/">Machine Learning - 07 Exponential Family <span class="label label-default">machine-learning</span> </a></h5>
+      </div>
+      
+      
+        
+</div>
+
+
+<!--
+
+<div class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2020/12/05/inference-ml09/">
+            Machine Learning - 09 Exact Inference of Graphical Models
+            <small>05 Dec 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/11/29/probabilistic_graphical_models-ml08/">
+            Machine Learning - 08 Probabilistic Graphical Models
+            <small>29 Nov 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/11/12/exponential_family-ml07/">
+            Machine Learning - 07 Exponential Family
+            <small>12 Nov 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+-->
+
+<!-- Comments -->
+<!--
+
+-->
+<!-- Comments Form -->
+<!--
+  <form method="POST" action="">
+    <input name="options[redirect]" type="hidden" value="https://example.com">
+    <input name="options[slug]" type="hidden" value="linear_classification-ml03">
+      <label>*Name</label>
+      <input name="fields[name]" type="text">
+      <label>E-mail</label>
+      <input name="fields[email]" type="email"><br>
+      <label>Message:</label>
+      <textarea style="width:100%" name="fields[message]" rows="12"></textarea>
+      <button type="submit">Submit comment</button>
+      <small>Comments will appear after moderation.</small>
+  </form>
+-->
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/public/js/script.js'></script>
+  </body>
+</html>

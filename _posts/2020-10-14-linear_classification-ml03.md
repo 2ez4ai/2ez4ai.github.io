@@ -107,7 +107,7 @@ where $\lambda_1=\lambda \left(\bar x_{c1}-\bar x_{c_2}\right)^Tw$ is a scalar a
 
 Discriminant classifiers focus on the classification problem directly. Specifically, discriminant classifiers  model the posterior $P(Y\vert X)$, then makes the class prediction based on the estimated probability.
 
-## 3.1. Logistic regression
+## 3.1. Logistic Regression
 
 Logistic regression inputs the result of a *linear regression* to a *sigmoid function* to make classification. A sigmoid function is
 
@@ -141,7 +141,7 @@ $$\hat y=\arg\max_{y\in\{0,1\}}P(y\vert x)=\arg\max_{y\in\{0,1\}}P(x\vert y)P(y)
 
 In generative classifier methods, a key problem is how to model the likelihood $$P(x\vert y)$$ and the prior $P(y)$. 
 
-## 4.1. Naive Bayes classifier
+## 4.1. Naive Bayes Classifier
 
 Naive Bayes classifier is the simplest generative classifier. For a binary classification problem, suppose the feature of $x_i$ is composed of $(x_{i1},x_{i2},\dots,x_{id})$. Then naive Bayes classifier assumes not only the independence among the data but also that *every pair of the feature is independent*, *i.e.,*
 
@@ -157,7 +157,7 @@ $$y_i\sim\text{Bern}(\phi),\quad x_{ij}\vert y_i\sim\mathcal{N}(\mu_{j},\sigma_j
 
 where $\phi,\mu_j$, and $\sigma_{j}$ are parameters that can be learned by MLE method. Note that such model is just a common case. The key idea of naive Bayes classifier is its independence assumption. Specifically, naive Bayes classifier is not a single method but a family of methods. By assuming the independence, it can be extremely fast compared with other classification methods.
 
-## 4.2. Gaussian discriminant analysis
+## 4.2. Gaussian Discriminant Analysis
 
 As a generative method, *Gaussian discriminant analysis* (GDA) models the prior and the likelihood as follows,
 

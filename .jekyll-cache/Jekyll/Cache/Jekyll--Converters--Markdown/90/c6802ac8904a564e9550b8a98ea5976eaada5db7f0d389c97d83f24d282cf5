@@ -1,4 +1,4 @@
-I",'<p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>, <a href="https://ermongroup.github.io/cs228-notes/">CS228-notes</a> and <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf">PRML</a>. For the fundamental of probability, one can refer to <a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Introduction to Probability</a>. Many thanks to these great works.</em></p>
+I"O$<p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>, <a href="https://ermongroup.github.io/cs228-notes/">CS228-notes</a> and <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf">PRML</a>. For the fundamental of probability, one can refer to <a href="https://drive.google.com/file/d/1VmkAAGOYCTORq1wxSQqy255qLJjTNvBI/view">Introduction to Probability</a>. Many thanks to these great works.</em></p>
 
 <ul id="markdown-toc">
   <li><a href="#0-introduction" id="markdown-toc-0-introduction">0. Introduction</a></li>
@@ -19,35 +19,33 @@
 
 <p>We first consider the marginal inference in a <em>chain</em> Bayesian network which has the following joint distribution,</p>
 
-<script type="math/tex; mode=display">P(x_1,x_2,\dots,x_n)=P(x_1)\prod_{i=2}^nP(x_i\vert x_{i-1}).</script>
+\[P(x_1,x_2,\dots,x_n)=P(x_1)\prod_{i=2}^nP(x_i\vert x_{i-1}).\]
 
 <p>Suppose we want to infer the marginal distribution $P(x_n)$. A naive way to do that is marginalizing $x_1,x_2,\dots,x_{n-1}$:</p>
 
-<script type="math/tex; mode=display">P(x_n)=\sum_{x_1}\sum_{x_2}\dots\sum_{x_{n-1}}P(x_1,x_2,\dots,x_{n-1}).</script>
+\[P(x_n)=\sum_{x_1}\sum_{x_2}\dots\sum_{x_{n-1}}P(x_1,x_2,\dots,x_{n-1}).\]
 
 <p>However, as there are $n-1$ variables each with $k$ states, the computation needs to sum the probability over $k^{n-1}$ values and would scale exponentially with the length of the chain. To simplify the computation, we can leverage <em>variable elimination</em>.</p>
 
 <p>The key of <em>variable elimination</em> is in <em>rearranging the order</em> of the summations and the multiplications. Specifically, the marginal distribution follows that</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}P(x_n)&=\sum_{x_1}\sum_{x_2}\dots\sum_{x_{n-1}}P(x_1)\prod_{i=2}^nP(x_i\vert x_{i-1})\\&=\sum_{x_{n-1}}P(x_n\vert x_{n-1})\cdot \sum_{x_{n-2}}P(x_{n-1}\vert x_{n-2})\cdot\dots\cdot \sum_{x_{1}}P(x_{2}\vert x_{1})P(x_1).\end{aligned} %]]></script>
+\[\begin{aligned}P(x_n)&amp;=\sum_{x_1}\sum_{x_2}\dots\sum_{x_{n-1}}P(x_1)\prod_{i=2}^nP(x_i\vert x_{i-1})\\&amp;=\sum_{x_{n-1}}P(x_n\vert x_{n-1})\cdot \sum_{x_{n-2}}P(x_{n-1}\vert x_{n-2})\cdot\dots\cdot \sum_{x_{1}}P(x_{2}\vert x_{1})P(x_1).\end{aligned}\]
 
 <p>Such a rearrangement works because multiplication is distributive over addition,</p>
 
-<script type="math/tex; mode=display">ab+ac=a(b+c),</script>
+\[ab+ac=a(b+c),\]
 
-<p>where the number of arithmetic operations are reduced from three (the left-hand side) to two (the right-hand side). Before we move on, we generalize the new expression to a Markov network since every Bayesian network can be transformed into a Markov network. For the chain Bayesian network we considered, we can remove all the arrows of the graph to obtain a Markov network. The obtained Markov network would have maximum cliques <script type="math/tex">\{x_1,x_2\}</script>, …, <script type="math/tex">\{x_{n-2},x_{n-1}\}</script> and <script type="math/tex">\{x_{n-1},x_{n}\}</script> and the corresponding potentials are</p>
+<p>where the number of arithmetic operations are reduced from three (the left-hand side) to two (the right-hand side). Before we move on, we generalize the new expression to a Markov network since every Bayesian network can be transformed into a Markov network. For the chain Bayesian network we considered, we can remove all the arrows of the graph to obtain a Markov network. The obtained Markov network would have maximum cliques \(\{x_1,x_2\}\), …, \(\{x_{n-2},x_{n-1}\}\) and \(\{x_{n-1},x_{n}\}\) and the corresponding potentials are</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\psi_{1,2}(x_1,x_2)&=P(x_2\vert x_1)P(x_1),\\&\vdots\\\psi_{x_{n-2},x_{n-1}}(x_{n-2},x_{n-1})&=P(x_{n-2}\vert x_{n-1}),\\\psi_{n-1,n}(x_{n-1},x_n)&=P(x_{n-1}\vert x_n).\end{aligned} %]]></script>
+\[\begin{aligned}\psi_{1,2}(x_1,x_2)&amp;=P(x_2\vert x_1)P(x_1),\\&amp;\vdots\\\psi_{x_{n-2},x_{n-1}}(x_{n-2},x_{n-1})&amp;=P(x_{n-2}\vert x_{n-1}),\\\psi_{n-1,n}(x_{n-1},x_n)&amp;=P(x_{n-1}\vert x_n).\end{aligned}\]
 
 <p>The rearrangement for the Markov network then follows that</p>
 
-<script type="math/tex; mode=display">P(x_n)=\sum_{x_{n-1}}\psi_{n-1,n}(x_{n-1}, x_{n})\cdot \sum_{x_{n-2}}\psi_{n-2,n-1}(x_{n-2}, x_{n-1})\cdot\dots\cdot \sum_{x_{1}}\psi_{1,2}(x_1,x_2).</script>
+\[P(x_n)=\sum_{x_{n-1}}\psi_{n-1,n}(x_{n-1}, x_{n})\cdot \sum_{x_{n-2}}\psi_{n-2,n-1}(x_{n-2}, x_{n-1})\cdot\dots\cdot \sum_{x_{1}}\psi_{1,2}(x_1,x_2).\]
 
 <p>Now the computation composes of $n-1$ summations. More importantly, unlike the previous one sums over $k^{n-1}$ values, this expression allows each term only need to sum over $k\times k$ values. Specifically, the sum</p>
 
-<script type="math/tex; mode=display">\sum_{x_i}\psi_{x_i,x_{i+1}}(x_{i},x_{i+1})</script>
+\[\sum_{x_i}\psi_{x_i,x_{i+1}}(x_{i},x_{i+1})\]
 
 <p>only involves two variables and thus the summation is over $k\times k$ values. Then the overall computation is of $O(nk^2)$ complexity, which is much better than the naive $O(k^n)$ method.</p>
 
@@ -61,7 +59,7 @@
 
 <p>For a tree graph, its maximum cliques contains only two nodes. By VE algorithm, to compute the marginal $P(x_i)$, we need to eliminate all nodes that are in the subtree of $x_i$. For node $x_j$, the elimination involves computing $\sum_{x_j}\psi_{x_j,x_k}(x_j,x_k)m_{j,k}$ where $x_k$ is the parent of $x_j$ in the tree. The term $m_{j,k}$ can be thought of a <em>message</em> that $x_j$ sends to $x_k$ about the subtree rooted at $x_j$. Similarly, the computing result can be viewed as</p>
 
-<script type="math/tex; mode=display">m_{k,l}=\sum_{x_j}\psi_{x_j,x_k}(x_j,x_k)m_{j,k}</script>
+\[m_{k,l}=\sum_{x_j}\psi_{x_j,x_k}(x_j,x_k)m_{j,k}\]
 
 <p>that contains the information for $x_l$, the parent of $x_k$, about the subtree rooted at $x_k$. By doing so, at the end of VE, $x_i$ would receive messages from all of its immediate children and then marginalize them out to yield the final marginal.</p>
 
@@ -78,32 +76,31 @@
   <li>For each $x_j$ in $N(x_i)$, <em>i.e.,</em> the neighborhood of $x_i$, collect the messages sent to $x_i$:</li>
 </ul>
 
-<script type="math/tex; mode=display">m_{j,i}=\sum_{x_j}\psi_{x_i,x_j}(x_i,x_j)\psi_{x_j}(x_j)\prod_{k\in N(x_j)\setminus i}m_{k,j};</script>
+\[m_{j,i}=\sum_{x_j}\psi_{x_i,x_j}(x_i,x_j)\psi_{x_j}(x_j)\prod_{k\in N(x_j)\setminus i}m_{k,j};\]
 
 <ul>
   <li>For each $x_j$ in $N(x_i)$, collect the messages sent from $x_i$:</li>
 </ul>
 
-<script type="math/tex; mode=display">m_{i,j}=\sum_{x_i}\psi_{x_j,x_i}(x_j,x_i)\psi_{x_i}(x_i)\prod_{k\in N(x_i)\setminus j}m_{k,i}.</script>
+\[m_{i,j}=\sum_{x_i}\psi_{x_j,x_i}(x_j,x_i)\psi_{x_i}(x_i)\prod_{k\in N(x_i)\setminus j}m_{k,i}.\]
 
-<p>By doing so, we can obtain all the messages with <script type="math/tex">2\vert E\vert</script> steps, where $E$ is the set of edges. Then for any marginal we have</p>
+<p>By doing so, we can obtain all the messages with \(2\vert E\vert\) steps, where $E$ is the set of edges. Then for any marginal we have</p>
 
-<script type="math/tex; mode=display">P(x_i)=\psi_i(x_i)\prod_{k\in N(x_i)}m_{k,i}.</script>
+\[P(x_i)=\psi_i(x_i)\prod_{k\in N(x_i)}m_{k,i}.\]
 
 <h2 id="23-max-product">2.3 Max-Product</h2>
 
 <p>We now consider a problem of finding the set of values that have the largest probability so that</p>
 
-<script type="math/tex; mode=display">\hat{\text{x}}=\arg\max_{\text{x}} P(\text{x}).</script>
+\[\hat{\text{x}}=\arg\max_{\text{x}} P(\text{x}).\]
 
 <p>Notice that</p>
 
-<script type="math/tex; mode=display">\max_{\text{x}} P(\text{x})=\max_{\text{x}_1}\dots \max_{\text{x}_n}P(\text{x}).</script>
+\[\max_{\text{x}} P(\text{x})=\max_{\text{x}_1}\dots \max_{\text{x}_n}P(\text{x}).\]
 
 <p>By <em>sum-product</em>, we have</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\max_{\text{x}} P(\text{x})&=\max_{x_1}\dots \max_{x_n}\psi_i(x_i)\prod_{k\in N(x_i)}m_{k,i}\\&=\max_{x_n}\max_{x_n-1{}}\psi_{x_n,x_{n-1}}(x_n,x_{n-1})\max_{x_{n-2}}\psi_{x_{n-1},x_{n-2}}(x_{n-1},x_{n-2})\\&\quad\ \dots\max_{x_1}\psi_{x_2,x_1}(x_2,x_1)\psi_{x_1}(x_1).\end{aligned} %]]></script>
+\[\begin{aligned}\max_{\text{x}} P(\text{x})&amp;=\max_{x_1}\dots \max_{x_n}\psi_i(x_i)\prod_{k\in N(x_i)}m_{k,i}\\&amp;=\max_{x_n}\max_{x_n-1{}}\psi_{x_n,x_{n-1}}(x_n,x_{n-1})\max_{x_{n-2}}\psi_{x_{n-1},x_{n-2}}(x_{n-1},x_{n-2})\\&amp;\quad\ \dots\max_{x_1}\psi_{x_2,x_1}(x_2,x_1)\psi_{x_1}(x_1).\end{aligned}\]
 
 <p>Such a method for maximizing <em>max-product</em> is known as <em>max-product</em> algorithm.</p>
 

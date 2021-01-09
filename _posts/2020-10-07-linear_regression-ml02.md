@@ -73,7 +73,7 @@ which is consistent with our conclusion in section 1. Also, plugging the values 
 
 As we mentioned before, error is inevitable in practice, otherwise there is no need to do such approximation.
 
-## 3.1 Maximum likelihood estimation
+## 3.1 Maximum Likelihood Estimation
 
 We now use Gaussian distribution to reflect such noise as $\varepsilon\sim\mathcal{N}(0,\sigma^2)$. With the definition in section 1, we need to find the $w$ subject to
 
@@ -89,7 +89,7 @@ $$\begin{aligned}\hat w&=\arg\max_w\mathcal{L}(w)\\&=\arg\max_w -\sum_{i=1}^N\fr
 
 which is consistent with our analysis in section 1. In fact, least squares method has an assumption that the noise is subject to Gaussian distribution.
 
-## 3.2 Maximum a posteriori
+## 3.2 Maximum A Posteriori
 
 As we mentioned in the [previous notes](https://2ez4ai.github.io/2020/09/28/intro-ml01/), in the view of Bayesians, $w$ can also be a random variable. Suppose $w\sim\mathcal{N}(0,\sigma_0^2)$. Still, we have $y\vert x;w\sim\mathcal{N}(w^Tx,\sigma^2)$ (there is a little abuse of notation: $w$ after ‘$\|$’ is a sample rather than a random variable). By *maximum a posteriori* (MAP) method, we have
 

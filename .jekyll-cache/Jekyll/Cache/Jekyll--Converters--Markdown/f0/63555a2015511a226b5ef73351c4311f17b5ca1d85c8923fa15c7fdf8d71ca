@@ -1,4 +1,4 @@
-I"Å><p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>. For the fundamental of linear algebra, one can always refer to <a href="http://math.mit.edu/~gs/linearalgebra/">Introduction to Linear Algebra</a> and <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">The Matrix Cookbook</a> for more details. Many thanks to these great works.</em></p>
+I"Í7<p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>. For the fundamental of linear algebra, one can always refer to <a href="http://math.mit.edu/~gs/linearalgebra/">Introduction to Linear Algebra</a> and <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">The Matrix Cookbook</a> for more details. Many thanks to these great works.</em></p>
 
 <ul id="markdown-toc">
   <li><a href="#0-introduction" id="markdown-toc-0-introduction">0. Introduction</a></li>
@@ -23,36 +23,33 @@
 </div>
 <h2 id="11-problem-formulation">1.1. Problem formulation</h2>
 
-<p>Suppose we have data set <script type="math/tex">\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}</script> where $x_i\in\mathbb{R}^{d\times 1}$ is the data feature and $y_i\in{-1,1}$ is the corresponding class label. A case where $d=2$ is shown in the figure above. The hyperplane that separates the data is defined as</p>
+<p>Suppose we have data set \(\mathcal{D}=\{(x_1,y_1),(x_2,y_2),\dots,(x_N,y_N)\}\) where $x_i\in\mathbb{R}^{d\times 1}$ is the data feature and $y_i\in{-1,1}$ is the corresponding class label. A case where $d=2$ is shown in the figure above. The hyperplane that separates the data is defined as</p>
 
-<script type="math/tex; mode=display">w^Tx-b=0,</script>
+\[w^Tx-b=0,\]
 
 <p>where $w\in\mathbb{R}^{d\times 1}$ and $b\in\mathbb{R}$ are parameters to be learned. Then like what we arrived in <a href="https://2ez4ai.github.io/2020/10/14/linear_classification-ml03/">perceptron</a>, a correct classifier should ensure that</p>
 
-<script type="math/tex; mode=display">y_i(w^Tx_i-b)>0,\forall i=1,2,\dots,N.</script>
+\[y_i(w^Tx_i-b)&gt;0,\forall i=1,2,\dots,N.\]
 
 <p>We further define the <em>margin</em> as the parallel lines that has the minimum distance from the data to the hyperplane. In <em>hard-margin</em> SVM, we need to find the <em>maximum-margin</em> hyperplane that maximizes the distance, which can be described by</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\max_{w,b}\min_{i}&\quad \frac{\vert w^Tx_i-b\vert}{\vert\vert w\vert\vert}\\\text{s.t.}&\quad y_i(w^Tx_i-b)>0,\forall i=1,2,\dots,N\end{aligned}. %]]></script>
+\[\begin{aligned}\max_{w,b}\min_{i}&amp;\quad \frac{\vert w^Tx_i-b\vert}{\vert\vert w\vert\vert}\\\text{s.t.}&amp;\quad y_i(w^Tx_i-b)&gt;0,\forall i=1,2,\dots,N\end{aligned}.\]
 
 <p>The problem further is equivalent to</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{alignat*}{3}\max_{w,b}\min_{i}&\quad \frac{y_i(w^Tx_i-b)}{\vert\vert w\vert\vert}\implies\max_{w,b}\frac{1}{\vert\vert w\vert\vert}\min_i&\quad y_i(w^Tx_i-b)\\\text{s.t.}&\quad y_i(w^Tx_i-b)>0,\forall i=1,2,\dots,N\end{alignat*}. %]]></script>
+\[\begin{alignat*}{3}\max_{w,b}\min_{i}&amp;\quad \frac{y_i(w^Tx_i-b)}{\vert\vert w\vert\vert}\implies\max_{w,b}\frac{1}{\vert\vert w\vert\vert}\min_i&amp;\quad y_i(w^Tx_i-b)\\\text{s.t.}&amp;\quad y_i(w^Tx_i-b)&gt;0,\forall i=1,2,\dots,N\end{alignat*}.\]
 
 <p>For the constraint $y_i(w^Tx_i-b)&gt;0, \forall i=1,2,\dots,N$, there exists a positive parameter $r&gt;0$ such that</p>
 
-<script type="math/tex; mode=display">\min_i y_i(w^Tx_i-b)=r.</script>
+\[\min_i y_i(w^Tx_i-b)=r.\]
 
 <p>As there are many $w,b$ available for the separation as long as they have the same directions. We add a new constraint that $r=1$. Then it follows that</p>
 
-<script type="math/tex; mode=display">\min_i y_i(w^Tx_i-b)=y_i((w_{\text{old}}^T/r)x_i-b_{\text{old}}/r)=1.</script>
+\[\min_i y_i(w^Tx_i-b)=y_i((w_{\text{old}}^T/r)x_i-b_{\text{old}}/r)=1.\]
 
 <p>The problem then is transformed into</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{alignat*}{3}&&\max_{w,b}\frac{1}{\vert\vert w\vert\vert}\min_i y_i(w^Tx_i-b)&\implies\min_{w,b}\quad \frac{1}{2}w^Tw\\&&\text{s.t.}\quad y_i(w^Tx_i-b)>0&\implies\text{s.t.}\quad y_i(w^Tx_i-b)\ge 1,i=1,2,\dots,N\end{alignat*}, %]]></script>
+\[\begin{alignat*}{3}&amp;&amp;\max_{w,b}\frac{1}{\vert\vert w\vert\vert}\min_i y_i(w^Tx_i-b)&amp;\implies\min_{w,b}\quad \frac{1}{2}w^Tw\\&amp;&amp;\text{s.t.}\quad y_i(w^Tx_i-b)&gt;0&amp;\implies\text{s.t.}\quad y_i(w^Tx_i-b)\ge 1,i=1,2,\dots,N\end{alignat*},\]
 
 <p>which is a linearly constrained <em>quadratic optimization</em> (QP) problem.</p>
 
@@ -60,39 +57,35 @@
 
 <p>The following content is about <a href="https://web.stanford.edu/~boyd/cvxbook/">convex optimization</a>. In section 1, we have the <em>primal problem</em></p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\min_{w,b}&\quad \frac{1}{2}w^Tw\\\text{s.t.}&\quad y_i(w^Tx_i-b)\ge 1,i=1,2,\dots,N\end{aligned}. %]]></script>
+\[\begin{aligned}\min_{w,b}&amp;\quad \frac{1}{2}w^Tw\\\text{s.t.}&amp;\quad y_i(w^Tx_i-b)\ge 1,i=1,2,\dots,N\end{aligned}.\]
 
 <p>The <em>Lagrangian</em> for the problem is a function defined as</p>
 
-<script type="math/tex; mode=display">L(w,b,\lambda)=\frac{1}{2}w^Tw+\sum_{i=1}^N\lambda_i\left(1-y_i\left(w^Tx_i-b\right)\right),</script>
+\[L(w,b,\lambda)=\frac{1}{2}w^Tw+\sum_{i=1}^N\lambda_i\left(1-y_i\left(w^Tx_i-b\right)\right),\]
 
 <p>where $\lambda_i\ge 0$ is the <em>Lagrange multiplier</em> associated with the constraints. Consider the problem of $\max_\lambda L(w,b,\lambda)$,</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\max_{\lambda\ge 0} L(w,b,\lambda)=\begin{cases}\frac{1}{2}w^Tw+\infty&\text{if }\exists i\in\{1,2,\dots,N\}\text{ s.t. }1-y_i(w^Tx_i-b)>0,\\\frac{1}{2}w^Tw+0&\text{otherwise.}\end{cases} %]]></script>
+\[\max_{\lambda\ge 0} L(w,b,\lambda)=\begin{cases}\frac{1}{2}w^Tw+\infty&amp;\text{if }\exists i\in\{1,2,\dots,N\}\text{ s.t. }1-y_i(w^Tx_i-b)&gt;0,\\\frac{1}{2}w^Tw+0&amp;\text{otherwise.}\end{cases}\]
 
 <p>The problem makes sense (non infinity) only when the original constraint is satisfied. In that case, the primal problem is equivalent to</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\min_{w,b}\max_\lambda&\quad L(w,b,\lambda)\\\text{s.t.}&\quad \lambda_i\ge 0,i=1,2,\dots,N\end{aligned}. %]]></script>
+\[\begin{aligned}\min_{w,b}\max_\lambda&amp;\quad L(w,b,\lambda)\\\text{s.t.}&amp;\quad \lambda_i\ge 0,i=1,2,\dots,N\end{aligned}.\]
 
 <p>Then we define the <em>Lagrange dual function</em> for the primal problem as</p>
 
-<script type="math/tex; mode=display">g(\lambda)=\min_{w,b}L(w,b,\lambda).</script>
+\[g(\lambda)=\min_{w,b}L(w,b,\lambda).\]
 
 <blockquote>
   <p>Actually, the correct definition of the <em>Lagrange dual function</em> should be</p>
 
-  <script type="math/tex; mode=display">g(\lambda)=\inf_{w,b}L(w,b,\lambda).</script>
+\[g(\lambda)=\inf_{w,b}L(w,b,\lambda).\]
 
   <p>Here we assume the minimum exists and the infimum is the minimum for understanding.</p>
 </blockquote>
 
 <p>The <em>Lagrange dual problem</em> of the original problem is then defined as</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\max_{\lambda}&\quad g(\lambda)\\\text{s.t.}&\quad \lambda_i\ge 0,i=1,2,\dots,N\end{aligned}. %]]></script>
+\[\begin{aligned}\max_{\lambda}&amp;\quad g(\lambda)\\\text{s.t.}&amp;\quad \lambda_i\ge 0,i=1,2,\dots,N\end{aligned}.\]
 
 <p>The dual problem is introduced for its convexity. Specifically, notice that the infimum (minimum in this case) of $g(\lambda)$ is unconstrained as opposed to the original constrained minimization problem. Further, $g(\lambda)$ is concave with respect to $\lambda$ regardless of the original problem.</p>
 
@@ -105,35 +98,33 @@
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: center"><script type="math/tex">% <![CDATA[
-\begin{aligned}\min_{w,b}\max_\lambda&\quad L(w,b,\lambda)\\\text{s.t.}&\quad \lambda_i\ge 0,i=1,2,\dots,N\end{aligned} %]]></script></td>
-      <td style="text-align: center"><script type="math/tex">% <![CDATA[
-\begin{aligned}\max_{\lambda}\min_{w,b}&\quad L(w,b,\lambda)\\\text{s.t.}&\quad \lambda_i\ge 0,i=1,2,\dots,N\end{aligned} %]]></script></td>
+      <td style="text-align: center">\(\begin{aligned}\min_{w,b}\max_\lambda&amp;\quad L(w,b,\lambda)\\\text{s.t.}&amp;\quad \lambda_i\ge 0,i=1,2,\dots,N\end{aligned}\)</td>
+      <td style="text-align: center">\(\begin{aligned}\max_{\lambda}\min_{w,b}&amp;\quad L(w,b,\lambda)\\\text{s.t.}&amp;\quad \lambda_i\ge 0,i=1,2,\dots,N\end{aligned}\)</td>
     </tr>
   </tbody>
 </table>
 
 <p>A natural problem is whether the two problems are equivalent. Obviously, the equivalence is obtained if and only if</p>
 
-<script type="math/tex; mode=display">\min_{w,b}\max_{\lambda} L(w,b,\lambda)=\max_{\lambda}\min_{w,b} L(w,b,\lambda).</script>
+\[\min_{w,b}\max_{\lambda} L(w,b,\lambda)=\max_{\lambda}\min_{w,b} L(w,b,\lambda).\]
 
 <p>If the equation holds, we say the <em>strong duality</em> holds. It can also be shown that the <em>weak duality</em> always holds as</p>
 
-<script type="math/tex; mode=display">\min_{w,b}\max_{\lambda} L(w,b,\lambda)\ge\max_{\lambda}\min_{w,b} L(w,b,\lambda).</script>
+\[\min_{w,b}\max_{\lambda} L(w,b,\lambda)\ge\max_{\lambda}\min_{w,b} L(w,b,\lambda).\]
 
 <p><em>Proof:</em></p>
 
 <p>Obviously, we have</p>
 
-<script type="math/tex; mode=display">\max_\lambda L(w,b,\lambda)\ge L(w,b,\lambda)\ge\min_{w,b}L(w,b,\lambda).</script>
+\[\max_\lambda L(w,b,\lambda)\ge L(w,b,\lambda)\ge\min_{w,b}L(w,b,\lambda).\]
 
 <p>Define $F(w,b)=\max_\lambda L(w,b,\lambda)$ and $G(\lambda)=\min_{w,b}L(w,b,\lambda)$. According the above inequality, it follows that</p>
 
-<script type="math/tex; mode=display">F(w,b)\ge G(\lambda)\implies\min_{w,b}F(w,b)\ge\max_\lambda G(\lambda).</script>
+\[F(w,b)\ge G(\lambda)\implies\min_{w,b}F(w,b)\ge\max_\lambda G(\lambda).\]
 
 <p>Therefore we have</p>
 
-<script type="math/tex; mode=display">\min_{w,b}\max_{\lambda} L(w,b,\lambda)\ge\max_{\lambda}\min_{w,b} L(w,b,\lambda).\tag*{$\blacksquare$}</script>
+\[\min_{w,b}\max_{\lambda} L(w,b,\lambda)\ge\max_{\lambda}\min_{w,b} L(w,b,\lambda).\tag*{$\blacksquare$}\]
 
 <p>Solving the dual problem in fact is used to find nontrivial lower bounds for difficult original problems. In our case, the strong duality holds for the linearly constrained QP problem. Thus to solve the primal problem is to solve the dual problem.</p>
 
@@ -145,51 +136,50 @@
   <li>
     <p>(a). Primal Feasibility:</p>
 
-    <script type="math/tex; mode=display">y_i(w^Tx_i-b)\ge1,i=1,2,\dots,N</script>
+\[y_i(w^Tx_i-b)\ge1,i=1,2,\dots,N\]
   </li>
   <li>
     <p>(b). Dual Feasibility:</p>
 
-    <script type="math/tex; mode=display">\lambda_i\ge 0,i=1,2,\dots,N</script>
+\[\lambda_i\ge 0,i=1,2,\dots,N\]
   </li>
   <li>
     <p>(c). Complementary Slackness:</p>
 
-    <script type="math/tex; mode=display">\hat\lambda_i\left(1-y_i\left(\hat{w}^Tx_i-\hat b\right)\right)=0,i=1,2,\dots,N</script>
+\[\hat\lambda_i\left(1-y_i\left(\hat{w}^Tx_i-\hat b\right)\right)=0,i=1,2,\dots,N\]
   </li>
   <li>
     <p>(d). Zero gradient of Lagrangian with respect to $w,b$:</p>
 
-    <script type="math/tex; mode=display">\frac{\partial L}{\partial b}=0,\quad \frac{\partial L}{\partial w}=0.</script>
+\[\frac{\partial L}{\partial b}=0,\quad \frac{\partial L}{\partial w}=0.\]
   </li>
 </ul>
 
-<p>The conditions (a) and (b) are the original constraints. As for condition (c), recall that we define $y_i(w^Tx_i-b)=1$ for the data that is exactly <script type="math/tex">1/\vert\vert w\vert\vert</script> away from the hyperplane $w^Tx-b=0$, <em>i.e.,</em> on the margin of the hyperplane. For those which are not on the margin, to satisfy KKT conditions, it must follow that</p>
+<p>The conditions (a) and (b) are the original constraints. As for condition (c), recall that we define $y_i(w^Tx_i-b)=1$ for the data that is exactly \(1/\vert\vert w\vert\vert\) away from the hyperplane $w^Tx-b=0$, <em>i.e.,</em> on the margin of the hyperplane. For those which are not on the margin, to satisfy KKT conditions, it must follow that</p>
 
-<script type="math/tex; mode=display">\hat\lambda_k=0,k\in\{i\vert y_i(w^Tx_i-b)>1,i=1,2,\dots,N\}.</script>
+\[\hat\lambda_k=0,k\in\{i\vert y_i(w^Tx_i-b)&gt;1,i=1,2,\dots,N\}.\]
 
 <p>The condition (d) is for the dual problem. Specifically, we consider the unconstrained problem $\min_{w,b}L(w,b,\lambda)$ in the dual problem. For the differentiable function $L(w,b,\lambda)$ , by <em>Fermatâ€™s theorem</em>, the extremum exists when condition (d) is satisfied, $i.e.,$</p>
 
-<script type="math/tex; mode=display">\frac{\partial L}{\partial b}=\sum_{i=1}^N\lambda_iy_i=0,\\\frac{\partial L}{\partial w}=w-\sum_{i=1}^N\lambda_iy_ix_i=0.</script>
+\[\frac{\partial L}{\partial b}=\sum_{i=1}^N\lambda_iy_i=0,\\\frac{\partial L}{\partial w}=w-\sum_{i=1}^N\lambda_iy_ix_i=0.\]
 
 <p>Solving the equations we have</p>
 
-<script type="math/tex; mode=display">\sum_{i=1}^N\lambda_iy_i=0,\forall b,\quad \hat w=\sum_{i=1}^N\lambda_iy_ix_i.</script>
+\[\sum_{i=1}^N\lambda_iy_i=0,\forall b,\quad \hat w=\sum_{i=1}^N\lambda_iy_ix_i.\]
 
 <p>Plugging them into $L(w,b,\lambda)$, we can transform the problem into</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\max_{\lambda\ge0}&\quad \min_{w,b}L(w,b,\lambda)\\\implies\max_{\lambda\ge0}&\quad \frac{1}{2}\sum_{i=1}^{N}\left(\lambda_iy_ix_i^T\right)\sum_{i=1}^{N}\left(\lambda_iy_ix_i\right)+\sum_{i=1}^N\lambda_i-\sum_{i=1}^N\lambda_iy_i\left(\sum_{j=1}^N\lambda_jy_jx_j^T\right)x_i\\\text{s.t.}&\quad \sum_{i=1}^N\lambda_iy_i=0\\\implies\max_{\lambda\ge0}&\quad -\frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^N\left(\lambda_i\lambda_jy_iy_jx_i^Tx_j\right)+\sum_{i=1}^N\lambda_i\\\text{s.t.}&\quad \sum_{i=1}^N\lambda_iy_i=0\\\implies \min_\lambda&\quad \frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^N\left(\lambda_i\lambda_jy_iy_jx_i^Tx_j\right)-\sum_{i=1}^N\lambda_i\\\text{s.t.}&\quad \lambda_i\ge0,i=1,2,\dots,N\\&\quad \sum_{i=1}^N\lambda_iy_i=0\end{aligned} %]]></script>
+\[\begin{aligned}\max_{\lambda\ge0}&amp;\quad \min_{w,b}L(w,b,\lambda)\\\implies\max_{\lambda\ge0}&amp;\quad \frac{1}{2}\sum_{i=1}^{N}\left(\lambda_iy_ix_i^T\right)\sum_{i=1}^{N}\left(\lambda_iy_ix_i\right)+\sum_{i=1}^N\lambda_i-\sum_{i=1}^N\lambda_iy_i\left(\sum_{j=1}^N\lambda_jy_jx_j^T\right)x_i\\\text{s.t.}&amp;\quad \sum_{i=1}^N\lambda_iy_i=0\\\implies\max_{\lambda\ge0}&amp;\quad -\frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^N\left(\lambda_i\lambda_jy_iy_jx_i^Tx_j\right)+\sum_{i=1}^N\lambda_i\\\text{s.t.}&amp;\quad \sum_{i=1}^N\lambda_iy_i=0\\\implies \min_\lambda&amp;\quad \frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^N\left(\lambda_i\lambda_jy_iy_jx_i^Tx_j\right)-\sum_{i=1}^N\lambda_i\\\text{s.t.}&amp;\quad \lambda_i\ge0,i=1,2,\dots,N\\&amp;\quad \sum_{i=1}^N\lambda_iy_i=0\end{aligned}\]
 
 <p>The optimal $\hat\lambda$ can be obtained by <em>sequential minimal optimization</em> (SMO) algorithm. Here we assume we already have the optimal value. Notice we have $\sum_{i=1}^N\hat\lambda_iy_i=0$, which means there exists at least one $\hat\lambda_k\ne0$ otherwise $\hat w=0$. According our analysis, $\hat\lambda_k\ne 0$ only when</p>
 
-<script type="math/tex; mode=display">y_k(w^Tx_k-b)-1=0.</script>
+\[y_k(w^Tx_k-b)-1=0.\]
 
 <p>Therefore we have the solution</p>
 
-<script type="math/tex; mode=display">\hat w=\sum_{i=1}^N\hat\lambda_iy_ix_i,</script>
+\[\hat w=\sum_{i=1}^N\hat\lambda_iy_ix_i,\]
 
-<script type="math/tex; mode=display">\hat b=\sum_{i=1}^N\hat\lambda_iy_ix_i^Tx_k-y_k.</script>
+\[\hat b=\sum_{i=1}^N\hat\lambda_iy_ix_i^Tx_k-y_k.\]
 
 <p>Accordingly, the hyperplane is the linear combination of the data on the margin with corresponding $\hat\lambda_k&gt;0$. We call those data <em>support vectors</em> from where the name SVM comes.</p>
 
@@ -197,7 +187,7 @@
 
 <p>In practice, there are noise and outliers among the data, which makes the data nonlinearly separable. In that case, hard-margin fails to work. Now we introduce <em>soft-margin SVM</em> which extends SVM to the nonlinearly separable data. Recall that in hard-margin SVM, we have the constraint</p>
 
-<script type="math/tex; mode=display">y_i(w^Tx_i-b)\ge 1,i=1,2,\dots,N</script>
+\[y_i(w^Tx_i-b)\ge 1,i=1,2,\dots,N\]
 
 <p>which confines the model to the linearly separable case. To extent the model to general cases, we introduce <em>loss function</em>, which can be defined as</p>
 
@@ -205,16 +195,14 @@
   <li>
     <p>The number of wrongly classifying:</p>
 
-    <script type="math/tex; mode=display">% <![CDATA[
-\text{loss}=\sum_{i=1}^N I(y_i(w^Tx_i-b)<1), %]]></script>
+\[\text{loss}=\sum_{i=1}^N I(y_i(w^Tx_i-b)&lt;1),\]
 
     <p>where $I(\cdot)$ is the indicator function. However, such loss function is not differentiable.</p>
   </li>
   <li>
     <p>The sum of the distances between the hyperplane and the outliers:</p>
 
-    <script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\text{loss}_i&=\begin{cases}0&y_i(w^Tx_i-b)\ge 1\\1-y_i(w^Tx_i-b)&y_i(w^Tx_i-b)<1\text{ (wrongly classified)}\end{cases}\\&=\max\{0, 1-y_i(w^Tx_i-b)\}.\\\text{loss}&=\sum_{i=1}^N\text{loss}_i,\end{aligned} %]]></script>
+\[\begin{aligned}\text{loss}_i&amp;=\begin{cases}0&amp;y_i(w^Tx_i-b)\ge 1\\1-y_i(w^Tx_i-b)&amp;y_i(w^Tx_i-b)&lt;1\text{ (wrongly classified)}\end{cases}\\&amp;=\max\{0, 1-y_i(w^Tx_i-b)\}.\\\text{loss}&amp;=\sum_{i=1}^N\text{loss}_i,\end{aligned}\]
 
     <p>which is called <strong>hinge loss</strong>.</p>
   </li>
@@ -222,21 +210,19 @@
 
 <p>However, the $\max$ in the hinge loss is not differentiable neither. We now adapt the original constraint as</p>
 
-<script type="math/tex; mode=display">y_i(w^Tx_i-b)\ge 1-\xi_i,i=1,2,\dots,N</script>
+\[y_i(w^Tx_i-b)\ge 1-\xi_i,i=1,2,\dots,N\]
 
 <p>where $\xi_i\ge0$ and $\sum_{i=1}^N\xi_i\le$ constant are called <em>slack variables</em>. The slack variables is introduced to allow for some points to be on the wrong side of the margin. Specifically, for the points that are on the wrong side, it will break the original constraint $y_i(w^Tx_i-b)\ge 1$ as</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-y_i(w^Tx_i-b)=\xi< 1. %]]></script>
+\[y_i(w^Tx_i-b)=\xi&lt; 1.\]
 
 <p>With slack variables, such classification is allowed as long as</p>
 
-<script type="math/tex; mode=display">\xi\ge 1-\xi_i\implies\xi_i\ge1-\xi.</script>
+\[\xi\ge 1-\xi_i\implies\xi_i\ge1-\xi.\]
 
 <p>Moreover, we do not want the $\xi_i$ to be too large to distinguish points correctly. Thus we have the new formulation</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}\min_{w,b}&\quad \frac{1}{2}w^Tw+C\sum_{i=1}^N\xi_i\\\text{s.t.}&\quad y_i(w^Tx_i-b)\ge 1-\xi_i\\&\quad \xi_i\ge 0\\&\quad i=1,2,\dots,N\end{aligned}, %]]></script>
+\[\begin{aligned}\min_{w,b}&amp;\quad \frac{1}{2}w^Tw+C\sum_{i=1}^N\xi_i\\\text{s.t.}&amp;\quad y_i(w^Tx_i-b)\ge 1-\xi_i\\&amp;\quad \xi_i\ge 0\\&amp;\quad i=1,2,\dots,N\end{aligned},\]
 
 <p>where $C$ is the <em>cost</em> parameter that determines to what extent we allow for outliers. To solve the problem one can refer to the hard-margin case as they are actually similar.</p>
 

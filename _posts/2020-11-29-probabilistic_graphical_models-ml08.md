@@ -211,7 +211,7 @@ As shown in Figure 5, we say that a *Markov blanket* $\mathcal{M}_i$ of a node $
 
 The graphs we talked in the previous sections are directed. When it comes to undirected graphs, some concepts of directed graphs still play important roles while others do not. The graphical probabilistic models defined by *undirected graphs* is called *Markov networks*, also known as *Markov random fields*. Similar to Bayesian networks, the nodes in a Markov network represent random variables. However, as edges carry no arrows in undirected graphs, the function of edges changes a lot. 
 
-## 2.1. Conditional independence
+## 2.1. Conditional Independence
 
 The conditional independence of an undirected graph is given by the *absence* of edges. Specifically, for a graph with nodes representing random variable $x_1,x_2,\dots, x_N$, we have:
 

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-51FFV4BDWW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-51FFV4BDWW');
+</script>
+  
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    Machine Learning - 02 Linear Regression &middot; Jingye Wang
+  </title>
+
+  
+  <link rel="canonical" href="/2020/10/07/linear_regression-ml02/">
+  
+
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ["\\(", "\\)"] ],
+      displayMath: [ ['$$', '$$'], ["\\[", "\\]"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+    //,
+    //displayAlign: "left",
+    //displayIndent: "2em"
+  });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+  
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>"You can’t connect the dots looking forward; you can only connect them looking backward."</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/categories/">Archive</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+    <span class="sidebar-nav-item">Currently v0.1.2</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2021. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Jingye Wang</a>
+            <small>A personal blog.</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <style>
+  .button {
+    border: 2px solid;
+    border-radius: 7.5px;
+    color: white;
+    padding: 2.5px 7.5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition-duration: 0.1s;
+    cursor: pointer;
+  }
+
+  .buttonC {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #2e3131;
+  }
+
+  .buttonC:hover {
+    background-color: #2e3131;
+    color: white;
+  }
+  a:hover{
+    text-decoration: none;
+  }
+</style>
+<div class="post">
+  <h1 class="post-title">Machine Learning - 02 Linear Regression </h1>
+  <span class="post-date">
+    07 Oct 2020
+    <p></p>
+  <div class="post-categories">
+      
+      
+      <a class="button buttonC" href="/categories/#machine-learning">machine-learning</a>&nbsp;
+      
+      
+    </div>
+  </span>
+  <p><em>The notes are based on the <a href="https://github.com/shuhuai007/Machine-Learning-Session">session</a>. Many thanks to the great work.</em></p>
+
+<ul id="markdown-toc">
+  <li><a href="#1-least-squares-method" id="markdown-toc-1-least-squares-method">1. Least Squares Method</a></li>
+  <li><a href="#2-least-squares-method---a-matrix-perspective" id="markdown-toc-2-least-squares-method---a-matrix-perspective">2. Least Squares Method - A Matrix Perspective</a></li>
+  <li><a href="#3-least-squares-method---a-probabilistic-perspective" id="markdown-toc-3-least-squares-method---a-probabilistic-perspective">3. Least Squares Method - A Probabilistic Perspective</a>    <ul>
+      <li><a href="#31-maximum-likelihood-estimation" id="markdown-toc-31-maximum-likelihood-estimation">3.1 Maximum Likelihood Estimation</a></li>
+      <li><a href="#32-maximum-a-posteriori" id="markdown-toc-32-maximum-a-posteriori">3.2 Maximum A Posteriori</a></li>
+    </ul>
+  </li>
+  <li><a href="#4-regularization" id="markdown-toc-4-regularization">4. Regularization</a></li>
+  <li><a href="#5-conclusion" id="markdown-toc-5-conclusion">5. Conclusion</a></li>
+</ul>
+<h1 id="1-least-squares-method">1. Least Squares Method</h1>
+
+<p>Suppose we have the IID data \(\mathcal{D}=\{(x_1,y_1), (x_2,y_2),\dots,(x_N,y_N)\},\) where $x_i\in\mathbb{R}^{d\times 1}, y_i\in\mathbb{R}, i=1,2,\dots,N$. One can view $x_i$ as a feature vector and $y_i$ is the corresponding label. Denote</p>
+
+\[X=(x_1,x_2,\dots,x_N)^T=\begin{pmatrix}x_{11}&amp;x_{12}&amp;\dots&amp;x_{1d}\\x_{21}&amp;x_{22}&amp;\dots&amp;x_{2d}\\\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\x_{N1}&amp;x_{12}&amp;\dots&amp;x_{1d}\end{pmatrix}_{N\times d},\quad Y=\begin{pmatrix}y_1\\y_2\\\vdots\\y_N\end{pmatrix}_{N\times 1}.\]
+
+<p>The problem is given the data set, we need to find a function to fit these data while minimizing the sum of squared error. In this case, we only focus on linear function:</p>
+
+\[f(w)=w^Tx,\]
+
+<p>where $w\in\mathbb{R}^{d\times 1}$ is the unknown weight we need to learn. Here we ignore the bias term as it can be represented by adding a new dimension to the variables. The <em>loss function</em> of the least squares method is defined as</p>
+
+\[\mathcal{L}(w)=\sum_{i=1}^N||w^Tx_i-y_i||^2.\]
+
+<p>In this case, $w^Tx_i\in\mathbb{R}$ and $y_i\in\mathbb{R}$. Thus we can expand the loss function as</p>
+
+\[\begin{aligned}\mathcal{L}(w)&amp;=\underbrace{\begin{pmatrix}w^Tx_1-y_1&amp;w^Tx_2-y_2&amp;\dots&amp;w^Tx_N-y_N\end{pmatrix}}_{w^T\begin{pmatrix}x_1&amp;x_2&amp;\dots&amp;x_N\end{pmatrix}-\begin{pmatrix}y_1&amp;y_2&amp;\dots&amp;y_N\end{pmatrix}}\begin{pmatrix}w^Tx_1-y_1\\w^Tx_2-y_2\\\vdots\\w^Tx_N-y_N\end{pmatrix}\\&amp;=(w^TX^T-Y^T)(Xw-Y)\\&amp;=w^TX^TXw-2w^TX^TY+Y^TY\end{aligned}.\]
+
+<p>Such expansion is for the derivative of the loss. Thus we have the optimal weight where</p>
+
+\[\begin{alignat*}{3}\hat w&amp;=\arg\min_w \mathcal{L}(w)\Rightarrow\frac{\partial \mathcal{L}(w)}{\partial w}&amp;=0\end{alignat*}.\]
+
+<p>Solving the equation, we have</p>
+
+\[\hat{w}=(X^TX)^{-1}X^TY.\]
+
+<h1 id="2-least-squares-method---a-matrix-perspective">2. Least Squares Method - A Matrix Perspective</h1>
+
+<p>Knowledge about <a href="http://math.mit.edu/~gs/linearalgebra/">vectors and space</a> is required in this section. We consider using a new approximation linear function</p>
+
+\[h(w)=Xw,\]
+
+<p>where $w\in\mathbb{R}^{d\times 1}$ and it is quite similar to $f(w)$ we defined in section 1. One should keep in mind that a matrix multiple a vector yields a linear combination of the <strong>column vectors</strong> of the matrix. We will use $X_1,X_2,\dots,X_N$ to represent the column vector of $X$. Ideally, we want to find the $w$ subject to</p>
+
+\[X w=Y.\]
+
+<p>If such $w$ exists, then we can solve it directly and easily. However, in practice error is inevitable and such $w$ often does not exist, which means $Y$ is not a linear combination of $X_i$ and they do not share the same space. What we can do is finding a linear combination of $X_i$ so that it has the least Euclidean distance to $Y$.</p>
+
+<p>As I am too lazy to depict the picture, I would like to give an imaginable example for that. One can also get the picture easily with these examples. The following discussion is based on a three-dimensional space with $xyz$ axes.</p>
+
+<p><strong>Ideal case</strong>: Suppose we have the data \(x_1, x_2, x_3 = \{(1,0,0)^T,(0,1,0)^T,(0,0,1)^T\}, Y=(1,1,1)^T\). Thus</p>
+
+\[X=(x_1,x_2, x_3)^T=\begin{pmatrix}1&amp;0&amp;0\\0&amp;1&amp;0\\0&amp;0&amp;1\end{pmatrix},\quad Y=\begin{pmatrix}1\\1\\1\end{pmatrix}.\]
+
+<p>With the knowledge of vectors, it can be easily found that we can obtain $Y$ by $1\cdot X_1+1\cdot X_2+1\cdot X_3$, which gives the solution for $X\hat{w}=Y$ as $\hat{w}=(1,1,1)^T$.</p>
+
+<p><strong>Practical case</strong>: In practice, things may be different. Suppose we have $x_1, x_2, x_3 = \{(1,0.2,0.5)^T,(0,1,0)^T,(0,0,0)^T\}, Y=(1,1,1)^T$. Thus</p>
+
+\[X=(x_1,x_2, x_3)^T=\begin{pmatrix}1&amp;0.2&amp;0.5\\0&amp;1&amp;0\\0&amp;0&amp;0\end{pmatrix},\quad Y=\begin{pmatrix}1\\1\\1\end{pmatrix}.\]
+
+<p>With a manual drafting, one can find there is no way to get $Y$ by the linear combination of $X_1,X_2$ and $X_3$: all the $X_i$ lies in $xy$ surface while $Y$ exists in $xyz$ space. In such case, what we can do is finding a line on $xy$ surface as close to $Y$ as possible. Obviously, the closest one is the projection of $Y$ on $xy$ surface, which is $(1,1,0)^T$ .</p>
+
+<p>The key is how to find the projection $X\hat{w}$ numerically rather than intuitively. Consider the vector $Y-X\hat{w}$, which starts from the end of $X\hat{w}$ pointing to the end of $Y$. $X\hat{w}$ is the projection if and only if $Y-X\hat w$ is perpendicular to all the column vectors of $X$. Therefore it follows that</p>
+
+\[\begin{aligned}X^T(Y-X\hat w)&amp;=\mathbf{0}\\X^TX\hat w&amp;=X^TY\\\hat w&amp;=(X^TX)^{-1}X^TY,\end{aligned}\]
+
+<p>which is consistent with our conclusion in section 1. Also, plugging the values of the example above, we have $\hat w=(0.64, 1, 0.32)^T$, thus $X\hat w=(1,1,0)^T$, which is consistent with our (imaginary) observation of the projection.</p>
+
+<blockquote>
+  <p>The term $(X^TX)^{-1}X^T$ is called <a href="https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse">Moore–Penrose inverse</a> of $X$.</p>
+</blockquote>
+
+<h1 id="3-least-squares-method---a-probabilistic-perspective">3. Least Squares Method - A Probabilistic Perspective</h1>
+
+<p>As we mentioned before, error is inevitable in practice, otherwise there is no need to do such approximation.</p>
+
+<h2 id="31-maximum-likelihood-estimation">3.1 Maximum Likelihood Estimation</h2>
+
+<p>We now use Gaussian distribution to reflect such noise as $\varepsilon\sim\mathcal{N}(0,\sigma^2)$. With the definition in section 1, we need to find the $w$ subject to</p>
+
+\[y=w^Tx+\varepsilon.\]
+
+<p>Obviously, we have $y|x;w\sim\mathcal{N}(w^Tx,\sigma^2)$. For $N$ samples, the log-likelihood follows that</p>
+
+\[\begin{aligned}\mathcal{L}(w)&amp;=\log P(Y|X;w)\\&amp;=\sum_{i=1}^N\log P(y_i|x_i;w)\\&amp;=\sum_{i=1}^N\left(\log \frac{1}{\sqrt{2\pi}\sigma}-\frac{1}{2\sigma^2}(y_i-w^Tx_i)^2\right)\end{aligned}.\]
+
+<p>Therefore, by <em>maximum likelihood estimation</em> (MLE) method, we have</p>
+
+\[\begin{aligned}\hat w&amp;=\arg\max_w\mathcal{L}(w)\\&amp;=\arg\max_w -\sum_{i=1}^N\frac{1}{2\sigma^2}(y_i-w^Tx_i)^2\\&amp;=\arg\min_w\sum_{i=1}^N(y_i-w^Tx_i)^2\end{aligned},\]
+
+<p>which is consistent with our analysis in section 1. In fact, least squares method has an assumption that the noise is subject to Gaussian distribution.</p>
+
+<h2 id="32-maximum-a-posteriori">3.2 Maximum A Posteriori</h2>
+
+<p>As we mentioned in the <a href="https://2ez4ai.github.io/2020/09/28/intro-ml01/">previous notes</a>, in the view of Bayesians, $w$ can also be a random variable. Suppose $w\sim\mathcal{N}(0,\sigma_0^2)$. Still, we have $y\vert x;w\sim\mathcal{N}(w^Tx,\sigma^2)$ (there is a little abuse of notation: $w$ after ‘$|$’ is a sample rather than a random variable). By <em>maximum a posteriori</em> (MAP) method, we have</p>
+
+\[\begin{aligned}\hat w&amp;=\arg\max_w P(w|Y)\\&amp;=\arg\max_w\log\left(\frac{\prod_{i=1}^NP(y_i|w)\cdot P(w)}{\prod_{i=1}^NP(y_i)}\right)\\&amp;=\arg\max_w\log\left(\prod_{i=1}^NP(y_i|w)\right)+\log P(w)\\&amp;=\arg\max_w\sum_{i=1}^N\log\left(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(y_i-w^Tx_i)^2}{2\sigma^2}}\right)+\log\left(\frac{1}{\sqrt{2\pi}\sigma_0}e^{-\frac{||w||^2}{2\sigma_0^2}}\right)\\&amp;=\arg\min_w\sum_{i=1}^N\frac{(y_i-w^Tx_i)^2}{2\sigma^2}+\frac{||w||^2}{2\sigma_0^2}\\&amp;=\arg\min_w\underbrace{\sum_{i=1}^N(y_i-w^Tx_i)^2}_\text{square error}+\underbrace{\frac{\sigma^2}{\sigma_0^2}||w||^2}_\text{regularizer}\end{aligned},\]
+
+<p>which is slightly different from the result of MLE method. However, we will show in next section this is actually equivalent to the <em>regularized least squares method</em>.</p>
+
+<h1 id="4-regularization">4. Regularization</h1>
+
+<p>In practice, a common issue is $N\ll d$, which may cause $X^TX$ not invertible and further lead to <em>overfitting</em>. There are three techniques to avoid overfitting: collecting more data, <em>feature engineering/extracting</em>, and <em>regularization</em>. The regularization method is adding a penalty term, and we have the new loss function $\mathcal{L}_r(w)=\mathcal{L}(w)+\lambda P(w)$ where $\lambda$ is a tunable parameter. Depending on what $P(w)$ is, we have different regression.</p>
+
+<p><strong>Lasso regression</strong>: use $L1$ norm as the penalty, which means $P(w)=||w||$.</p>
+
+<p><strong>Ridge regression</strong>: use $L2$ norm as the penalty, which means $P(w)=||w||_2^2=w^Tw.$</p>
+
+<p>Such regularization is often called <em>weight decay</em>. We now focus on ridge regression. According the above definition, we have</p>
+
+\[\begin{aligned}\mathcal{L}_r(w)&amp;=\mathcal{L}(w)+\lambda P(w)\\&amp;=\sum_{i=1}^N||w^Tx_i-y_i||^2+\lambda w^Tw\\&amp;=w^TX^TXw-2w^TX^TY+Y^TY+\lambda w^Tw\\&amp;=w^T(X^TX+\lambda\mathbf{I})w-2w^TX^TY+Y^TY\end{aligned}.\]
+
+<p>Therefore, we have the optimal weight where</p>
+
+\[\begin{alignat*}{3}\hat w&amp;=\arg\min_w \mathcal{L}_r(w)\Rightarrow\frac{\partial \mathcal{L}_r(w)}{\partial w}&amp;=0\end{alignat*}.\]
+
+<p>Solving the equation, we have</p>
+
+\[\hat{w}=(X^TX+\lambda\mathbf{I})^{-1}X^TY.\]
+
+<p>By introducing the positive definite matrix $\lambda\mathbf{I}$, the problem of the invertible matrix $X^TX$ is avoided.</p>
+
+<h1 id="5-conclusion">5. Conclusion</h1>
+
+<p>Though linear regression is a naive model of machine learning, the thought of it is inspiring. In this post, we show that least squares is equivalent to MLE method with Gaussian noise in data, while the least squares with $L2$ regularizer is equivalent to MAP method with Gaussian noise in both weight and data.</p>
+
+<p>Based on the attributes of linear regression, thoughts of many machine learning models can be derived:</p>
+
+<ul>
+  <li>Linearity: as its name suggests, the linear regression method exploits linear functions to fit the data. Unsurprisingly, such linearity has a limited performance in general. Hence, there are many models developed from breaking the linearity. Examples:
+    <ul>
+      <li><strong>Polynomial Regression</strong> is a form of linear regression in which we convert the original features into their higher order terms. For example, transforms $x=(x_1,x_2)$ into $\tilde x=(x_1,x_2,x_1x_2,x_2^3)$.</li>
+      <li><strong>Logistic Regression</strong>: introduces a sigmoid function to the linear function, <em>e.g.</em> $f(x)=\text{sigmoid}(w^Tx)$.</li>
+      <li><strong>Neural Network</strong> introduces multiple nonlinear functions and brings the multi-layer structure.</li>
+    </ul>
+  </li>
+  <li>Global Space: the approximation we found by linear regression is applied to the whole space. However, in practice, the data may not be continuous, and we need different approximations for different space.
+    <ul>
+      <li><strong>Decision Tree</strong> divides the space into smaller sub-spaces depending on the question.</li>
+    </ul>
+  </li>
+  <li>Raw Data: the basic linear regression utilizes all the given data, which incurs the <em>curse of dimensionality</em>. In this case, dimensionality reduction methods are necessary.
+    <ul>
+      <li><strong>PCA</strong> transforms the variables of the higher dimension into a smaller ones that still contain most of the information in the original data set.</li>
+    </ul>
+  </li>
+</ul>
+
+
+</div>
+
+ <!--https://blog.webjeda.com/jekyll-related-posts/-->
+<div class="related">
+  <h2>Related posts</h2>
+  
+  
+  
+
+  
+
+    
+    
+
+    
+
+    
+      <div>
+      <h5><a href="/2020/12/05/inference-ml09/">Machine Learning - 09 Exact Inference of Graphical Models <span class="label label-default">machine-learning</span> </a></h5>
+      </div>
+      
+      
+    
+
+  
+
+    
+    
+
+    
+
+    
+      <div>
+      <h5><a href="/2020/11/29/probabilistic_graphical_models-ml08/">Machine Learning - 08 Probabilistic Graphical Models <span class="label label-default">machine-learning</span> </a></h5>
+      </div>
+      
+      
+    
+
+  
+
+    
+    
+
+    
+
+    
+      <div>
+      <h5><a href="/2020/11/12/exponential_family-ml07/">Machine Learning - 07 Exponential Family <span class="label label-default">machine-learning</span> </a></h5>
+      </div>
+      
+      
+        
+</div>
+
+
+<!--
+
+<div class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2020/12/05/inference-ml09/">
+            Machine Learning - 09 Exact Inference of Graphical Models
+            <small>05 Dec 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/11/29/probabilistic_graphical_models-ml08/">
+            Machine Learning - 08 Probabilistic Graphical Models
+            <small>29 Nov 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/11/12/exponential_family-ml07/">
+            Machine Learning - 07 Exponential Family
+            <small>12 Nov 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+-->
+
+<!-- Comments -->
+<!--
+
+-->
+<!-- Comments Form -->
+<!--
+  <form method="POST" action="">
+    <input name="options[redirect]" type="hidden" value="https://example.com">
+    <input name="options[slug]" type="hidden" value="linear_regression-ml02">
+      <label>*Name</label>
+      <input name="fields[name]" type="text">
+      <label>E-mail</label>
+      <input name="fields[email]" type="email"><br>
+      <label>Message:</label>
+      <textarea style="width:100%" name="fields[message]" rows="12"></textarea>
+      <button type="submit">Submit comment</button>
+      <small>Comments will appear after moderation.</small>
+  </form>
+-->
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/public/js/script.js'></script>
+  </body>
+</html>
