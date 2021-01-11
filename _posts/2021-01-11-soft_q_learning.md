@@ -1,8 +1,9 @@
 ---
 layout: post
-categories: reinforcement-learning
+categories: reinforcement-learning paper-reading
 title: Paper - Reinforcement Learning with Deep Energy-Based Policies
 published: True
+comments: True
 description: A personal summary of paper Reinforcement Learning with Deep Energy-Based Policies.
 ---
 

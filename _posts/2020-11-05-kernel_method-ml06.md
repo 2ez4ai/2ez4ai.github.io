@@ -1,6 +1,7 @@
 ---
 layout: post
 categories: machine-learning
+comments: True
 title: Machine Learning - 06 Kernel Method
 published: true
 description: Introduce the basic concept of kernel methods and two properties of it with proof details. 

@@ -2,6 +2,7 @@
 layout: post
 categories: machine-learning
 title: Machine Learning - 04 Dimensionality Reduction
+comments: True
 description: Include PCA and its variants. 
 ---
 

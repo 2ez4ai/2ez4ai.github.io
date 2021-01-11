@@ -1,6 +1,7 @@
 ---
 layout: post
 categories: machine-learning
+comments: True
 title: Machine Learning - 08 Probabilistic Graphical Models
 published: True
 description: A long story. Had to deal with many other things during the writing. Hope the following posts can be finished regularly.

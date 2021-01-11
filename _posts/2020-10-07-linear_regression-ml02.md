@@ -2,6 +2,7 @@
 layout: post
 categories: machine-learning
 title: Machine Learning - 02 Linear Regression
+comments: True
 description: A naive model of machine learning. Introduce three perspectives to the least squares method.
 ---
 

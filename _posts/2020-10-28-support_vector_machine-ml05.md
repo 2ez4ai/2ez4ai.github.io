@@ -1,6 +1,7 @@
 ---
 layout: post
 categories: machine-learning
+comments: True
 title: Machine Learning - 05 Support Vector Machine
 published: true
 description: Include support vector machine and Lagrange duality. 
