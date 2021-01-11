@@ -4,23 +4,13 @@
  <title>Jingye Wang</title>
  <link href="/atom.xml" rel="self"/>
  <link href="/"/>
- <updated>2021-01-11T11:40:19+08:00</updated>
+ <updated>2021-01-11T22:42:45+08:00</updated>
  <id></id>
  <author>
    <name>Jingye Wang</name>
    <email>wangjy5@shanghaitech.edu.cn</email>
  </author>
 
- 
- <entry>
-   <title>Test comments</title>
-   <link href="/2021/01/11/test/"/>
-   <updated>2021-01-11T00:00:00+08:00</updated>
-   <id>/2021/01/11/test</id>
-   <content type="html">&lt;p&gt;test post&lt;/p&gt;
-
-</content>
- </entry>
  
  <entry>
    <title>Paper - Reinforcement Learning with Deep Energy-Based Policies</title>
@@ -253,13 +243,35 @@ Figure 1. Policies based on the value of Q function. (a) Unimodal policy. (b) Mu
 
 &lt;p&gt;The gradient of the loss function is given by &lt;em&gt;Stein variational gradient descent&lt;/em&gt; (SVGD). In my view, the use of SVGD is mainly for the analysis of the resemblance between the proposed algorithm, soft Q learning (SQL), and actor-critic, as the succeeding works seem to use no SVGD anymore.&lt;/p&gt;
 
-&lt;p&gt;The author provides the implementation in &lt;a href=&quot;https://github.com/haarnoja/softqlearning&quot;&gt;github-softqlearning&lt;/a&gt;. However, the latest version is faced with dependencies issue. Luckily, the older version (commits on Oct 30, 2017) works well. Other implementation can be hardly found.&lt;/p&gt;
+&lt;p&gt;The author provides the implementation in &lt;a href=&quot;https://github.com/haarnoja/softqlearning&quot;&gt;github-softqlearning&lt;/a&gt;. However, the latest version is faced with dependencies issue. Luckily, the older version (commits on Oct 30, 2017) works well. Other feasible implementation can be hardly found. For the performance, I tested it on Multigoal environment and the results are consistent with that of the original paper. Besides, I conducted experiments with varying values of $\alpha$, which is shown in Figure 2.&lt;/p&gt;
 
-&lt;p&gt;For the performance, I only tested it on Multigoal environment and the results are consistent with that of the original paper. Generally speaking, SQL tends to have a high variance, which can also be viewed as the cost for exploration.&lt;/p&gt;
+&lt;figure&gt;
+    &lt;div style=&quot;display:flex&quot;&gt;
+            &lt;figure&gt;
+&lt;img src=&quot;../../../../assets/images/sql_alpha0_500.png&quot; /&gt;
+                &lt;figcaption&gt;&lt;center&gt;$\alpha=0$&lt;/center&gt;&lt;/figcaption&gt;
+            &lt;/figure&gt;
+            &lt;figure&gt;
+&lt;img src=&quot;../../../../assets/images/sql_alpha05_500.png&quot; /&gt;
+                &lt;figcaption&gt;&lt;center&gt;$\alpha=0.5$&lt;/center&gt;&lt;/figcaption&gt;
+            &lt;/figure&gt;
+            &lt;figure&gt;
+&lt;img src=&quot;../../../../assets/images/sql_alpha1_500.png&quot; /&gt;
+                &lt;figcaption&gt;&lt;center&gt;$\alpha=1$&lt;/center&gt;&lt;/figcaption&gt;
+            &lt;/figure&gt;
+    &lt;/div&gt;
+&lt;/figure&gt;
+&lt;center&gt;
+&lt;p style=&quot;font-size:80%;&quot;&gt;
+Figure 2. After 500 steps, the performance of SQL in Multigoal with differnt values of $\alpha$.
+  &lt;/p&gt;
+&lt;/center&gt;
+
+&lt;p&gt;Generally speaking, when $\alpha\ne 0$, SQL tends to have a high variance, which can also be viewed as the cost for exploration.&lt;/p&gt;
 
 &lt;h1 id=&quot;4-conclusion&quot;&gt;4. Conclusion&lt;/h1&gt;
 
-&lt;p&gt;Compared with SAC, SQL has received much less publicity. It can be hard to find a repository on Github that supports SQL and other successful methods. In many works, it was replaced by SAC. The use of SVGD seems to be tricky and makes it hard to be implemented. Still, it can be proven that bringing in the entropy term does work for the end of better exploring.&lt;/p&gt;
+&lt;p&gt;It was proven that bringing in the entropy term does work for the end of better exploring. The author successfully extended the entropy RL to contiunous case. However, the high variance makes it challenging to be used for performing complicated tasks, and that may be one of the reasons why little (relatively) ink has been spilled on SQL. A wise choice could be to use SQL as an initializer rather than a trainer.&lt;/p&gt;
 
 &lt;h1 id=&quot;5-references&quot;&gt;5. References&lt;/h1&gt;
 

@@ -206,13 +206,35 @@ $$J_\pi(\phi;s_t)=D_\text{KL}\left(\pi^\phi(a_t\vert s_t)\bigg\vert\bigg\vert\ex
 
 The gradient of the loss function is given by *Stein variational gradient descent* (SVGD). In my view, the use of SVGD is mainly for the analysis of the resemblance between the proposed algorithm, soft Q learning (SQL), and actor-critic, as the succeeding works seem to use no SVGD anymore.
 
-The author provides the implementation in [github-softqlearning](https://github.com/haarnoja/softqlearning). However, the latest version is faced with dependencies issue. Luckily, the older version (commits on Oct 30, 2017) works well. Other implementation can be hardly found.
+The author provides the implementation in [github-softqlearning](https://github.com/haarnoja/softqlearning). However, the latest version is faced with dependencies issue. Luckily, the older version (commits on Oct 30, 2017) works well. Other feasible implementation can be hardly found. For the performance, I tested it on Multigoal environment and the results are consistent with that of the original paper. Besides, I conducted experiments with varying values of $\alpha$, which is shown in Figure 2. 
 
-For the performance, I only tested it on Multigoal environment and the results are consistent with that of the original paper. Generally speaking, SQL tends to have a high variance, which can also be viewed as the cost for exploration.
+<figure>
+    <div style="display:flex">
+            <figure>
+<img src="../../../../assets/images/sql_alpha0_500.png" >
+                <figcaption><center>$\alpha=0$</center></figcaption>
+            </figure>
+            <figure>
+<img src="../../../../assets/images/sql_alpha05_500.png" >
+                <figcaption><center>$\alpha=0.5$</center></figcaption>
+            </figure>
+            <figure>
+<img src="../../../../assets/images/sql_alpha1_500.png" >
+                <figcaption><center>$\alpha=1$</center></figcaption>
+            </figure>
+    </div>
+</figure>
+<center>
+<p style="font-size:80%;">
+Figure 2. After 500 steps, the performance of SQL in Multigoal with differnt values of $\alpha$.
+  </p>
+</center>
+
+Generally speaking, when $\alpha\ne 0$, SQL tends to have a high variance, which can also be viewed as the cost for exploration.
 
 #  4. Conclusion
 
-Compared with SAC, SQL has received much less publicity. It can be hard to find a repository on Github that supports SQL and other successful methods. In many works, it was replaced by SAC. The use of SVGD seems to be tricky and makes it hard to be implemented. Still, it can be proven that bringing in the entropy term does work for the end of better exploring.
+It was proven that bringing in the entropy term does work for the end of better exploring. The author successfully extended the entropy RL to contiunous case. However, the high variance makes it challenging to be used for performing complicated tasks, and that may be one of the reasons why little (relatively) ink has been spilled on SQL. A wise choice could be to use SQL as an initializer rather than a trainer.
 
 
 
