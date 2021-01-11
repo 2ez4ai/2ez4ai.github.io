@@ -4,13 +4,265 @@
  <title>Jingye Wang</title>
  <link href="/atom.xml" rel="self"/>
  <link href="/"/>
- <updated>2021-01-09T18:36:31+08:00</updated>
+ <updated>2021-01-11T11:12:25+08:00</updated>
  <id></id>
  <author>
    <name>Jingye Wang</name>
    <email>wangjy5@shanghaitech.edu.cn</email>
  </author>
 
+ 
+ <entry>
+   <title>Paper - Reinforcement Learning with Deep Energy-Based Policies</title>
+   <link href="/2021/01/11/soft_q_learning/"/>
+   <updated>2021-01-11T00:00:00+08:00</updated>
+   <id>/2021/01/11/soft_q_learning</id>
+   <content type="html">&lt;p&gt;&lt;em&gt;This is a brief summary of paper &lt;a href=&quot;https://arxiv.org/pdf/1702.08165.pdf&quot;&gt;Reinforcement Learning with Deep Energy-Based Policies&lt;/a&gt; for my personal interest.&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#0-introduction&quot; id=&quot;markdown-toc-0-introduction&quot;&gt;0. Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#1-motivation&quot; id=&quot;markdown-toc-1-motivation&quot;&gt;1. Motivation&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2-soft-definition&quot; id=&quot;markdown-toc-2-soft-definition&quot;&gt;2. Soft Definition&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#21-objective-function&quot; id=&quot;markdown-toc-21-objective-function&quot;&gt;2.1. Objective Function&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#22-soft-function&quot; id=&quot;markdown-toc-22-soft-function&quot;&gt;2.2. Soft Function&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3-theorem-analyses&quot; id=&quot;markdown-toc-3-theorem-analyses&quot;&gt;3. Theorem Analyses&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#31-policy-improvement&quot; id=&quot;markdown-toc-31-policy-improvement&quot;&gt;3.1. Policy Improvement&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#32-policy-iteration&quot; id=&quot;markdown-toc-32-policy-iteration&quot;&gt;3.2. Policy Iteration&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#33-soft-bellman-equation&quot; id=&quot;markdown-toc-33-soft-bellman-equation&quot;&gt;3.3. Soft Bellman Equation&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#34-soft-value-iteration&quot; id=&quot;markdown-toc-34-soft-value-iteration&quot;&gt;3.4. Soft Value Iteration&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4-algorithm&quot; id=&quot;markdown-toc-4-algorithm&quot;&gt;4. Algorithm&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4-conclusion&quot; id=&quot;markdown-toc-4-conclusion&quot;&gt;4. Conclusion&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#5-references&quot; id=&quot;markdown-toc-5-references&quot;&gt;5. References&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h1&gt;
+
+&lt;p&gt;After publishing the paper &lt;a href=&quot;https://arxiv.org/pdf/1702.08165.pdf&quot;&gt;soft Q learning&lt;/a&gt; in Jul 2017, the author proposed the influential algorithm &lt;a href=&quot;https://arxiv.org/pdf/1801.01290.pdf&quot;&gt;SAC&lt;/a&gt; in the next year. While SAC has received tremendous publicity, the discussion, if any, about this precedent work generally falls into the rut of &lt;a href=&quot;https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/&quot;&gt;the excellent blog&lt;/a&gt;. Therefore I decided to summarize some of thoughts and problems I had during the reading. Though this post is mainly for my personal interest, any advice will be appreciated.&lt;/p&gt;
+
+&lt;h1 id=&quot;1-motivation&quot;&gt;1. Motivation&lt;/h1&gt;
+
+&lt;p&gt;In reinforcement learning (RL) problem, given an agent and an environment, the objective of the agent is to learn a policy that maximizes the rewards the agent can gain. However, faced with an unknown environment, there is a tradeoff between exploitation and exploration. Before maximum entropy RL, the exploration is generally ensured by external mechanisms, such as $\varepsilon-$greedy in DQN and adding exploratory noise to the actions in DDPG. Un like those heuristic and inefficient methods, maximum entropy encourages the agent to conduct exploration by itself based on both reward and entropy. Specifically, in maximum entropy RL, the optimal policy is redefined as&lt;/p&gt;
+
+\[\pi^\ast_\text{MaxEnt}=\arg\max_\pi\mathbb{E}_{\pi}\left[r(s_t,a_t)+\mathcal{H}(\pi(\cdot\vert s_t))\right],\tag{1}\]
+
+&lt;p&gt;which adds a regularization term to the standard definition. Many paper adds a parameter $\alpha$ to entropy, which we will ignore in the following discussion as it does not affect the related conclusion. Based on this redefinition, the motivation of this paper can be summarized as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Generalize it to continuous cases:&lt;/p&gt;
+
+    &lt;p&gt;Before this work, entropy maximization was mainly utilized in discrete cases. Theoretical analyses were needed for applying into continuous cases.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Take trajectory-wise entropy into consideration:&lt;/p&gt;
+
+    &lt;p&gt;The term $\mathcal{H}(\pi(\cdot\vert s_t))$ only considers the entropy of the policy at state $s_t$. Traditional methods tend to act greedily based on the entropy at the next state. In this work, the author considers the long term entropy reward instead that of the next state.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Policy formulation:&lt;/p&gt;
+
+    &lt;p&gt;Even though we have an objective function given the definition, it still needs a probabilistic definition from which we can make sampling. Instead of using conditional Gaussian distribution like many other works, the author borrows the idea of Boltzmann distribution.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;2-soft-definition&quot;&gt;2. Soft Definition&lt;/h1&gt;
+
+&lt;p&gt;We now discuss the related definition in this paper.&lt;/p&gt;
+
+&lt;h2 id=&quot;21-objective-function&quot;&gt;2.1. Objective Function&lt;/h2&gt;
+
+&lt;p&gt;The optimal policy in this paper is defined as&lt;/p&gt;
+
+\[\pi^\ast=\arg\max_\pi\sum_t\mathbb{E}_{(s_t,a_t)\sim\rho_\pi}\left[r(s_t,a_t)+\mathcal{H}(\pi(\cdot\vert s_t))\right],\tag{2}\]
+
+&lt;p&gt;which differs from the one defined in $(2)$ as it aims to reach states where they will have high entropy in the future. Specifically, a detailed version is given by&lt;/p&gt;
+
+\[\pi^\ast=\arg\max_\pi\sum_t\mathbb{E}_{(s_t,a_t)\sim\rho_\pi}\left[\sum_{l=t}^\infty \gamma^{l-t}\mathbb{E}_{(s_l,a_l)\sim\rho_\pi}\left[r(s_l,a_l)+\mathcal{H}(\pi(\cdot\vert s_l))\right]\bigg\vert s_t,a_t\right],\tag{3}\]
+
+&lt;p&gt;where the first expectation \(\sum_t\mathbb{E}_{(s_t,a_t)\sim\rho_\pi}\) is over all the pairs \((s_t, a_t)\) at any time step, and the second expectation \(\sum_{l=t}^\infty \gamma^{l-t}\mathbb{E}_{(s_l,a_l)\sim\rho_\pi}\) is over all the trajectories originating from $(s_t,a_t)$.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In the original paper, the detailed version is actually given by&lt;/p&gt;
+
+\[\pi^\ast_\text{MaxEnt}=\arg\max_\pi\sum_t\mathbb{E}_{(s_t,a_t)\sim\rho_\pi}\left[\sum_{l=t}^\infty \gamma^{l-t}\mathbb{E}_{(s_l,a_l)}\left[r(s_t,a_t)+\mathcal{H}(\pi(\cdot\vert s_t))\right]\bigg\vert s_t,a_t\right].\]
+
+  &lt;p&gt;Problem: The subscripts (shown in red below) in the second expectation does confuse me a lot. Why it is over $t$ rather than $l$?&lt;/p&gt;
+
+\[r(s_{\color{red}t},a_{\color{red}t})+\mathcal{H}(\pi(\cdot\vert s_{\color{red}t}))?\]
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;22-soft-function&quot;&gt;2.2. Soft Function&lt;/h2&gt;
+
+&lt;p&gt;The corresponding $Q$-function in this paper is defined as&lt;/p&gt;
+
+\[Q_\text{soft}^\pi(s_t,a_t)\triangleq r(s_t,a_t)+\sum_{l=t+1}^\infty \gamma^{l-t}\mathbb{E}_{(s_{l},a_{l})\sim\rho_\pi}\left[r(s_{l},a_{l})+\mathcal{H}(\pi(\cdot\vert s_{l}))\right].\tag{4}\]
+
+&lt;p&gt;Notice that the entropy at state $s_t$ was omitted in the definition.&lt;/p&gt;
+
+&lt;p&gt;The corresponding value function is given by&lt;/p&gt;
+
+\[V_\text{soft}^\pi(s_t)\triangleq \log \int_{\mathcal{A}}\exp\left(Q_\text{soft}^\pi(s_t,a)\right)da,\tag{5}\]
+
+&lt;p&gt;which is actually in the form of log sum exponential that approximates maximum.&lt;/p&gt;
+
+&lt;p&gt;Given the two definitions, the soft policy is then given by&lt;/p&gt;
+
+\[\pi(a_t\vert s_t)=\exp\left(Q^\pi_\text{soft}(s_t,a_t)-V^\pi_\text{soft}(s_t)\right).\tag{6}\]
+
+&lt;p&gt;As $V^\pi_\text{soft}$ only depends on $Q^\pi_\text{soft}$, the soft policy is actually the Boltzmann distribution based on the value of $Q^\pi_\text{soft}$. The comparison is shown in Figure 1. It can be found that Boltzmann distribution assigns a reasonable likelihood for all actions (rather the optimal one), which encourages a diverse exploration.&lt;/p&gt;
+
+&lt;figure&gt;
+    &lt;div style=&quot;display:flex&quot;&gt;
+            &lt;figure&gt;
+&lt;img src=&quot;http://bair.berkeley.edu/static/blog/softq/figure_3a_unimodal-policy.png&quot; /&gt;
+                &lt;figcaption&gt;&lt;center&gt;(a)&lt;/center&gt;&lt;/figcaption&gt;
+            &lt;/figure&gt;
+            &lt;figure&gt;
+&lt;img src=&quot;http://bair.berkeley.edu/static/blog/softq/figure_3b_multimodal_policy.png&quot; /&gt;
+                &lt;figcaption&gt;&lt;center&gt;(b)&lt;/center&gt;&lt;/figcaption&gt;
+            &lt;/figure&gt;
+    &lt;/div&gt;
+&lt;/figure&gt;
+&lt;center&gt;
+&lt;p style=&quot;font-size:80%;&quot;&gt;
+Figure 1. Policies based on the value of Q function. (a) Unimodal policy. (b) Multimodal policy.
+  &lt;/p&gt;
+&lt;/center&gt;
+&lt;p&gt;With the those definitions, we have proposed the solution for the problems mentioned in the motivation: continuous function for continuous states and actions space; the trajectory-wise optimization defined by the objective function; and Boltzmann distribution to represent the optimal policy. To ensure things work, we need theoretical analyses and feasible update rules.&lt;/p&gt;
+
+&lt;h1 id=&quot;3-theorem-analyses&quot;&gt;3. Theorem Analyses&lt;/h1&gt;
+
+&lt;p&gt;We now discuss the related theorem guarantee. The first theorem shows us the optimality:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Theorem 1&lt;/strong&gt;: The optimal policy for equation (3) is given by&lt;/p&gt;
+
+\[\pi^\ast(a_t\vert s_t)=\exp\left(Q^\ast_\text{soft}(s_t,a_t)-V^\ast_\text{soft}(s_t)\right).\]
+
+&lt;p&gt;The proof sketch follows two steps: policy improvement and policy iteration.&lt;/p&gt;
+
+&lt;h2 id=&quot;31-policy-improvement&quot;&gt;3.1. Policy Improvement&lt;/h2&gt;
+
+&lt;p&gt;We first show that given any policy, we can improve it by ‘softmizing’ it. Specifically,&lt;/p&gt;
+
+\[\forall\pi,\text{let }\tilde\pi(\cdot\vert s)\propto\exp\left(Q^\pi_\text{soft}(s,\cdot)\right),\text{then }Q^\pi_\text{soft}(s_t,a_t)\le Q^{\tilde\pi}_\text{soft}(s_t,a_t).\]
+
+&lt;p&gt;To show that, we rewrite the second part of $Q$ function (defined in (4)) as&lt;/p&gt;
+
+\[\begin{aligned}&amp;amp;\sum_{l=t+1}^\infty \gamma^{l-t}\mathbb{E}_{(s_{l},a_{l})\sim\rho_\pi}\left[r(s_{l},a_{l})+\mathcal{H}(\pi(\cdot\vert s_{l}))\right]\\=&amp;amp;\mathbb{E}_{(s_{t+1},a_{t+1})\sim\rho_\pi}[[\gamma\mathcal{H}(\pi(\cdot\vert s_{l}))+\gamma r(s_{t+1},a_{t+1})\\&amp;amp;+\sum_{l=t+2}^\infty \gamma^{l-t}\mathbb{E}_{(s_{l},a_{l})\sim\rho_\pi}[r(s_{l},a_{l})+\mathcal{H}(\pi(\cdot\vert s_{l}))]]\\=&amp;amp;\mathbb{E}_{(s_{t+1},a_{t+1})\sim\rho_\pi}[\gamma\mathcal{H}(\pi(\cdot\vert s_{l}))+\gamma (r(s_{t+1},a_{t+1})\\&amp;amp;+ \sum_{l=t+2}^\infty \gamma^{l-t-1}\mathbb{E}_{(s_{l},a_{l})\sim\rho_\pi}[r(s_{l},a_{l})+\mathcal{H}(\pi(\cdot\vert s_{l}))])]\\=&amp;amp;\mathbb{E}_{(s_{t+1},a_{t+1})\sim\rho_\pi}[\gamma\mathcal{H}(\pi(\cdot\vert s_{t+1}))+\gamma Q^\pi_\text{soft}(s_{t+1},a_{t+1})].\end{aligned}\]
+
+&lt;p&gt;As the entropy term is independent of $a_{t+1}$, we then have the following equation&lt;/p&gt;
+
+\[Q^\pi_\text{soft}(s_t,a_t)=r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+1}\sim\mathcal{P}}[\mathcal{H}(\pi(\cdot\vert s_{t+1}))+\mathbb{E}_{a_{t+1}\sim\pi}\left[Q^\pi_\text{soft}(s_{t+1},a_{t+1})]\right].\tag{7}\]
+
+&lt;p&gt;Given the equation, we then provide an inequality:&lt;/p&gt;
+
+\[\mathcal{H}(\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right]\le \mathcal{H}(\tilde\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\tilde\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right].\tag{8}\]
+
+&lt;p&gt;&lt;em&gt;Proof of (8):&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;We rewrite the left hand side of the inequality&lt;/p&gt;
+
+\[\begin{aligned}&amp;amp;\mathcal{H}(\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right]\\=&amp;amp;\mathbb{E}_{a_t\sim \pi}\left[{\color{red}{-\log\pi(a_t\vert s_t)}}+Q^\pi_\text{soft}(s_t,a_t)\right]\\=&amp;amp;\mathbb{E}_{a_t\sim \pi}\left[-\log\pi(a_t\vert s_t){\color{red}{+\log\tilde{\pi}(a_t\vert s_t)-\log\tilde{\pi}(a_t\vert s_t)}}+Q^\pi_\text{soft}(s_t,a_t)\right]\\=&amp;amp;-\mathbb{E}_{a_t\sim \pi}\left[\log\pi(a_t\vert s_t)-\log\tilde{\pi}(a_t\vert s_t)\right]+\mathbb{E}_{a_t\sim \pi}\left[Q^\pi_\text{soft}(s_t,a_t)-\log\tilde{\pi}(a_t\vert s_t)\right]\\=&amp;amp;-D_\text{KL}(\pi\vert\vert\tilde{\pi})+\mathbb{E}_{a_t\sim\pi}\left[Q^\pi_\text{soft}(s_t,a_t)-Q^\pi_\text{soft}(s_t,a_t)+\log\int_\mathcal{A}\exp(Q^\pi_\text{soft}(s_t,a'))da'\right]\\=&amp;amp;-D_\text{KL}(\pi\vert\vert\tilde{\pi})+\log\int_\mathcal{A}\exp(Q^\pi_\text{soft}(s_t,a'))da’.\end{aligned}\]
+
+&lt;p&gt;For the right hand side of the inequality, we have&lt;/p&gt;
+
+\[\begin{aligned}&amp;amp;\mathcal{H}(\tilde\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\tilde\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right]\\=&amp;amp;\mathbb{E}_{a_t\sim \tilde\pi}\left[{\color{red}{-\log\tilde\pi(a_t\vert s_t)}}+Q^\pi_\text{soft}(s_t,a_t)\right]\\=&amp;amp;\mathbb{E}_{a_t\sim \tilde\pi}\left[-\log\frac{\exp\left(Q^\pi_\text{soft}(s_t,a_t)\right)}{\int_\mathcal{A}\exp\left(Q^\pi_\text{soft}(s_t,a')\right)da'}+Q^\pi_\text{soft}(s_t,a_t)\right]\\=&amp;amp;\mathbb{E}_{a_t\sim \tilde\pi}\left[-Q^\pi_\text{soft}(s_t,a_t)+\log\int_\mathcal{A}\exp\left(Q^\pi_\text{soft}(s_t,a')\right)da'+Q^\pi_\text{soft}(s_t,a_t)\right]\\=&amp;amp;\log\int_\mathcal{A}\exp\left(Q^\pi_\text{soft}(s_t,a')\right)da’.\end{aligned}\]
+
+&lt;p&gt;Since $D_\text{KL}\ge 0$, we have&lt;/p&gt;
+
+\[\mathcal{H}(\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right]\le \mathcal{H}(\tilde\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\tilde\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right].\tag*{$\blacksquare$}\]
+
+&lt;p&gt;With (7) and (8), we now ready to show policy improvement. The idea is simple: we use the inequality (8) to contract the right hand side of equality (7) to complete the proof.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Proof of policy improvement:&lt;/em&gt;&lt;/p&gt;
+
+\[\begin{aligned}Q_\text{soft}^\pi(s_t,a_t)=&amp;amp; r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+1}\sim\mathcal{P}}\left[\mathcal{H}(\pi(\cdot\vert s_{t+1}))+\mathbb{E}_{a_{t+1}\sim\pi}[Q_\text{soft}^\pi(s_{t+1},a_{t+1})]\right]\\\le&amp;amp; r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+1}\sim\mathcal{P}}\left[\mathcal{H}({\color{red}{\tilde{\pi}}}(\cdot\vert s_{t+1}))+ \mathbb{E}_{a_{t+1}\sim{\color{red}{\tilde{\pi}}}}[Q^\pi_\text{soft}(s_{t+1},a_{t+1})]\right]\\=&amp;amp;r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+1}\sim\mathcal{P}}[\mathcal{H}({\color{red}{\tilde{\pi}}}(\cdot\vert s_{t+1}))\\&amp;amp;+ \mathbb{E}_{a_{t+1}\sim{\color{red}{\tilde{\pi}}}}[r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+2}\sim\mathcal{P}}[\mathcal{H}(\pi(\cdot\vert s_{t+2}))+\mathbb{E}_{a_{t+2}\sim\pi}[Q_\text{soft}^\pi(s_{t+2},a_{t+2})]]]\\\le &amp;amp;r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+1}\sim\mathcal{P}}[\mathcal{H}({\color{red}{\tilde{\pi}}}(\cdot\vert s_{t+1}))\\&amp;amp;+ \mathbb{E}_{a_{t+1}\sim{\color{red}{\tilde{\pi}}}}[r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+2}\sim\mathcal{P}}[\mathcal{H}({\color{red}{\tilde{\pi}}}(\cdot\vert s_{t+2}))+\mathbb{E}_{a_{t+2}\sim{\color{red}{\tilde{\pi}}}}[Q_\text{soft}^\pi(s_{t+2},a_{t+2})]]]\\ \vdots \\ \le &amp;amp; r(s_t,a_t)+\sum_{l=t+1}^\infty \mathbb{E}_{(s_l,a_l)\sim\rho_{\tilde\pi}}\left[r(s_l,a_l)+\mathcal{H}(\tilde\pi(\cdot\vert s_l))\right]\\=&amp;amp; Q^{\tilde\pi}_\text{soft}(s_t,a_t).\end{aligned}\]
+
+&lt;p&gt;Therefore we complete the proof. \(\tag*{$\blacksquare$}\)&lt;/p&gt;
+
+&lt;h2 id=&quot;32-policy-iteration&quot;&gt;3.2. Policy Iteration&lt;/h2&gt;
+
+&lt;p&gt;With &lt;em&gt;policy improvement&lt;/em&gt; theorem, we can improve any arbitrary policy. Therefore the policy can be naturally updated by&lt;/p&gt;
+
+\[\pi_{i+1}(\cdot \vert s_t)\propto \exp\left(Q^{\pi_i}_\text{soft}(s_t,\cdot)\right).\]
+
+&lt;p&gt;Since any policy can be improved in this way, the optimal policy must satisfy this form, and the proof of &lt;em&gt;Theorem 1&lt;/em&gt; is completed. \(\tag*{$\blacksquare$}\)&lt;/p&gt;
+
+&lt;h2 id=&quot;33-soft-bellman-equation&quot;&gt;3.3. Soft Bellman Equation&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Theorem 2.&lt;/strong&gt; The soft $Q$ function defined in (4) satisfies the soft Bellman equation&lt;/p&gt;
+
+\[Q^\ast_\text{soft}(s_t,a_t)=r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+1}\sim\mathcal{P}}\left[V^\ast_\text{soft}(s_{t+1})\right].\]
+
+&lt;p&gt;&lt;em&gt;Proof of Theorem 2&lt;/em&gt;:&lt;/p&gt;
+
+&lt;p&gt;The proof is pretty straightforward. Notice that&lt;/p&gt;
+
+\[\begin{aligned}&amp;amp;\mathcal{H}(\pi(\cdot\vert s_{t+1}))+\mathbb{E}_{a_{t+1}\sim\pi}[Q_\text{soft}^\pi(s_{t+1},a_{t+1})]\\
+=&amp;amp;\mathbb{E}_{a_{t+1}\sim\pi}[-\log \pi(a_{t+1}\vert s_{t+1})+Q_\text{soft}^\pi(s_{t+1},a_{t+1})]\\
+=&amp;amp;\mathbb{E}_{a_{t+1}\sim\pi}[-\log \exp(Q_\text{soft}^\pi(s_{t+1},a_{t+1})-V_\text{soft}^\pi(s_{t+1}))+Q_\text{soft}^\pi(s_{t+1},a_{t+1})]\\
+=&amp;amp;\mathbb{E}_{a_{t+1}\sim\pi}[V_\text{soft}^\pi(s_{t+1})]\\
+=&amp;amp;V_\text{soft}^\pi(s_{t+1}).\end{aligned}\]
+
+&lt;p&gt;Therefore the soft $Q$ function defined in (4) is equivalent to&lt;/p&gt;
+
+\[\begin{aligned}Q_\text{soft}^\pi(s_t,a_t)&amp;amp;= r(s_t,a_t)+\sum_{l=t+1}^\infty \gamma^{l-t}\mathbb{E}_{(s_{l},a_{l})\sim\rho_\pi}\left[r(s_{l},a_{l})+\mathcal{H}(\pi(\cdot\vert s_{l}))\right]\\&amp;amp;=r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+1}\sim\mathcal{P}}\left[V^\pi_\text{soft}(s_{t+1})\right].\end{aligned}\]
+
+\[\tag*{$\blacksquare$}\]
+
+&lt;h2 id=&quot;34-soft-value-iteration&quot;&gt;3.4. Soft Value Iteration&lt;/h2&gt;
+
+&lt;p&gt;So far we have shown the optimality of soft policy (&lt;em&gt;Theorem 1&lt;/em&gt;) and soft $Q$ function &lt;em&gt;(Theorem 2)&lt;/em&gt;. However, we   still need a rule to learn the function. Specifically, we mainly focus on the update rule of $Q$ function as the policy and value function both are defined by $Q$ function. To this end, the author provides the following theorem.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Theorem 3.&lt;/strong&gt; The iteration&lt;/p&gt;
+
+\[Q^\pi_\text{soft}(s_t,a_t)\gets r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+1}\sim\mathcal{P}}\left[V^\pi_\text{soft}(s_{t+1})\right],\]
+
+\[V_\text{soft}^\pi(s_t)\gets \log \int_{\mathcal{A}}\exp\left(Q_\text{soft}^\pi(s_t,a)\right)da,\]
+
+&lt;p&gt;converges to \(Q^\ast_\text{soft}\) and \(V^\ast_\text{soft}\), respectively.&lt;/p&gt;
+
+&lt;p&gt;The proof is quite similar to the general case in RL. For the detailed proof one can refer to the paper directly.&lt;/p&gt;
+
+&lt;h1 id=&quot;4-algorithm&quot;&gt;4. Algorithm&lt;/h1&gt;
+
+&lt;p&gt;Given the above analyses, there are two key issues in designing a practical algorithm:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The intractable integral for computing the value of $V^\pi_\text{soft}$;&lt;/li&gt;
+  &lt;li&gt;The intractable sampling from Boltzmann distribution.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To deal with the integral issue, this paper leverages &lt;em&gt;importance sampling&lt;/em&gt;, which has been widely used in many previous works. For the second issue, generally speaking, the author uses a neural network to approximate the policy, and the loss function is defined as&lt;/p&gt;
+
+\[J_\pi(\phi;s_t)=D_\text{KL}\left(\pi^\phi(a_t\vert s_t)\bigg\vert\bigg\vert\exp\left(Q^\theta_\text{soft}(s_t,a_t)-V^\theta_\text{soft}(s_t)\right)\right).\]
+
+&lt;p&gt;The gradient of the loss function is given by &lt;em&gt;Stein variational gradient descent&lt;/em&gt; (SVGD). In my view, the use of SVGD is mainly for the analysis of the resemblance between the proposed algorithm, soft Q learning (SQL), and actor-critic, as the succeeding works seem to use no SVGD anymore.&lt;/p&gt;
+
+&lt;p&gt;The author provides the implementation in &lt;a href=&quot;https://github.com/haarnoja/softqlearning&quot;&gt;github-softqlearning&lt;/a&gt;. However, the latest version is faced with dependencies issue. Luckily, the older version (commits on Oct 30, 2017) works well. Other implementation can be hardly found.&lt;/p&gt;
+
+&lt;p&gt;For the performance, I only tested it on Multigoal environment and the results are consistent with that of the original paper. Generally speaking, SQL tends to have a high variance, which can also be viewed as the cost for exploration.&lt;/p&gt;
+
+&lt;h1 id=&quot;4-conclusion&quot;&gt;4. Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Compared with SAC, SQL has received much less publicity. It can be hard to find a repository on Github that supports SQL and other successful methods. In many works, it was replaced by SAC. The use of SVGD seems to be tricky and makes it hard to be implemented. Still, it can be proven that bringing in the entropy term does work for the end of better exploring.&lt;/p&gt;
+
+&lt;h1 id=&quot;5-references&quot;&gt;5. References&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1702.08165.pdf&quot;&gt;Reinforcement Learning with Deep Energy-Based Policies&lt;/a&gt; - Tuomas Haarnoja et al.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/&quot;&gt;Learning Diverse Skills via Maximum Entropy Deep Reinforcement Learning&lt;/a&gt; - BAIR&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://julien-vitay.net/deeprl/EntropyRL.html&quot;&gt;Deep Reinforcement Learning&lt;/a&gt; - Julien Vitay&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.slideshare.net/DongMinLee32/maximum-entropy-reinforcement-learning-stochastic-control&quot;&gt;Maximum Entropy Reinforcement Learning (Stochastic Control)&lt;/a&gt; - Dongmin Lee&lt;/p&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Machine Learning - 09 Exact Inference of Graphical Models</title>

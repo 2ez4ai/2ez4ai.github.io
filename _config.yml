@@ -2,7 +2,7 @@
 title:               Jingye Wang
 tagline:             'A personal blog.'
 description:         '"You can’t connect the dots looking forward; you can only connect them looking backward."'
-url:                 '' # 2ez4ai.github.io
+url:                 '' #2ez4ai.github.io
 baseurl:             ''
 paginate:            6
 permalink:           /:year/:month/:day/:title/
