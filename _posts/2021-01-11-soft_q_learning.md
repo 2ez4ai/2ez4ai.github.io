@@ -46,7 +46,7 @@ The optimal policy in this paper is defined as
 
 $$\pi^\ast=\arg\max_\pi\sum_t\mathbb{E}_{(s_t,a_t)\sim\rho_\pi}\left[r(s_t,a_t)+\mathcal{H}(\pi(\cdot\vert s_t))\right],\tag{2}$$
 
-which differs from the one defined in $(2)$ as it aims to reach states where they will have high entropy in the future. Specifically, a detailed version is given by
+which differs from the one defined in $(1)$ as it aims to reach states where they may have high entropy in the future. Specifically, a detailed version is given by
 
 $$\pi^\ast=\arg\max_\pi\sum_t\mathbb{E}_{(s_t,a_t)\sim\rho_\pi}\left[\sum_{l=t}^\infty \gamma^{l-t}\mathbb{E}_{(s_l,a_l)\sim\rho_\pi}\left[r(s_l,a_l)+\mathcal{H}(\pi(\cdot\vert s_l))\right]\bigg\vert s_t,a_t\right],\tag{3}$$
 
@@ -66,7 +66,7 @@ The corresponding $Q$-function in this paper is defined as
 
 $$Q_\text{soft}^\pi(s_t,a_t)\triangleq r(s_t,a_t)+\sum_{l=t+1}^\infty \gamma^{l-t}\mathbb{E}_{(s_{l},a_{l})\sim\rho_\pi}\left[r(s_{l},a_{l})+\mathcal{H}(\pi(\cdot\vert s_{l}))\right].\tag{4}$$
 
-Notice that the entropy at state $s_t$ was omitted in the definition.
+Notice that the entropy at state $s_t$ is omitted in the definition.
 
 The corresponding value function is given by
 
@@ -78,7 +78,7 @@ Given the two definitions, the soft policy is then given by
 
 $$\pi(a_t\vert s_t)=\exp\left(Q^\pi_\text{soft}(s_t,a_t)-V^\pi_\text{soft}(s_t)\right).\tag{6}$$
 
-As $V^\pi_\text{soft}$ only depends on $Q^\pi_\text{soft}$, the soft policy is actually the Boltzmann distribution based on the value of $Q^\pi_\text{soft}$. The comparison is shown in Figure 1. It can be found that Boltzmann distribution assigns a reasonable likelihood for all actions (rather the optimal one), which encourages a diverse exploration.
+As $V^\pi_\text{soft}$ only depends on $Q^\pi_\text{soft}$, the soft policy is actually the Boltzmann distribution based on the value of $Q^\pi_\text{soft}$. The comparison is shown in Figure 1. It can be found that Boltzmann distribution assigns a reasonable likelihood for all actions (rather than just the optimal one).
 
 <figure>
     <div style="display:flex">
@@ -97,11 +97,11 @@ As $V^\pi_\text{soft}$ only depends on $Q^\pi_\text{soft}$, the soft policy is a
 Figure 1. Policies based on the value of Q function. (a) Unimodal policy. (b) Multimodal policy.
   </p>
 </center>
-With the those definitions, we have proposed the solution for the problems mentioned in the motivation: continuous function for continuous states and actions space; the trajectory-wise optimization defined by the objective function; and Boltzmann distribution to represent the optimal policy. To ensure things work, we need theoretical analyses and feasible update rules.
+With those definitions, we have proposed the solutions to the problems mentioned in the motivation: continuous function for continuous states and actions space; the trajectory-wise optimization defined by the objective function $(3)$; and Boltzmann distribution to represent the optimal policy. To ensure things work, we need theoretical analyses and feasible update rules.
 
 # 3. Theorem Analyses
 
-We now discuss the related theorem guarantee. The first theorem shows us the optimality:
+We now discuss the related theoretical guarantee. The first theorem shows us the optimality:
 
 **Theorem 1**: The optimal policy for equation (3) is given by
 
@@ -123,7 +123,7 @@ As the entropy term is independent of $a_{t+1}$, we then have the following equa
 
 $$Q^\pi_\text{soft}(s_t,a_t)=r(s_t,a_t)+\gamma\mathbb{E}_{s_{t+1}\sim\mathcal{P}}[\mathcal{H}(\pi(\cdot\vert s_{t+1}))+\mathbb{E}_{a_{t+1}\sim\pi}\left[Q^\pi_\text{soft}(s_{t+1},a_{t+1})]\right].\tag{7}$$
 
-Given the equation, we then provide an inequality:
+We then provide an inequality:
 
 $$\mathcal{H}(\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right]\le \mathcal{H}(\tilde\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\tilde\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right].\tag{8}$$
 
@@ -141,7 +141,7 @@ Since $D_\text{KL}\ge 0$, we have
 
 $$\mathcal{H}(\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right]\le \mathcal{H}(\tilde\pi(\cdot\vert s_{t}))+\mathbb{E}_{a_{t}\sim\tilde\pi}\left[Q^\pi_\text{soft}(s_{t},a_{t})\right].\tag*{$\blacksquare$}$$
 
-With (7) and (8), we now ready to show policy improvement. The idea is simple: we use the inequality (8) to contract the right hand side of equality (7) to complete the proof.
+With (7) and (8), we now ready to show policy improvement. The idea is simple: we use inequality (8) to contract the right hand side of equality (7) to complete the proof.
 
 *Proof of policy improvement:*
 
@@ -158,6 +158,12 @@ $$\pi_{i+1}(\cdot \vert s_t)\propto \exp\left(Q^{\pi_i}_\text{soft}(s_t,\cdot)\r
 Since any policy can be improved in this way, the optimal policy must satisfy this form, and the proof of *Theorem 1* is completed. $$\tag*{$\blacksquare$}$$
 
 ## 3.3. Soft Bellman Equation
+
+Though we have that the optimal policy can be obtained by policy iteration, it would be exhausting to conduct the iteration exactly in that way (just think about the integral we omit with the help of $\propto$)! Therefore, a more feasible way is to find the optimal $Q$ function (which is why they call the algorithm *soft Q learning*, I guess) as
+
+$$\pi^\ast(a_t\vert s_t)\propto\exp\left(Q^\ast_\text{soft}(s_t,a_t)\right).$$
+
+We now show the soft Bellman optimality equation which connects the two optimal function.
 
 **Theorem 2.** The soft $Q$ function defined in (4) satisfies the soft Bellman equation
 
@@ -179,9 +185,11 @@ $$\begin{aligned}Q_\text{soft}^\pi(s_t,a_t)&= r(s_t,a_t)+\sum_{l=t+1}^\infty \ga
 
 $$\tag*{$\blacksquare$}$$
 
+Theorem 2 actually sheds light on how we update our $Q$ function, which will be introduced in next section.
+
 ## 3.4. Soft Value Iteration
 
-So far we have shown the optimality of soft policy (*Theorem 1*) and soft $Q$ function *(Theorem 2)*. However, we   still need a rule to learn the function. Specifically, we mainly focus on the update rule of $Q$ function as the policy and value function both are defined by $Q$ function. To this end, the author provides the following theorem.
+So far we have shown the optimality of soft policy (*Theorem 1*) and soft $Q$ function *(Theorem 2)*. However, we still need a rule to learn the function. Specifically, we mainly focus on the update rule of $Q$ function as the policy and value function both are defined by $Q$ function. To this end, the author provides the following theorem.
 
 **Theorem 3.** The iteration
 
@@ -191,22 +199,22 @@ $$V_\text{soft}^\pi(s_t)\gets \log \int_{\mathcal{A}}\exp\left(Q_\text{soft}^\pi
 
 converges to $$Q^\ast_\text{soft}$$ and $$V^\ast_\text{soft}$$, respectively.
 
-The proof is quite similar to the general case in RL. For the detailed proof one can refer to the paper directly.
+The proof is quite similar to the general case in RL. For the detailed proof one can refer to the paper directly. Notice that the update of $Q$ function does not involve the policy, therefore it is an off-policy RL.
 
 # 4. Algorithm
 
-Given the above analyses, there are two key issues in designing a practical algorithm:
+Given the above analyses, there are two key issues in designing a truly practical algorithm:
 
 - The intractable integral for computing the value of $V^\pi_\text{soft}$;
 - The intractable sampling from Boltzmann distribution.
 
-To deal with the integral issue, this paper leverages *importance sampling*, which has been widely used in many previous works. For the second issue, generally speaking, the author uses a neural network to approximate the policy, and the loss function is defined as
+To deal with the integral issue, this paper leverages *importance sampling*, which has been widely used in many previous works. For the second issue, generally speaking, the author uses a neural network to approximate the Boltzmann distribution of the policy (rather than the policy itself, and that differs from actor-critic, claimed by the author), and the loss function is defined as
 
 $$J_\pi(\phi;s_t)=D_\text{KL}\left(\pi^\phi(a_t\vert s_t)\bigg\vert\bigg\vert\exp\left(Q^\theta_\text{soft}(s_t,a_t)-V^\theta_\text{soft}(s_t)\right)\right).$$ 
 
-The gradient of the loss function is given by *Stein variational gradient descent* (SVGD). In my view, the use of SVGD is mainly for the analysis of the resemblance between the proposed algorithm, soft Q learning (SQL), and actor-critic, as the succeeding works seem to use no SVGD anymore.
+The gradient of the loss function is given by *Stein Variational Gradient Descent* (SVGD). In my view, the use of SVGD is mainly for the analysis of the resemblance between the proposed algorithm, soft Q learning (SQL), and actor-critic, as the succeeding works seem to use no SVGD anymore.
 
-The author provides the implementation in [github-softqlearning](https://github.com/haarnoja/softqlearning). However, the latest version is faced with dependencies issue. Luckily, the older version (commits on Oct 30, 2017) works well. Other feasible implementation can be hardly found. For the performance, I tested it on Multigoal environment and the results are consistent with that of the original paper. Besides, I conducted experiments with varying values of $\alpha$, which is shown in Figure 2. 
+The author provides the implementation in [github-softqlearning](https://github.com/haarnoja/softqlearning). However, the latest version is faced with dependencies issue. Luckily, the older version (committed on Oct 30, 2017) works well. Other feasible implementation can be hardly found. For the performance, I tested it on Multigoal environment and the results are consistent with that of the original paper. Besides, I conducted experiments with varying values of $\alpha$, which is shown in Figure 2. 
 
 <figure>
     <div style="display:flex">
@@ -234,7 +242,7 @@ Generally speaking, when $\alpha\ne 0$, SQL tends to have a high variance, which
 
 #  4. Conclusion
 
-It was proven that bringing in the entropy term does work for the end of better exploring. The author successfully extended the entropy RL to contiunous case. However, the high variance makes it challenging to be used for performing complicated tasks, and that may be one of the reasons why little (relatively) ink has been spilled on SQL. A wise choice could be to use SQL as an initializer rather than a trainer.
+It was proven that bringing in the entropy term does work for the end of better exploring. The author successfully extended the entropy RL framework to contiunous case in this paper. However, the high variance makes it challenging to be used for performing complicated tasks, and that may be one of the reasons why little (relatively) ink has been spilled on SQL. A wise choice could be to use SQL as an initializer rather than a trainer.
 
 
 
@@ -242,9 +250,12 @@ It was proven that bringing in the entropy term does work for the end of better 
 
    [Reinforcement Learning with Deep Energy-Based Policies](https://arxiv.org/pdf/1702.08165.pdf) - Tuomas Haarnoja et al. 
 
+   [Soft Actor-Critic](https://arxiv.org/pdf/1801.01290.pdf) - Tuomas Haarnoja et al. 
+
    [Learning Diverse Skills via Maximum Entropy Deep Reinforcement Learning](https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/) - BAIR
 
    [Deep Reinforcement Learning](https://julien-vitay.net/deeprl/EntropyRL.html) - Julien Vitay 
 
    [Maximum Entropy Reinforcement Learning (Stochastic Control)](https://www.slideshare.net/DongMinLee32/maximum-entropy-reinforcement-learning-stochastic-control) - Dongmin Lee 
 
+   [Stein Variational Gradient Descent: A General Purpose Bayesian Inference Algorithm](https://arxiv.org/pdf/1608.04471.pdf) - Qiang Liu and Dilin Wang
