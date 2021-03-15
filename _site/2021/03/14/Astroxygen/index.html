@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-51FFV4BDWW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-51FFV4BDWW');
+</script>
+  
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    Unity3D - Astroxygen &middot; Jingye Wang
+  </title>
+
+  
+  <link rel="canonical" href="/2021/03/14/Astroxygen/">
+  
+
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ["\\(", "\\)"] ],
+      displayMath: [ ['$$', '$$'], ["\\[", "\\]"] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+    //,
+    //displayAlign: "left",
+    //displayIndent: "2em"
+  });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+  
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>"You can’t connect the dots looking forward; you can only connect them looking backward."</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/categories/">Archive</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+    <span class="sidebar-nav-item">Currently v0.2.2</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2021. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Jingye Wang</a>
+            <small>A personal blog.</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <style>
+  .button {
+    border: 2px solid;
+    border-radius: 7.5px;
+    color: white;
+    padding: 2.5px 7.5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition-duration: 0.1s;
+    cursor: pointer;
+  }
+
+  .buttonC {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #2e3131;
+  }
+
+  .buttonC:hover {
+    background-color: #2e3131;
+    color: white;
+  }
+  a:hover{
+    text-decoration: none;
+  }
+</style>
+<div class="post">
+  <h1 class="post-title">Unity3D - Astroxygen </h1>
+  <span class="post-date">
+    14 Mar 2021
+    <p></p>
+  <div class="post-categories">
+      
+      
+      <a class="button buttonC" href="/categories/#unity3d">unity3d</a>&nbsp;
+      
+      
+    </div>
+  </span>
+  <div align="center"><img src="../../../../assets/images/astroxygen_bg.png" alt="" width="700" />
+</div>
+
+<center>
+  <p style="font-size:80%;">
+Figure 1. Astroxygen.
+  </p>
+</center>
+
+<h1 id="0-background">0. Background</h1>
+
+<p>Finally this blog has something related to video games. This, <a href="https://github.com/2ez4ai/Astroxygen">Astroxygen</a>, is my first Unity3D project after attending like three courses of Unity3D. This game is generally based on the <em>perfect match</em> map of <strong>Fall Guys: Ultimate Knockout</strong>, as I find the models of that are friendly given my poor modeling skills. Also, it innately allows me to personalize, to some extent, my game by using a different figure set rather than fruits. Unlike <em>perfect match</em> that has fixed rounds, I set the goal for the player as collecting enough oxygen cylinder.</p>
+
+<div align="center"><img src="../../../../assets/images/fallguys_pm.png" alt="" width="450" />
+</div>
+
+<center>
+  <p style="font-size:80%;">
+Figure 2. The perfect match map of FullGuys.
+  </p>
+</center>
+
+<h1 id="1-components">1. Components</h1>
+
+<p>The scene includes two main components:</p>
+<ul>
+  <li>a screen to display the target figure and other information;</li>
+  <li>a platform consisted of 16 tiles allowing players to stand on.</li>
+</ul>
+
+<p>For the players, there is only one controllable and others are actually scripts.</p>
+
+<p>To make the falling reasonable, I use a picture of space as the background. For the choice of items of CSGO, that was my very original idea since they are fascinating and highly distinguishable.</p>
+
+<h1 id="2-mechanism">2. Mechanism</h1>
+
+<p>Actually, it occurred to me quite late that listing a time table for all scripts can relieve me a lot when doing such a periodical game (at the start of the project, I dived into each logic independently, and very often got stuck with their inconsistent logic). In each round, the game proceeds as follows:</p>
+<ul>
+  <li>-1.5s ~ 0.0s, ready for start;</li>
+  <li>0.0s ~ 5.0s, uncover tiles randomly for memorisation;</li>
+  <li>5.0s ~ 10.0s, uncover tiles randomly for memorisation; start counting down;</li>
+  <li>10.s ~ 15.0s, cover tiles; create oxygen tank randomly;</li>
+  <li>15.0s ~ 17.5s, disable moving ability of all players; uncover tiles to show the corresponding figures;</li>
+  <li>17.5s ~ 20.0s, disable tiles that showing wrong figures;</li>
+  <li>20.0s ~ , reset timer, tiles;</li>
+</ul>
+
+<p>Now I would like to summarize the detailed mechanism of each object.</p>
+
+<p><strong>FallGuys</strong>: it is controlled by player via <code class="language-plaintext highlighter-rouge">CharacterController</code>. To avoid others jump over head that stacks fallguys,  I actually add a invisiable high cylinder for it.</p>
+
+<p><strong>Computers</strong>: to make it of great diversity, I created some materials for skins and outfits from which it choices randomly at the start of the game, and its action are actually done by a lot of <code class="language-plaintext highlighter-rouge">Random.RandomRange()</code>. Somehow it does look like smart XD. The move is done by <code class="language-plaintext highlighter-rouge">move()</code> of <code class="language-plaintext highlighter-rouge">CharacterController</code>, where I set the horizontal/vertical input manually according to their position. I intended to implement the move by <code class="language-plaintext highlighter-rouge">NavMeshAgent</code>, but failed to make it due to the platform I implemented is not static.</p>
+
+<div align="center"><img src="../../../../assets/images/astroxygen_computers.png" alt="" width="1000" />
+</div>
+
+<center>
+  <p style="font-size:80%;">
+Figure 3. The computers can arrive right tiles, as well as the wrong ones (the green computer standing on the tile with a glove figure, which is different from the one in the screen).
+  </p>
+</center>
+
+<p><strong>Oxygen</strong>: they are created randomly in the 10th seconds of each round. The main logic is done by in <code class="language-plaintext highlighter-rouge">OnTriggerEnter()</code>. I also add floating effect for them by changing the <code class="language-plaintext highlighter-rouge">transform.position.y</code>, which is also applied to the blue indicator sign.</p>
+
+<div align="center"><img src="../../../../assets/images/astroxygen_oxygen.png" alt="" width="1000" />
+</div>
+
+<center>
+  <p style="font-size:80%;">
+Figure 4. The player is trying to get access to the oxygen cylinder. The screen shows that it still needs to collect 4 more oxygen cylinders.
+  </p>
+</center>
+
+<p><strong>Platform</strong>: the removing of tiles makes the platform can not be static (there must be a lot of ways to make it, but I am ok with this so far XD). The showing and covering were all done by changing the corresponding material. It is quite easy actually.</p>
+
+<p><strong>Screen</strong>: like platform, its function mostly is done by changing materials.</p>
+
+<p><strong>SphereBlock</strong>: though they look gigantic, they are generally harmless, as they are floating quite high above players. The only reason I added this is that the project asks us to use <code class="language-plaintext highlighter-rouge">NavMeshAgent</code> XD. And yes, this is done with <code class="language-plaintext highlighter-rouge">NavMeshAgent</code>.</p>
+
+<h1 id="3-conclusion">3. Conclusion</h1>
+
+<p>This project reminds me of the days when I enjoyed scenario editor of <em>Age of Empires II</em> and <em>Warcraft 3</em>. But at that time I was like 15 years old, and actually did not make a thing. As for my first project and given such a short time, I think this time the project is of a high degree of completeness. The main drawback, for me, is the code construction is messy due to my lacking in the game logic in the early stages.</p>
+
+</div>
+
+ <!--https://blog.webjeda.com/jekyll-related-posts/-->
+<div class="related">
+  <h2>Related posts</h2>
+  
+  
+  
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+
+    
+    
+
+    
+
+    
+
+  
+</div>
+
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://2ez4ai-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/public/js/script.js'></script>
+  </body>
+</html>
