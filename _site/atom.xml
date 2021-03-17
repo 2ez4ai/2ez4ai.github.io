@@ -4,7 +4,7 @@
  <title>Jingye Wang</title>
  <link href="/atom.xml" rel="self"/>
  <link href="/"/>
- <updated>2021-03-16T10:07:34+08:00</updated>
+ <updated>2021-03-17T19:03:22+08:00</updated>
  <id></id>
  <author>
    <name>Jingye Wang</name>
@@ -19,10 +19,20 @@
    <id>/2021/03/14/Astroxygen</id>
    <content type="html">&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../../../../assets/images/astroxygen_bg.png&quot; alt=&quot;&quot; width=&quot;700&quot; /&gt;
 &lt;/div&gt;
-
 &lt;center&gt;
   &lt;p style=&quot;font-size:80%;&quot;&gt;
 Figure 1. Astroxygen.
+  &lt;/p&gt;
+&lt;/center&gt;
+
+&lt;div align=&quot;center&quot;&gt;
+&lt;video width=&quot;700&quot; controls=&quot;controls&quot;&gt;
+	&lt;source src=&quot;../../../../assets/videos/astroxygen_recording.mp4&quot; type=&quot;video/mp4&quot; /&gt;
+&lt;/video&gt;
+&lt;/div&gt;
+&lt;center&gt;
+  &lt;p style=&quot;font-size:80%;&quot;&gt;
+Video 1. Demo video.
   &lt;/p&gt;
 &lt;/center&gt;
 

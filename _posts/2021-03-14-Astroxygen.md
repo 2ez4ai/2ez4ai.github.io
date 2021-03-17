@@ -9,10 +9,20 @@ description: My first Unity3D project.
 
 <div align="center"><img src="../../../../assets/images/astroxygen_bg.png" alt="" width="700" />
 </div>
-
 <center>
   <p style="font-size:80%;">
 Figure 1. Astroxygen.
+  </p>
+</center>
+
+<div align="center">
+<video width="700" controls="controls">
+	<source src="../../../../assets/videos/astroxygen_recording.mp4"  type="video/mp4" />
+</video>
+</div>
+<center>
+  <p style="font-size:80%;">
+Video 1. Demo video.
   </p>
 </center>
 
