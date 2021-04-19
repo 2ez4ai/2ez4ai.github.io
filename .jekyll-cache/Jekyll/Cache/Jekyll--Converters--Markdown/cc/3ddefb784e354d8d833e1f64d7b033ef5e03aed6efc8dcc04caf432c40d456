@@ -1,0 +1,54 @@
+I"d<div align="center"><img src="../../../../assets/images/goldseeker_init.png" alt="" width="700" />
+</div>
+<center>
+  <p style="font-size:80%;">
+Figure 1. GoldSeeker.
+  </p>
+</center>
+
+<center>
+<iframe src="https://www.youtube.com/embed/TNMTLX0pcEY" width="560" height="315" frameborder="0" allowfullscreen="">
+</iframe>
+</center>
+<center>
+  <p style="font-size:80%;">
+Video 1. Demo video.
+  </p>
+</center>
+
+<h1 id="0-introduction">0. Introduction</h1>
+
+<p>The flow of this game (<a href="https://github.com/2ez4ai/GoldSeeker">source</a>) is to collect 10 gold items, <em>i.e.,</em> coins. Some coins can be obtained directly on the map. The others can only be obtained from the creatures.</p>
+
+<p>Compared with my first game <a href="https://2ez4ai.github.io/2021/03/14/Astroxygen/">Astroxygen</a> is my first game, this one is far less interesting. The story and flow is not completed. It seems like I just put all those new things I learnt together in a brute, straightfoward and no surprise way. But still, I gained lots of experience related to models, animations, <em>etc.</em> that the previous one failed to provide.</p>
+
+<h1 id="1-components">1. Components</h1>
+
+<p>The scene includes four main components:</p>
+<ul>
+  <li>a character controlled by a player;</li>
+  <li>four enemies;</li>
+  <li>two points for save &amp; load;</li>
+  <li>quest components: coins and the light indicating the quest done;</li>
+</ul>
+
+<p>Unlike the previous one, this time I used sophisticated models rather than simple cubes or spheres or capsules. The models I got mainly from <a href="http://mixamo.com/">mixamo</a> and <a href="https://sketchfab.com/3d-models">sketchfab</a>. Actually, at the beginning I tried to make a Chinese style combat game. But when I skimmed the two fancy websites, I found there is little Chinese models. Those closest ones often turn out to be Japanese. That was the first time that I glimpsed the scale of the gap between the two industries. And I believe that one day, games adapted from our Chinese stories can be all the rage.</p>
+
+<h1 id="2-mechanism">2. Mechanism</h1>
+
+<p>Though this game is far more naiver than the previous one, the logic parts are much more complicated. The following content may be confusing if I use wrong gaming parlance.</p>
+
+<p><strong>Main Character</strong>: it is controlled by a player via <code class="language-plaintext highlighter-rouge">CharacterController</code>. The new feature here is that the control now supports both <strong>keyboard</strong> and <strong>controller</strong>, and we have animations for our character, which is supported with <strong>blend tree</strong>. Besides, we now have HP and furo (mana), which makes it formal.</p>
+
+<p><strong>Third Person Camera</strong>: the control for the main character would also affect the <strong>camera</strong> since they are grouped. More over, it also supports an independently way to control the camera, by using the right click of a mouse (the right joystick of a controller) as the input of the camera’s rotation. I also implemented a naive <strong>lock-on</strong> mechanic. I made it by adding the move input of the player as a factor to the rotation input of the camera, because I want a smooth lock-on rather than in a brutal way.</p>
+
+<p><strong>Enemies</strong>: they now three status: idle, patrol, and attack. All the move related logic is done with <code class="language-plaintext highlighter-rouge">NavMeshAgent</code>. I also added an <strong>aggro</strong> mechanic for the enemies. Actually, I think the only tricky part lies in the synchronization between the logic and the animation. Maybe I should use <code class="language-plaintext highlighter-rouge">rayCast</code> to detect the timing.</p>
+
+<p><strong>Skills</strong> (attack): in fact, the normal attack for the main character is like shooting. It generates a prefab with <code class="language-plaintext highlighter-rouge">rigidBody</code> then we adds a velocity to it and make damage when the <code class="language-plaintext highlighter-rouge">OnTriggerEnter</code> happens. The special attack, sequentially generating nine swords circle the target and then converge, is quite similar but different in prefabs: more lights, more awesome, I assume.</p>
+
+<p><strong>Save &amp; Load</strong>: this is a fancy function. I used <code class="language-plaintext highlighter-rouge">GameManager</code> for this. However, given those remarkable skills, like the <em>Recall</em> of <em>Tracer</em> in OverWatch and <em>Time Lapse</em> of <em>Weaver</em> in Dota2, I think there is more can be done with this function.</p>
+
+<h1 id="3-conclusion">3. Conclusion</h1>
+
+<p>So this is my second project. I spent a lot of time in selecting models and setting animations. Sometimes I felt like I am a director, with all the materials for a movie. But I was too stick to models and animations to focus on the gameplay. What makes it worse is that the effect is not attracting at all.</p>
+:ET

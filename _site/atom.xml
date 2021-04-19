@@ -4,13 +4,76 @@
  <title>Jingye Wang</title>
  <link href="/atom.xml" rel="self"/>
  <link href="/"/>
- <updated>2021-03-17T19:03:22+08:00</updated>
+ <updated>2021-04-19T10:50:31+08:00</updated>
  <id></id>
  <author>
    <name>Jingye Wang</name>
    <email>wangjy5@shanghaitech.edu.cn</email>
  </author>
 
+ 
+ <entry>
+   <title>Unity3D - GoldSeeker</title>
+   <link href="/2021/04/18/GoldSeeker/"/>
+   <updated>2021-04-18T00:00:00+08:00</updated>
+   <id>/2021/04/18/GoldSeeker</id>
+   <content type="html">&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../../../../assets/images/goldseeker_init.png&quot; alt=&quot;&quot; width=&quot;700&quot; /&gt;
+&lt;/div&gt;
+&lt;center&gt;
+  &lt;p style=&quot;font-size:80%;&quot;&gt;
+Figure 1. GoldSeeker.
+  &lt;/p&gt;
+&lt;/center&gt;
+
+&lt;center&gt;
+&lt;iframe src=&quot;https://www.youtube.com/embed/TNMTLX0pcEY&quot; width=&quot;560&quot; height=&quot;315&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;
+&lt;/iframe&gt;
+&lt;/center&gt;
+&lt;center&gt;
+  &lt;p style=&quot;font-size:80%;&quot;&gt;
+Video 1. Demo video.
+  &lt;/p&gt;
+&lt;/center&gt;
+
+&lt;h1 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h1&gt;
+
+&lt;p&gt;The flow of this game (&lt;a href=&quot;https://github.com/2ez4ai/GoldSeeker&quot;&gt;source&lt;/a&gt;) is to collect 10 gold items, &lt;em&gt;i.e.,&lt;/em&gt; coins. Some coins can be obtained directly on the map. The others can only be obtained from the creatures.&lt;/p&gt;
+
+&lt;p&gt;Compared with my first game &lt;a href=&quot;https://2ez4ai.github.io/2021/03/14/Astroxygen/&quot;&gt;Astroxygen&lt;/a&gt; is my first game, this one is far less interesting. The story and flow is not completed. It seems like I just put all those new things I learnt together in a brute, straightforward and no surprise way. But still, I gained lots of experience related to models, animations, &lt;em&gt;etc.&lt;/em&gt; that the previous one failed to provide.&lt;/p&gt;
+
+&lt;h1 id=&quot;1-components&quot;&gt;1. Components&lt;/h1&gt;
+
+&lt;p&gt;The scene includes four main components:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;a character controlled by a player;&lt;/li&gt;
+  &lt;li&gt;four enemies;&lt;/li&gt;
+  &lt;li&gt;two points for save &amp;amp; load;&lt;/li&gt;
+  &lt;li&gt;quest components: coins and the light indicating the quest done;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Unlike the previous one, this time I used sophisticated models rather than simple cubes or spheres or capsules. The models I got mainly from &lt;a href=&quot;http://mixamo.com/&quot;&gt;mixamo&lt;/a&gt; and &lt;a href=&quot;https://sketchfab.com/3d-models&quot;&gt;sketchfab&lt;/a&gt;. By the way, the audio is from &lt;a href=&quot;[https://dota2.fandom.com/wiki/Category:Audio]&quot;&gt;Dota2&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Actually, at the beginning I tried to make a Chinese style combat game. But when I skimmed the two fancy websites, I found there is little Chinese models. Those closest ones often turn out to be Japanese. That was the first time that I glimpsed the scale of the gap between the two industries. And I believe that one day, games adapted from our Chinese stories can be all the rage.&lt;/p&gt;
+
+&lt;h1 id=&quot;2-mechanism&quot;&gt;2. Mechanism&lt;/h1&gt;
+
+&lt;p&gt;Though this game is far more naiver than the previous one, the logic parts are much more complicated. The following content may be confusing if I use wrong gaming parlance.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Main Character&lt;/strong&gt;: it is controlled by a player via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CharacterController&lt;/code&gt;. The new feature here is that the control now supports both &lt;strong&gt;keyboard&lt;/strong&gt; and &lt;strong&gt;controller&lt;/strong&gt;, and we have animations for our character, which is supported with &lt;strong&gt;blend tree&lt;/strong&gt;. Besides, we now have HP and furor (mana), which makes it formal.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Third Person Camera&lt;/strong&gt;: the control for the main character would also affect the &lt;strong&gt;camera&lt;/strong&gt; since they are grouped. More over, it also supports an independently way to control the camera, by using the right click of a mouse (the right joystick of a controller) as the input of the camera’s rotation. I also implemented a naive &lt;strong&gt;lock-on&lt;/strong&gt; mechanic. I made it by adding the move input of the player as a factor to the rotation input of the camera, because I want a smooth lock-on rather than in a brutal way.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Enemies&lt;/strong&gt;: they now three status: idle, patrol, and attack. All the move related logic is done with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NavMeshAgent&lt;/code&gt;. I also added an &lt;strong&gt;aggro&lt;/strong&gt; mechanic for the enemies. Actually, I think the only tricky part lies in the synchronization between the logic and the animation. Maybe I should use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rayCast&lt;/code&gt; to detect the timing.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Skills&lt;/strong&gt; (attack): in fact, the normal attack for the main character is like shooting. It generates a prefab with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rigidBody&lt;/code&gt; then we adds a velocity to it and make damage when the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OnTriggerEnter&lt;/code&gt; happens. The special attack, sequentially generating nine swords circle the target and then converge, is quite similar but different in prefabs: more lights, more awesome, I assume.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Save &amp;amp; Load&lt;/strong&gt;: this is a fancy function. I used &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GameManager&lt;/code&gt; for this. However, given those remarkable skills, like the &lt;em&gt;Recall&lt;/em&gt; of &lt;em&gt;Tracer&lt;/em&gt; in OverWatch and &lt;em&gt;Time Lapse&lt;/em&gt; of &lt;em&gt;Weaver&lt;/em&gt; in Dota2, I think there is more can be done with this function.&lt;/p&gt;
+
+&lt;h1 id=&quot;3-conclusion&quot;&gt;3. Conclusion&lt;/h1&gt;
+
+&lt;p&gt;So this is my second project. I spent a lot of time in selecting models and setting animations. Sometimes I felt like I am a director, with all the materials for a movie. However, I was too stick to models and animations to focus on the gameplay. What makes it worse is that the effect is not attracting at all. But still, I learnt much from this project. I now have the basic ability to make a complete and standard game. Next time I will try harder on gameplay and visual effects to improve the player experience.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Unity3D - Astroxygen</title>
@@ -38,7 +101,7 @@ Video 1. Demo video.
 
 &lt;h1 id=&quot;0-background&quot;&gt;0. Background&lt;/h1&gt;
 
-&lt;p&gt;Finally this blog has something related to video games. This, &lt;a href=&quot;https://github.com/2ez4ai/Astroxygen&quot;&gt;Astroxygen&lt;/a&gt;, is my first Unity3D project after attending like three courses of Unity3D. This game is generally based on the &lt;em&gt;perfect match&lt;/em&gt; map of &lt;strong&gt;Fall Guys: Ultimate Knockout&lt;/strong&gt;, as I find the models of that are friendly given my poor modeling skills. Also, it innately allows me to personalize, to some extent, my game by using a different figure set rather than fruits. Unlike &lt;em&gt;perfect match&lt;/em&gt; that has fixed rounds, I set the goal for the player as collecting enough oxygen cylinder.&lt;/p&gt;
+&lt;p&gt;This blog finally has something related to video games. &lt;a href=&quot;https://github.com/2ez4ai/Astroxygen&quot;&gt;Astroxygen&lt;/a&gt; is my first Unity3D project after attending like three courses of Unity3D. This game is generally based on the &lt;em&gt;perfect match&lt;/em&gt; map of &lt;strong&gt;Fall Guys: Ultimate Knockout&lt;/strong&gt;, as I find the models of that are friendly given my poor modeling skills. Also, it innately allows me to personalize, to some extent, my game by using a different figure set rather than fruits. To complete the game flow, unlike &lt;em&gt;perfect match&lt;/em&gt; that has fixed rounds, I set the goal for the player as collecting enough oxygen cylinder.&lt;/p&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../../../../assets/images/fallguys_pm.png&quot; alt=&quot;&quot; width=&quot;450&quot; /&gt;
 &lt;/div&gt;
@@ -57,28 +120,26 @@ Figure 2. The perfect match map of FullGuys.
   &lt;li&gt;a platform consisted of 16 tiles allowing players to stand on.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;For the players, there is only one controllable and others are actually scripts.&lt;/p&gt;
-
-&lt;p&gt;To make the falling reasonable, I use a picture of space as the background. For the choice of items of CSGO, that was my very original idea since they are fascinating and highly distinguishable.&lt;/p&gt;
+&lt;p&gt;To make the falling reasonable, I use a picture of space as the background. For the choice of CSGO items, that was my very original idea since they are fascinating and highly distinguishable.&lt;/p&gt;
 
 &lt;h1 id=&quot;2-mechanism&quot;&gt;2. Mechanism&lt;/h1&gt;
 
-&lt;p&gt;Actually, it occurred to me quite late that listing a time table for all scripts can relieve me a lot when doing such a periodical game (at the start of the project, I dived into each logic independently, and very often got stuck with their inconsistent logic). In each round, the game proceeds as follows:&lt;/p&gt;
+&lt;p&gt;Actually, it occurred to me quite late that listing a time table for all scripts can relieve me a lot when doing such a turn-based game (at the start of the project, I dived into each logic independently, and very often got stuck with their inconsistent logic). In each round, the game proceeds as follows:&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;-1.5s ~ 0.0s, ready for start;&lt;/li&gt;
-  &lt;li&gt;0.0s ~ 5.0s, uncover tiles randomly for memorisation;&lt;/li&gt;
-  &lt;li&gt;5.0s ~ 10.0s, uncover tiles randomly for memorisation; start counting down;&lt;/li&gt;
-  &lt;li&gt;10.s ~ 15.0s, cover tiles; create oxygen tank randomly;&lt;/li&gt;
-  &lt;li&gt;15.0s ~ 17.5s, disable moving ability of all players; uncover tiles to show the corresponding figures;&lt;/li&gt;
-  &lt;li&gt;17.5s ~ 20.0s, disable tiles that showing wrong figures;&lt;/li&gt;
-  &lt;li&gt;20.0s ~ , reset timer, tiles;&lt;/li&gt;
+  &lt;li&gt;0.0s ~ 5.0s, reveal some tiles randomly for memorisation;&lt;/li&gt;
+  &lt;li&gt;5.0s ~ 10.0s, reveal some tiles randomly for memorisation; start counting down;&lt;/li&gt;
+  &lt;li&gt;10.s ~ 15.0s, cover all tiles; generate oxygen tanks randomly;&lt;/li&gt;
+  &lt;li&gt;15.0s ~ 17.5s, disable moving ability of all players; reveal all tiles to show the answer;&lt;/li&gt;
+  &lt;li&gt;17.5s ~ 20.0s, disable tiles that have wrong figures;&lt;/li&gt;
+  &lt;li&gt;20.0s ~ , reset timer, tiles state, player’s moving ability;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Now I would like to summarize the detailed mechanism of each object.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;FallGuys&lt;/strong&gt;: it is controlled by player via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CharacterController&lt;/code&gt;. To avoid others jump over head that stacks fallguys,  I actually add a invisiable high cylinder for it.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;FallGuys&lt;/strong&gt;: it is controlled by player via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CharacterController&lt;/code&gt;. To avoid jumping over others’ head, which would stack fallguys,  I add an invisiable high cylinder for each of them.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Computers&lt;/strong&gt;: to make it of great diversity, I created some materials for skins and outfits from which it choices randomly at the start of the game, and its action are actually done by a lot of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Random.RandomRange()&lt;/code&gt;. Somehow it does look like smart XD. The move is done by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;move()&lt;/code&gt; of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CharacterController&lt;/code&gt;, where I set the horizontal/vertical input manually according to their position. I intended to implement the move by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NavMeshAgent&lt;/code&gt;, but failed to make it due to the platform I implemented is not static.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Computers&lt;/strong&gt;: to make it of great diversity, I created some materials for skins and outfits from which it choices randomly at the start of the game, and its action and memory are actually done by a lot of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Random.RandomRange()&lt;/code&gt;. It does work. I mean, they look like smart and fun enough XD. The move is done by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;move()&lt;/code&gt; of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CharacterController&lt;/code&gt;, where I set the horizontal/vertical input manually according to their position. I intended to implement the move by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NavMeshAgent&lt;/code&gt;, but failed to make it due to the platform I implemented is not static.&lt;/p&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../../../../assets/images/astroxygen_computers.png&quot; alt=&quot;&quot; width=&quot;1000&quot; /&gt;
 &lt;/div&gt;
@@ -88,8 +149,7 @@ Figure 2. The perfect match map of FullGuys.
 Figure 3. The computers can arrive right tiles, as well as the wrong ones (the green computer standing on the tile with a glove figure, which is different from the one in the screen).
   &lt;/p&gt;
 &lt;/center&gt;
-
-&lt;p&gt;&lt;strong&gt;Oxygen&lt;/strong&gt;: they are created randomly in the 10th seconds of each round. The main logic is done by in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OnTriggerEnter()&lt;/code&gt;. I also add floating effect for them by changing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;transform.position.y&lt;/code&gt;, which is also applied to the blue indicator sign.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Oxygen&lt;/strong&gt;: they are created randomly in the 10th seconds of each round. The main logic is done by in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OnTriggerEnter()&lt;/code&gt;. I also add floating effect for them by changing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;transform.position.y&lt;/code&gt;, which is also applied to the green indicator sign.&lt;/p&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../../../../assets/images/astroxygen_oxygen.png&quot; alt=&quot;&quot; width=&quot;1000&quot; /&gt;
 &lt;/div&gt;
@@ -99,16 +159,15 @@ Figure 3. The computers can arrive right tiles, as well as the wrong ones (the g
 Figure 4. The player is trying to get access to the oxygen cylinder. The screen shows that it still needs to collect 4 more oxygen cylinders.
   &lt;/p&gt;
 &lt;/center&gt;
-
-&lt;p&gt;&lt;strong&gt;Platform&lt;/strong&gt;: the removing of tiles makes the platform can not be static (there must be a lot of ways to make it, but I am ok with this so far XD). The showing and covering were all done by changing the corresponding material. It is quite easy actually.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Platform&lt;/strong&gt;: the removing of tiles makes the platform can not be static. The reveal and covering are all done by changing the corresponding material. It is quite easy.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Screen&lt;/strong&gt;: like platform, its function mostly is done by changing materials.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;SphereBlock&lt;/strong&gt;: though they look gigantic, they are generally harmless, as they are floating quite high above players. The only reason I added this is that the project asks us to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NavMeshAgent&lt;/code&gt; XD. And yes, this is done with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NavMeshAgent&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SphereBlock&lt;/strong&gt;: though they look gigantic, they are generally harmless, as they are floating quite high above players. The only reason I added this is that this project asks us to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NavMeshAgent&lt;/code&gt;. And yes, this is done with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NavMeshAgent&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h1 id=&quot;3-conclusion&quot;&gt;3. Conclusion&lt;/h1&gt;
 
-&lt;p&gt;This project reminds me of the days when I enjoyed scenario editor of &lt;em&gt;Age of Empires II&lt;/em&gt; and &lt;em&gt;Warcraft 3&lt;/em&gt;. But at that time I was like 15 years old, and actually did not make a thing. As for my first project and given such a short time, I think this time the project is of a high degree of completeness. The main drawback, for me, is the code construction is messy due to my lacking in the game logic in the early stages.&lt;/p&gt;
+&lt;p&gt;This project reminds me of the days when I enjoyed the scenario editors of &lt;em&gt;Age of Empires II&lt;/em&gt; and &lt;em&gt;Warcraft 3&lt;/em&gt;. But at that time I was like 15 years old, and actually did not make a thing. As for my first project and given such a short time, I think this project is of a high degree of completeness. The main drawback, for me, is the code construction is messy due to my lacking in the game logic in the early stage.&lt;/p&gt;
 </content>
  </entry>
  
