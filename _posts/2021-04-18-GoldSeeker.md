@@ -48,7 +48,7 @@ Though this game is far more naiver than the previous one, the logic parts are m
 
 **Third Person Camera**: the control for the main character would also affect the **camera** since they are grouped. More over, it also supports an independently way to control the camera, by using the right click of a mouse (the right joystick of a controller) as the input of the camera's rotation. I also implemented a naive **lock-on** mechanic. I made it by adding the move input of the player as a factor to the rotation input of the camera, because I want a smooth lock-on rather than in a brutal way.
 
-**Enemies**: they now three status: idle, patrol, and attack. All the move related logic is done with `NavMeshAgent`. I also added an **aggro** mechanic for the enemies. Actually, I think the only tricky part lies in the synchronization between the logic and the animation. Maybe I should use `rayCast` to detect the timing.
+**Enemies**: they now three status: idle, patrol, and attack. All the move related logic is done with `NavMeshAgent`. I also added an **aggro** mechanic for the enemies. Actually, I think the only tricky part lies in the synchronization between the logic and the animation. Maybe I should use `rayCast` to detect the timing. *Update 2020.04.20: it should be done with animation events!*
 
 **Skills** (attack): in fact, the normal attack for the main character is like shooting. It generates a prefab with `rigidBody` then we adds a velocity to it and make damage when the `OnTriggerEnter` happens. The special attack, sequentially generating nine swords circle the target and then converge, is quite similar but different in prefabs: more lights, more awesome, I assume.
 
