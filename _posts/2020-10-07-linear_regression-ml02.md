@@ -76,7 +76,7 @@ As we mentioned before, error is inevitable in practice, otherwise there is no n
 
 ## 3.1 Maximum Likelihood Estimation
 
-We now use Gaussian distribution to reflect such noise as $\varepsilon\sim\mathcal{N}(0,\sigma^2)$. With the definition in section 1, we need to find the $w$ subject to
+We now use Gaussian distribution to reflect such noise as $\varepsilon\sim\mathcal{N}(0,\sigma^2)$. According the definition in section 1, we need to find a $w$ subject to
 
 $$y=w^Tx+\varepsilon.$$
 
@@ -88,7 +88,7 @@ Therefore, by *maximum likelihood estimation* (MLE) method, we have
 
 $$\begin{aligned}\hat w&=\arg\max_w\mathcal{L}(w)\\&=\arg\max_w -\sum_{i=1}^N\frac{1}{2\sigma^2}(y_i-w^Tx_i)^2\\&=\arg\min_w\sum_{i=1}^N(y_i-w^Tx_i)^2\end{aligned},$$
 
-which is consistent with our analysis in section 1. In fact, least squares method has an assumption that the noise is subject to Gaussian distribution.
+which is consistent with our analysis in section 1. In fact, the least squares method has an assumption that the noise follows a Gaussian distribution.
 
 ## 3.2 Maximum A Posteriori
 
