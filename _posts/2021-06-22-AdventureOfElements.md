@@ -4,7 +4,7 @@ categories: unity3d
 comments: True
 title: Unity3D - Adventure of Elements
 published: True
-description: My final Unity3D project.
+description: A combination of Match3 and Rogue Like.
 ---
 
 {% include youtubePlayer.html id="Fsvt9NTzlRM" %}
